@@ -41,6 +41,7 @@ async.eachSeries(uc.apis, function (item, callback) {
     if(httpAgent[item.method]){
         httpAgent.headers = item.header;
         httpAgent[item.method](uc.host+item.uri,item.body, function (e, r) {
+            console.log(r.body);
             dp.validation(r.body);
             console.log(dp.report);
             if(r.body.code != 200){

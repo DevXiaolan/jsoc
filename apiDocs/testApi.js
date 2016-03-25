@@ -3,20 +3,15 @@
 module.exports = {
     'host': 'http://127.0.0.1:3001',
     'apis': {
-        'profile': {
-            name: 'profile',
-            uri: '/user/profile',
+        'user': {
+            name: 'user',
+            uri: '/test/user',
             method: 'get',
             header: {
-                appid: {
-                    type: 'String'
-                }
-            }
-            ,
+            },
             body: {
                 userId: {
-                    'type': 'Number',
-                    'from': 't_uid'
+                    'type': 'Number 2'
                 }
             }
             ,
@@ -35,14 +30,12 @@ module.exports = {
                 }
             }
         },
-        'index': {
-            name: 'index',
-            uri: '/index/index',
+        'order': {
+            name: 'order',
+            uri: '/test/order',
             method: 'get',
             header: {
-                appid: {
-                    type: 'String'
-                }
+
             }
             ,
             body: {
@@ -55,7 +48,7 @@ module.exports = {
                 }
                 ,
                 data: {
-                    type:'Object'
+                    type:'Array'
                 }
                 ,
                 msg: {
