@@ -36,26 +36,36 @@ DataProvider.prototype.generator = function(){
 };
 
 DataProvider.prototype.data = function (item) {
-    item.type = item.type.toLowerCase();
+    var tmp = item.type.split(' ');
+    item.type = tmp[0].toLowerCase();
     var ret = null;
     if(item.from && this.cache[item.from]){
         ret = this.cache[item.from];
     }else {
         switch (item.type) {
             case 'string':
-                ret = 'test_string_' + (Date.now() % 1000000);
+                ret = 'test_string_' + (Date.now() % 100000);console.log(tmp[1]);
+                if(tmp[1]>0){
+                    ret = ret.substr(0-tmp[1],tmp[1]);
+                }
                 break;
             case 'number':
-                ret = Math.floor(Math.random() * 777777 + 152718);
+                ret = Math.floor(Math.random() * 999999);
+                if(tmp[1]>0){
+                    ret = ret % (Math.pow(10,tmp[1]));
+                }
                 break;
             case 'mobile':
                 ret = Number.parseInt('13800' + Math.floor(Math.random() * 777777 + 152718));
                 break;
             case 'email':
-                ret = 'test_email_' + (Date.now() % 1000000) + '@tfftest.cn';
+                ret = 'test_email_' + (Date.now() % 1000000) + '@test.cn';
                 break;
             case 'password':
                 ret = '123456';
+                break;
+            case 'object':
+                return {'a':1};
                 break;
             default :
                 ret = null;
@@ -127,3 +137,7 @@ DataProvider.prototype.isType = function(type,val){
 
 
 module.exports = DataProvider;
+
+console.log(new DataProvider().data({
+    type:'Number 3'
+}));
