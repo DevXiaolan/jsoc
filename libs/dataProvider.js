@@ -138,6 +138,3 @@ DataProvider.prototype.isType = function(type,val){
 
 module.exports = DataProvider;
 
-console.log(new DataProvider().data({
-    type:'Number 3'
-}));
