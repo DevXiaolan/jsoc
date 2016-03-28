@@ -1,5 +1,5 @@
 'use strict';
-
+var colors = require('colors');
 let DataProvider = function(apiConfig){
     this.apiConfig = apiConfig;
     if(!process.dataProviderCache){
