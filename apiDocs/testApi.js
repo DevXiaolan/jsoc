@@ -5,14 +5,16 @@ module.exports = {
     'apis': {
         'user': {
             name: 'user',
-            uri: '/test/user',
+            uri: '/test/user/{uid}',
             method: 'get',
             header: {
             },
-            body: {
-                userId: {
-                    'type': 'Number 2'
+            query:{
+                time: {
+                    'type': 'Number 10'
                 }
+            },
+            body: {
             }
             ,
             return: {

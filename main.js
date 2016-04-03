@@ -43,6 +43,7 @@ async.eachSeries(uc.apis, function (item, callback) {
         httpAgent[item.method](uc.host+item.uri,item.body, function (e, r) {
             //console.log(r.body);
             dp.validation(r.body);
+            console.log(r.body);
             console.log(colorsFy(dp.report));
             if(r.body.code != 200){
                 console.log(r.body);
