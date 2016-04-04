@@ -45,7 +45,7 @@ async.eachSeries(uc.apis, function (item, callback) {
             dp.validation(r.body);
             console.log(r.body);
             console.log(colorsFy(dp.report));
-            
+
             callback(null,null);
         });
     }else{
