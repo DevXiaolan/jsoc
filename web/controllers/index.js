@@ -18,7 +18,7 @@ Controller.mock = function(req,res){
         var apis = require('../../apiDocs/'+config.apis).apis;
         var route = false;
         for(let k in apis){
-            if(matchUrl(req.url,apis[k].uri)){
+            if(matchUrl(req,apis[k])){
                 route = apis[k];
                 break;
             }
@@ -32,11 +32,18 @@ Controller.mock = function(req,res){
         res.json(400,{},'config.apis 为定义');
     }
 };
-
-var matchUrl = function (uri, route) {
-    uri = uri.split('?')[0];
-    route = toRegExp(route);
-    return !! new RegExp(route,'i').test(uri);
+/**
+ *
+ * @param uri pathinfo
+ * @param route route object
+ * @param method req.method
+ * @returns {boolean}
+ */
+var matchUrl = function (req, route) {
+    var uri = req.url.split('?')[0];
+    var method = req.method.toLowerCase();
+    var uriReg = toRegExp(route.uri);
+    return !! (new RegExp(uriReg,'i').test(uri) && method == route.method.toLowerCase());
 };
 
 var toRegExp = function (route) {
@@ -45,10 +52,6 @@ var toRegExp = function (route) {
 };
 
 var checkRequest = function (req, route) {
-    if(req.method.toLowerCase() != route.method.toLowerCase()){
-        console.log('method error');
-        return false;
-    }
 
     for(let k in route.body){
         if(!isType(route.body[k].type,req.body[k])){
