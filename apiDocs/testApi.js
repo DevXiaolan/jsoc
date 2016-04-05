@@ -8,13 +8,19 @@ module.exports = {
             uri: '/test/user/{uid}',
             method: 'get',
             header: {
+                appId:{
+                    type:'Number 6'
+                }
             },
             query:{
                 time: {
-                    'type': 'Number 10'
+                    type: 'Number 10'
                 }
             },
             body: {
+                content:{
+                    type:'String'
+                }
             }
             ,
             return: {
@@ -37,12 +43,11 @@ module.exports = {
             uri: '/test/order',
             method: 'get',
             header: {
-
-            }
-            ,
+            },
+            query:{
+            },
             body: {
-            }
-            ,
+            },
             return: {
                 code: {
                     type: 'Number',

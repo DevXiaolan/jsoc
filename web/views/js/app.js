@@ -2,7 +2,7 @@
  * Created by lanhao on 16/4/5.
  */
 
-var App = function($){
+var App = function(){
     "use strict";
 
     this.plans = [];
@@ -42,6 +42,44 @@ App.prototype.sider = function () {
         _html += '<li class="li-api" data-api="'+k+'"><i class="am-icon-chain am-icon-fw"></i>'+_this.currentPlan.apis[k].name+'</li>';;
     }
     $('#sider ul').html(_html);
+};
+
+App.prototype.apiCommon = function (api) {
+    var _html = '';
+    api = this.currentPlan.apis[api];
+    _html += '<div><label>Name:</label><input name="name" value="'+api.name+'"></div>';
+    _html += '<div><label>URI:</label><input name="uri" value="'+api.uri+'"></div>';
+    _html += '<div><label>METHOD:</label><input placeholder="get / post / put / delete" name=",ethod" value="'+api.method+'"></div>';
+    _html += this.apiObject(api.header,'Headers');
+    _html += this.apiObject(api.query,'query');
+    _html += this.apiObject(api.body,'body');
+    _html += this.apiObject(api.return,'return');
+    return _html;
+};
+
+App.prototype.apiObject = function (obj,title) {
+    var _html = '<fieldSet><legend>'+title+'</legend>';
+    for(var k in obj){
+        _html += this.apiEntity(k,obj[k]);
+    }
+    return _html+'</fieldSet>';
+};
+
+App.prototype.apiEntity = function (key,entity) {
+    var _html = '';
+    _html +='<label>'+key+':</label><span class="am-icon-edit am-icon-fixed am-text-primary">Edit</span><span class="am-icon-trash am-icon-fixed am-text-warning">Remove</span>';
+    var option = ['type','assert','to','from'];
+    if(!entity.type && !entity.assert){
+        for(var k in entity){
+            _html += this.apiEntity(k,entity[k]);
+        }
+    }else{
+        for(var k in entity){
+            var _tmp = (''+entity[k]).split(' ');
+            _html += '<div class="entity"><label>'+k+':</label>'+'<input name="'+k+'_type" value="'+_tmp[0]+'" readonly>'+(_tmp[1]?'<label>Length:</label><input readonly name="'+k+'_length" value="'+_tmp[1]+'">':'')+'</div>'
+        }
+    }
+    return _html;
 };
 
 !function($){
@@ -94,11 +132,12 @@ App.prototype.sider = function () {
     $('#sider').find('ul').get(0).addEventListener('click', function (e) {
         if(e.target.className == 'li-api'){
             var api = e.target.dataset.api;
-            $('#content>div').html('<pre>'+prettyJson(app.currentPlan.apis[api],0)+'</pre>');
+            $('#content>div').html(app.apiCommon(api));
         }
     });
 
-    var app = window.app = new App($);
+
+    var app = window.app = new App();
     app.loadPlan(function (e, r) {
        var _html = '';
        for(var i = 0;i<app.plans.length;i++){

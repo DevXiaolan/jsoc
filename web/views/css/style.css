@@ -54,10 +54,45 @@ body{
     padding: 0rem 5rem 0 2rem;
 }
 #content>div{
+    padding: 1rem 2rem;
     background-color: rgba(22, 28, 33,0.6);
 }
 #content>div pre{
     font-size: 1.2rem;
     background-color: inherit;
     color: #fff;
+}
+#content fieldset{
+    border: 1px solid #e5e5e5;
+}
+#content label,#content legend{
+    border: none;
+    width: 15%;
+    padding-left: 2%;
+    color: #fff;
+}
+#content legend{
+    margin-bottom: 0rem;
+}
+#content .entity{
+    margin: 0 0 0 15%;
+    width: 85%;
+    background-color: rgba(235, 235, 235,0.1);
+}
+#content .entity label{
+    color: #efefef;
+    width: 15%;
+    text-align: center;
+}
+#content .entity input{
+    width: 100px;
+    margin: 0 1rem;
+    text-align: center;
+}
+#content .am-icon-fixed{
+    margin: 0 0 0 2%;
+    cursor: pointer;
+}
+#content .am-icon-fixed:hover{
+    text-decoration: underline;
 }
