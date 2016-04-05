@@ -6,7 +6,7 @@ module.exports = {
     'port': 3001,
     'ip': null,
     'cors': false,
-    'static': ['js', 'css', 'jpg', 'png', 'ico'],
+    'static': ['js', 'css', 'jpg', 'png', 'ico','woff','woff2'],
     'modules': {},
-    'apis':'testApi'
+    'apis':'ucenterApi'
 };
