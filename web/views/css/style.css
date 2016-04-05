@@ -38,6 +38,26 @@ body{
 #loading{
     padding: 100px 20%;
 }
-#board>div{
+#sider{
     background-color: rgba(22, 28, 33,0.6);
+}
+#sider ul li{
+    padding: 5px 0;
+    color: #eee;
+    list-style: none;
+    cursor: pointer;
+}
+#sider ul li:hover{
+    color: rgb(59, 180, 242);
+}
+#content{
+    padding: 0rem 5rem 0 2rem;
+}
+#content>div{
+    background-color: rgba(22, 28, 33,0.6);
+}
+#content>div pre{
+    font-size: 1.2rem;
+    background-color: inherit;
+    color: #fff;
 }
