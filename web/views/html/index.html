@@ -9,33 +9,42 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <header id="header" class="am-topbar admin-header">
-        <h1 class="am-topbar-brand am-text-secondary am-text-xl am-serif">JSOC</h1>
-        <div class="am-dropdown" data-am-dropdown>
-            <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>选择方案 <span class="am-icon-caret-down"></span></button>
-            <ul class="am-dropdown-content am-dropdown-content-fixed">
+<header id="header" class="am-topbar admin-header">
+    <h1 class="am-topbar-brand am-text-secondary am-text-xl am-serif">{{site}}</h1>
 
+    <div class="am-dropdown" data-am-dropdown>
+        <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>选择方案 <span
+                class="am-icon-caret-down"></span></button>
+        <ul class="am-dropdown-content am-dropdown-content-fixed">
+            <li class="am-dropdown-header" v-for="plan in plans">{{plan}}</li>
+        </ul>
+    </div>
+    <em>{{host}}</em>
+</header>
+<div id="main">
+    <div id="loading">
+        <div class="am-progress am-progress-striped am-active am-round">
+            <div class="am-progress-bar am-progress-bar-secondary" style="width: 100%">LOADING...</div>
+        </div>
+    </div>
+    <div id="board" class="am-hide am-g">
+        <div id="sider" class="admin-sidebar am-u-md-2">
+            <ul class="">
+                <li class="li-api" data-api="{{index}}" v-for="(index, api) in plan.apis"><i
+                        class="am-icon-chain am-icon-fw"></i>{{api.name}}
+                </li>
             </ul>
         </div>
-        <em></em>
-    </header>
-    <div id="main">
-        <div id="loading">
-            <div class="am-progress am-progress-striped am-active am-round">
-                <div class="am-progress-bar am-progress-bar-secondary" style="width: 100%">LOADING...</div>
-            </div>
-        </div>
-        <div id="board" class="am-hide am-g">
-            <div id="sider" class="admin-sidebar am-u-md-2">
-                <ul class=""></ul>
-            </div>
-            <div id="content" class="am-u-md-10">
-                <div>ct</div>
+        <div id="content" class="am-u-md-10">
+            <div>
+
             </div>
         </div>
     </div>
+</div>
 </body>
 <script src="/assets/jquery/dist/jquery.min.js"></script>
 <script src="/assets/amazeui/dist/js/amazeui.min.js"></script>
+<script src="/assets/vue/dist/vue.min.js"></script>
 <script src="/js/app.js"></script>
 </html>

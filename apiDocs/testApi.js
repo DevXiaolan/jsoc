@@ -9,12 +9,14 @@ module.exports = {
             method: 'get',
             header: {
                 appId:{
-                    type:'Number 6'
+                    type:'Number',
+                    length:8
                 }
             },
             query:{
                 time: {
-                    type: 'Number 10'
+                    type: 'Number',
+                    length:10
                 }
             },
             body: {
@@ -30,7 +32,20 @@ module.exports = {
                 }
                 ,
                 data: {
-                    type:'Object'
+                    uid:{
+                        type:'Number',
+                        length:10,
+                        to:'temp_uid'
+                    },
+                    profile:{
+                        tel:{
+                            type:'Number',
+                            length:'11'
+                        },
+                        email:{
+                            type:'String'
+                        }
+                    }
                 }
                 ,
                 msg: {

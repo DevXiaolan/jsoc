@@ -33,7 +33,12 @@ body{
     border-bottom: none;
 }
 #header .am-dropdown-content-fixed li{
+
     cursor: pointer;
+}
+#header .am-dropdown-content-fixed li:hover{
+    color: #fff;
+    background-color: rgba(59, 180, 242,0.2);
 }
 #loading{
     padding: 100px 20%;
@@ -54,6 +59,7 @@ body{
     padding: 0rem 5rem 0 2rem;
 }
 #content>div{
+    color: #666;
     padding: 1rem 2rem;
     background-color: rgba(22, 28, 33,0.6);
 }
@@ -67,7 +73,7 @@ body{
 }
 #content label,#content legend{
     border: none;
-    width: 15%;
+    min-width: 15%;
     padding-left: 2%;
     color: #fff;
 }
@@ -75,16 +81,19 @@ body{
     margin-bottom: 0rem;
 }
 #content .entity{
+    margin: 0 0 0 10%;
+}
+#content .option{
     margin: 0 0 0 15%;
     width: 85%;
     background-color: rgba(235, 235, 235,0.1);
 }
-#content .entity label{
+#content .option label{
     color: #efefef;
     width: 15%;
     text-align: center;
 }
-#content .entity input{
+#content .option input{
     width: 100px;
     margin: 0 1rem;
     text-align: center;
