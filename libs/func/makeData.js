@@ -1,20 +1,20 @@
 'use strict';
 
-let makeData = function(type){
-    var tmp = type.split(' ');
-    type = tmp[0].toLowerCase();
+let makeData = function(type,length){
+    //console.log(type);
+    type = type?type.toLowerCase():null;
     var ret = null;
     switch (type) {
         case 'string':
-            ret = 'test_string_' + (Date.now() % 100000);console.log(tmp[1]);
-            if(tmp[1]>0){
-                ret = ret.substr(0-tmp[1],tmp[1]);
+            ret = 'string_' + Date.now();
+            if(length){
+                ret = ret.substr(0,length);
             }
             break;
         case 'number':
             ret = Math.floor(Math.random() * 99999999999);
-            if(tmp[1]>0){
-                ret = ret % (Math.pow(10,tmp[1]));
+            if(length){
+                ret = ret % (Math.pow(10,length));
             }
             break;
         case 'mobile':

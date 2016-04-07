@@ -1,11 +1,11 @@
 'use strict';
 
 let isType = function(type,val){
-    var tmp = type.split(' ');
-    type = tmp[0].toLowerCase();
+    type = type.toLowerCase();
+
     switch (type){
         case 'string':
-            return /^[A-Za-z0-9]+$/.test(val);
+            return /^[A-Za-z0-9_]+$/.test(val);
             break;
         case 'number':
             return /[0-9]+/.test(val);

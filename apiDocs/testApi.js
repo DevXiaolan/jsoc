@@ -21,7 +21,7 @@ module.exports = {
             },
             body: {
                 content:{
-                    type:'String'
+                    type:'email'
                 }
             }
             ,
@@ -43,7 +43,7 @@ module.exports = {
                             length:'11'
                         },
                         email:{
-                            type:'String'
+                            type:'string'
                         }
                     }
                 }

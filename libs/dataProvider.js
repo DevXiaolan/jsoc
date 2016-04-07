@@ -49,7 +49,7 @@ DataProvider.prototype.data = function (item) {
     if(item.from && this.cache[item.from]){
         ret = this.cache[item.from];
     }else {
-        ret = require('./func/makeData')(item.type);
+        ret = require('./func/makeData')(item.type,item.length);
     }
     if(item.to){
         this.cache[item.to] = ret;

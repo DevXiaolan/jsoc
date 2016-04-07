@@ -15,6 +15,7 @@ Controller.index = function (req,res) {
 
 Controller.mock = function(req,res){
     if(config.apis){
+        delete require.cache[require.resolve('../../apiDocs/'+config.apis)];
         var apis = require('../../apiDocs/'+config.apis).apis;
         var route = false;
         for(let k in apis){
@@ -23,6 +24,7 @@ Controller.mock = function(req,res){
                 break;
             }
         }
+
         if(checkRequest(req,route)){
             res.json(200,response(route.return.data),'');
         }else {
@@ -55,7 +57,7 @@ var checkRequest = function (req, route) {
 
     for(let k in route.body){
         if(!isType(route.body[k].type,req.body[k])){
-            console.log('body error');
+            console.log('body error',route.body[k].type,req.body[k]);
             return false;
         }
     }
@@ -70,18 +72,19 @@ var checkRequest = function (req, route) {
 };
 
 var response = function(retData){
+    var result = {};
     if(retData){
         if(typeof retData == 'object' && (!retData.type) && (!retData.assert)){
             for(let k in retData){
-                retData[k] = response(retData[k]);
+                result[k] = response(retData[k]);
             }
         }else{
-            retData = makeData(retData.type);
+            result = makeData(retData.type);
         }
     }else{
         return {};
     }
-    return retData;
+    return result;
 };
 
 module.exports = Controller;

@@ -40,10 +40,12 @@ async.eachSeries(uc.apis, function (item, callback) {
     item = dp.generator();
     if(httpAgent[item.method]){
         httpAgent.headers = item.header;
+
         httpAgent[item.method](uc.host+item.uri,item.body, function (e, r) {
             //console.log(r.body);
             dp.validation(r.body);
             console.log(r.body);
+            console.log(dp.cache);
             console.log(colorsFy(dp.report));
 
             callback(null,null);
