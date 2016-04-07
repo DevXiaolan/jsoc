@@ -105,3 +105,16 @@ body{
 #content .am-icon-fixed:hover{
     text-decoration: underline;
 }
+#dialog{
+    position: absolute;
+    margin: 0 auto;
+    height: 320px;
+    width: 200px;
+    padding: 20px 10px;
+    background-color: rgb(245, 245, 245);
+    border-radius:2px;
+}
+#dialog label{
+    min-width: 15%;
+    padding-left: 2%;
+}

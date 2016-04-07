@@ -23,6 +23,13 @@ var App = function () {
             plan:{}
         }
     });
+
+    this.vueDialog = new Vue({
+        el:'#dialog',
+        data:{
+            entity:{}
+        }
+    });
 };
 
 App.prototype.loadPlan = function (cb) {
@@ -65,32 +72,48 @@ App.prototype.apiCommon = function (api) {
 };
 
 App.prototype.apiObject = function (obj, title) {
-    var _html = '<fieldSet><legend>' + title + '<span class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
+    var _html = '<fieldSet><legend>' + title + '<span data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
     for (var k in obj) {
         _html += this.apiEntity(k, obj[k]);
     }
     return _html + '</fieldSet>';
 };
 
-App.prototype.dialog = function (select, cb) {
 
-};
 
 App.prototype.apiEntity = function (key, entity) {
     var _html = '';
     if (!entity.type && !entity.assert) {
-        _html += '<section class="entity"><label>' + key + ':</label><span class="am-icon-plus-square am-icon-fixed am-text-success">Add</span>';
+
+        _html += '<section class="entity"><label>' + key + ':</label><span data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span>';
         for (var k in entity) {
             _html += this.apiEntity(k, entity[k]);
         }
     } else {
-        _html += '<section class="entity"><label>' + key + ':</label><span class="am-icon-edit am-icon-fixed am-text-primary">Edit</span><span class="am-icon-trash am-icon-fixed am-text-warning">Remove</span>';
+        var _source = {};
+        _source[key] = entity;
+        _html += '<section class="entity"><label>' + key + ':</label><span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_edit_entity" class="am-icon-edit am-icon-fixed am-text-primary">Edit</span><span class="am-icon-trash am-icon-fixed am-text-warning">Remove</span>';
         for (var k in entity) {
             var _tmp = ('' + entity[k]).split(' ');
             _html += '<div class="option"><label>' + k + ':</label>' + '<input name="' + k + '_type" value="' + _tmp[0] + '" readonly>' + (_tmp[1] ? '<label>Length:</label><input readonly name="' + k + '_length" value="' + _tmp[1] + '">' : '') + '</div>'
         }
     }
     return _html+'</section>';
+};
+
+App.prototype.dialog = function (caller,type, cb) {
+    switch(type){
+        case 'd_add_entity':
+            this.vueDialog._data.entity = {};
+            break;
+        case 'd_edit_entity':
+            var s = $(caller).data('s');
+            this.vueDialog._data.entity = s;
+            break;
+        default :
+            break;
+    }
+    cb && cb(null,null);
 };
 
 !function ($) {
@@ -147,6 +170,20 @@ App.prototype.apiEntity = function (key, entity) {
         }
     });
 
+    $('#content').get(0).addEventListener('click', function (e) {
+        var dialog = e.target.dataset.dialog;
+        if(dialog){
+            console.log(dialog);
+            $('#dialog').addClass('am-hide').css({
+                top:e.clientY+'px',
+                left:e.clientX+'px'
+            });
+            app.dialog(e.target,dialog,function(e,r){
+                "use strict";
+                $('#dialog').removeClass('am-hide');
+            });
+        }
+    });
 
 
 
