@@ -41,10 +41,11 @@
             </div>
         </div>
     </div>
-    <div id="dialog" class="am-hide" v-for="(index,en) in entity">
-        <div class="am-g"><label class="am-u-md-5">Name:</label><input class="am-u-md-7" type="text" value="{{index}}"></div>
-        <div class="am-g"><label class="am-u-md-5">Type:</label><input class="am-u-md-7" type="text" value="{{en.type}}"></div>
-        <div class="am-g"><label class="am-u-md-5">Length:</label><input class="am-u-md-7" type="text" value="{{en.length}}"></div>
+    <div id="dialog" v-for="(index,en) in entity">
+        <div class="am-panel-hd am-cf">文件上传<span class="am-icon-close am-fr" v-on:click="close();"></span></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Name:</label><input class="am-u-md-7" type="text" value="{{index}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Type:</label><input class="am-u-md-7" type="text" value="{{en.type}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Length:</label><input class="am-u-md-7" type="text" value="{{en.length}}"></div>
     </div>
 </div>
 </body>

@@ -28,6 +28,11 @@ var App = function () {
         el:'#dialog',
         data:{
             entity:{}
+        },
+        methods:{
+            close: function () {
+                $('#dialog').hide();
+            }
         }
     });
 };
@@ -102,6 +107,7 @@ App.prototype.apiEntity = function (key, entity) {
 };
 
 App.prototype.dialog = function (caller,type, cb) {
+    console.log(type);
     switch(type){
         case 'd_add_entity':
             this.vueDialog._data.entity = {};
@@ -113,7 +119,7 @@ App.prototype.dialog = function (caller,type, cb) {
         default :
             break;
     }
-    cb && cb(null,null);
+    cb && cb(null,this.vueDialog._data.entity);
 };
 
 !function ($) {
@@ -171,17 +177,20 @@ App.prototype.dialog = function (caller,type, cb) {
     });
 
     $('#content').get(0).addEventListener('click', function (e) {
+
         var dialog = e.target.dataset.dialog;
         if(dialog){
-            console.log(dialog);
-            $('#dialog').addClass('am-hide').css({
-                top:e.clientY+'px',
-                left:e.clientX+'px'
+            console.log('has dialog');
+            $('#dialog').hide().css({
+                top:(e.pageY-160)+'px',
+                left:(e.pageX-100)+'px'
             });
             app.dialog(e.target,dialog,function(e,r){
-                "use strict";
-                $('#dialog').removeClass('am-hide');
+                console.log(e,r);
+                $('#dialog').show();
             });
+        }else{
+            console.log('no dialog');
         }
     });
 

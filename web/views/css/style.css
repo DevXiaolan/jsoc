@@ -110,11 +110,22 @@ body{
     margin: 0 auto;
     height: 320px;
     width: 200px;
-    padding: 20px 10px;
     background-color: rgb(245, 245, 245);
     border-radius:2px;
+    display: none;
+}
+#dialog .am-g-fixed{
+    margin: 10px;
+    width: auto;
 }
 #dialog label{
     min-width: 15%;
     padding-left: 2%;
+}
+#dialog .am-panel-hd{
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+#dialog .am-panel-hd span{
+    cursor: pointer;
 }
