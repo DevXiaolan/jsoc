@@ -95,8 +95,8 @@ App.prototype.apiEntity = function (key, entity) {
             _html += this.apiEntity(k, entity[k]);
         }
     } else {
-        var _source = {};
-        _source[key] = entity;
+        var _source = entity;
+        _source['name'] = key;
         _html += '<section class="entity"><label>' + key + ':</label><span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_edit_entity" class="am-icon-edit am-icon-fixed am-text-primary">Edit</span><span class="am-icon-trash am-icon-fixed am-text-warning">Remove</span>';
         for (var k in entity) {
             var _tmp = ('' + entity[k]).split(' ');
@@ -182,12 +182,14 @@ App.prototype.dialog = function (caller,type, cb) {
         if(dialog){
             console.log('has dialog');
             $('#dialog').hide().css({
-                top:(e.pageY-160)+'px',
-                left:(e.pageX-100)+'px'
+                top:(e.pageY-180)+'px',
+                left:(e.pageX-120)+'px'
             });
+            //根据 target 给dialog绑定数据（vue）
             app.dialog(e.target,dialog,function(e,r){
-                console.log(e,r);
+                console.log(e,r); //这里都有输出
                 $('#dialog').show();
+                console.log('done');
             });
         }else{
             console.log('no dialog');

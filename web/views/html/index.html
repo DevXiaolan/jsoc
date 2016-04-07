@@ -41,11 +41,16 @@
             </div>
         </div>
     </div>
-    <div id="dialog" v-for="(index,en) in entity">
-        <div class="am-panel-hd am-cf">文件上传<span class="am-icon-close am-fr" v-on:click="close();"></span></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Name:</label><input class="am-u-md-7" type="text" value="{{index}}"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Type:</label><input class="am-u-md-7" type="text" value="{{en.type}}"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Length:</label><input class="am-u-md-7" type="text" value="{{en.length}}"></div>
+    <div id="dialog" >
+        <div class="am-panel-hd am-cf">TITLE<span class="am-icon-close am-fr" v-on:click="close();"></span></div>
+
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Name:</label><input name="name" class="am-u-md-7" type="text" value="{{entity.name}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Type:</label><input name="type" class="am-u-md-7" type="text" value="{{entity.type}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Length:</label><input name="length" class="am-u-md-7" type="text" value="{{entity.length}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Assert:</label><input name="assert" class="am-u-md-7" type="text" value="{{entity.assert}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">To:</label><input name="to" class="am-u-md-7" type="text" value="{{entity.to}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Form:</label><input name="from" class="am-u-md-7" type="text" value="{{entity.from}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Required:</label><input name="required" class="am-u-md-7" type="text" value="{{entity.required}}"></div>
     </div>
 </div>
 </body>

@@ -108,14 +108,15 @@ body{
 #dialog{
     position: absolute;
     margin: 0 auto;
-    height: 320px;
-    width: 200px;
+    height: 360px;
+    width: 240px;
     background-color: rgb(245, 245, 245);
     border-radius:2px;
     display: none;
+    z-index: 2;
 }
 #dialog .am-g-fixed{
-    margin: 10px;
+    margin: 5px 10px;
     width: auto;
 }
 #dialog label{
