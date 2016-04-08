@@ -93,10 +93,9 @@ body{
     width: 15%;
     text-align: center;
 }
-#content .option input{
-    width: 100px;
-    margin: 0 1rem;
-    text-align: center;
+#content .option .option-value{
+
+    color: #999;
 }
 #content .am-icon-fixed{
     margin: 0 0 0 2%;

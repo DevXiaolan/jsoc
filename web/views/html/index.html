@@ -45,12 +45,36 @@
         <div class="am-panel-hd am-cf">TITLE<span class="am-icon-close am-fr" v-on:click="close();"></span></div>
 
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Name:</label><input name="name" class="am-u-md-7" type="text" value="{{entity.name}}"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Type:</label><input name="type" class="am-u-md-7" type="text" value="{{entity.type}}"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Length:</label><input name="length" class="am-u-md-7" type="text" value="{{entity.length}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Type:</label>
+            <input name="type" class="am-u-md-7" type="hidden" value="{{entity.type}}">
+            <div class="am-dropdown" data-am-dropdown>
+                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.type}} <span
+                        class="am-icon-caret-down"></span></button>
+                <ul class="am-dropdown-content am-dropdown-content-fixed">
+                    <li class="am-dropdown-header"><a>String</a></li>
+                    <li class="am-dropdown-header"><a>Number</a></li>
+
+                    <li class="am-dropdown-header"><a>Object</a></li>
+                    <li class="am-dropdown-header"><a>Array</a></li>
+                    <li class="am-dropdown-header"><a>Email</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Length:</label><input name="length" class="am-u-md-7" type="number" value="{{entity.length}}"></div>
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Assert:</label><input name="assert" class="am-u-md-7" type="text" value="{{entity.assert}}"></div>
         <div class="am-g am-g-fixed"><label class="am-u-md-5">To:</label><input name="to" class="am-u-md-7" type="text" value="{{entity.to}}"></div>
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Form:</label><input name="from" class="am-u-md-7" type="text" value="{{entity.from}}"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Required:</label><input name="required" class="am-u-md-7" type="text" value="{{entity.required}}"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Required:</label>
+            <input name="required" class="am-u-md-7" type="hidden" value="{{entity.required}}">
+            <div class="am-dropdown" data-am-dropdown>
+                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.required}} <span
+                        class="am-icon-caret-down"></span></button>
+                <ul class="am-dropdown-content am-dropdown-content-fixed">
+                    <li class="am-dropdown-header"><a>True</a></li>
+                    <li class="am-dropdown-header"><a>False</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 </body>

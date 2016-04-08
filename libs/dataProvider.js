@@ -66,7 +66,7 @@ DataProvider.prototype.validation = function (body,config,report) {
             this.validation(body[k],returnConfig[k],report[k]);
         }else{
 
-            if(returnConfig[k].assert && (returnConfig[k].assert == body[k])){
+            if(returnConfig[k].assert && (returnConfig[k].assert === body[k])){
                 report[k] = true;
             }else if((!returnConfig[k].assert) && returnConfig[k].type){
                 var allowType = returnConfig[k].type.split('||');

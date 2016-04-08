@@ -99,8 +99,7 @@ App.prototype.apiEntity = function (key, entity) {
         _source['name'] = key;
         _html += '<section class="entity"><label>' + key + ':</label><span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_edit_entity" class="am-icon-edit am-icon-fixed am-text-primary">Edit</span><span class="am-icon-trash am-icon-fixed am-text-warning">Remove</span>';
         for (var k in entity) {
-            var _tmp = ('' + entity[k]).split(' ');
-            _html += '<div class="option"><label>' + k + ':</label>' + '<input name="' + k + '_type" value="' + _tmp[0] + '" readonly>' + (_tmp[1] ? '<label>Length:</label><input readonly name="' + k + '_length" value="' + _tmp[1] + '">' : '') + '</div>'
+            _html += '<div class="option"><label>' + k + ':</label>' + '<span class="option-value">'+entity[k]+'</span></div>'
         }
     }
     return _html+'</section>';
