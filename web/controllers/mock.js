@@ -24,8 +24,8 @@ Controller.mock = function(req,res){
                 break;
             }
         }
-
-        if(checkRequest(req,route)){
+        
+        if(route && checkRequest(req,route)){
             res.json(200,response(route.return.data),'');
         }else {
             res.json(400, {},'请求有误，请检查参数与请求方法');
@@ -45,6 +45,7 @@ var matchUrl = function (req, route) {
     var uri = req.url.split('?')[0];
     var method = req.method.toLowerCase();
     var uriReg = toRegExp(route.uri);
+    console.log(new RegExp(uriReg,'i'),uri);
     return !! (new RegExp(uriReg,'i').test(uri) && method == route.method.toLowerCase());
 };
 

@@ -90,7 +90,6 @@ body{
 }
 #content .option label{
     color: #efefef;
-    width: 15%;
     text-align: center;
 }
 #content .option .option-value{
@@ -107,7 +106,7 @@ body{
 #dialog{
     position: absolute;
     margin: 0 auto;
-    height: 360px;
+    height: 350px;
     width: 240px;
     background-color: rgb(245, 245, 245);
     border-radius:2px;

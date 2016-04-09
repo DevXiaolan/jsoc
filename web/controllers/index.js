@@ -15,6 +15,7 @@ Controller.index = function (req,res) {
 Controller.plans = function(req,res){
     var files = fs.readdirSync(process.cwd()+'/../apiDocs');
     async.each(files, function (it, cb) {
+        delete require.cache[require.resolve(process.cwd()+'/../apiDocs/'+it)];
         var _tmp = require(process.cwd()+'/../apiDocs/'+it);
         Controller.plansCache[_tmp.name?_tmp.name:it.split('.')[0]] = _tmp;
         cb(null,null);

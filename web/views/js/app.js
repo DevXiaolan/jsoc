@@ -7,7 +7,7 @@ var App = function () {
 
     this.plans = [];
     this.currentPlan = null;
-
+    this.currentApi = null;
     this.vueHeader = new Vue({
         el: '#header',
         data: {
@@ -69,7 +69,7 @@ App.prototype.apiCommon = function (api) {
     _html += '<div><label>Name:</label><input name="name" value="' + api.name + '"> ( API identify name )</div>';
     _html += '<div><label>URI:</label><input name="uri" value="' + api.uri + '"> ( HTTP request URI )</div>';
     _html += '<div><label>METHOD:</label><input placeholder="get / post / put / delete" name=",ethod" value="' + api.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
-    _html += this.apiObject(api.header, 'Headers');
+    _html += this.apiObject(api.header, 'header');
     _html += this.apiObject(api.query, 'query');
     _html += this.apiObject(api.body, 'body');
     _html += this.apiObject(api.return, 'return');
@@ -79,26 +79,35 @@ App.prototype.apiCommon = function (api) {
 App.prototype.apiObject = function (obj, title) {
     var _html = '<fieldSet><legend>' + title + '<span data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
     for (var k in obj) {
-        _html += this.apiEntity(k, obj[k]);
+        _html += this.apiEntity(k, obj[k],title);
     }
     return _html + '</fieldSet>';
 };
 
 
 
-App.prototype.apiEntity = function (key, entity) {
+App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
+    if(feedBack){
+        var arr = prefix.split('.');
+        arr.push(key);
+        this.feedBack(arr,entity);
+    }
     var _html = '';
     if (!entity.type && !entity.assert) {
 
         _html += '<section class="entity"><label>' + key + ':</label><span data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span>';
         for (var k in entity) {
-            _html += this.apiEntity(k, entity[k]);
+            _html += this.apiEntity(k, entity[k],prefix+'.'+key);
         }
     } else {
-        var _source = entity;
+        var _source = {
+            'entity':entity
+        };
+        _source['role'] = prefix+'.'+key;
         _source['name'] = key;
-        _html += '<section class="entity"><label>' + key + ':</label><span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_edit_entity" class="am-icon-edit am-icon-fixed am-text-primary">Edit</span><span class="am-icon-trash am-icon-fixed am-text-warning">Remove</span>';
+        _html += '<section class="entity"  role="'+prefix+'.'+key+'"><label>' + key + ':</label><span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_edit_entity" class="am-icon-edit am-icon-fixed am-text-primary">Edit</span><span class="am-icon-trash am-icon-fixed am-text-warning">Remove</span>';
         for (var k in entity) {
+            if(k=='role')continue;
             _html += '<div class="option"><label>' + k + ':</label>' + '<span class="option-value">'+entity[k]+'</span></div>'
         }
     }
@@ -119,6 +128,15 @@ App.prototype.dialog = function (caller,type, cb) {
             break;
     }
     cb && cb(null,this.vueDialog._data.entity);
+};
+
+App.prototype.feedBack = function (arr, data) {
+    var api = this.currentPlan.apis[this.currentApi];
+    while(arr.length>1){
+        var _k = arr.shift();
+        api = api[_k];
+    }
+    api[arr[0]] = data;
 };
 
 !function ($) {
@@ -171,6 +189,7 @@ App.prototype.dialog = function (caller,type, cb) {
     $('#sider').find('ul').get(0).addEventListener('click', function (e) {
         if (e.target.className == 'li-api') {
             var api = e.target.dataset.api;
+            app.currentApi = api;
             $('#content>div').html(app.apiCommon(api));
         }
     });
@@ -179,32 +198,51 @@ App.prototype.dialog = function (caller,type, cb) {
 
         var dialog = e.target.dataset.dialog;
         if(dialog){
-            console.log('has dialog');
             $('#dialog').hide().css({
                 top:(e.pageY-180)+'px',
                 left:(e.pageX-120)+'px'
             });
             //根据 target 给dialog绑定数据（vue）
             app.dialog(e.target,dialog,function(e,r){
-                console.log(e,r); //这里都有输出
                 $('#dialog').show();
-                console.log('done');
             });
         }else{
             console.log('no dialog');
         }
     });
 
+    $('#dialog').get(0).addEventListener('click', function (e) {
+        if (e.target.localName == 'a') {
+            var _text = e.target.innerText;
+            var op = $(e.target).parent().parent().data('op');
+            $(e.target).parent().parent().parent().find('button').text(_text).click();
+            app.vueDialog._data.entity.entity[op] = _text;
+        }
+    });
+    $('#dialog_save_btn').click(function (e) {
+        var role = app.vueDialog._data.entity.role;
+        if(role){
+            var _tmp = role.split('.');
+            var key = _tmp.pop();
+            var prefix = _tmp.join('.');
+            $('section[role="'+role+'"]').prop('outerHTML', app.apiEntity(key,app.vueDialog._data.entity.entity,prefix,true));
+        }
 
+        app.vueDialog.close();
 
-    var app = window.app = new App();
-
-    app.loadPlan(function (e, r) {
-        app.vueHeader._data.plans = app.plans;
-        setTimeout(function () {
-            $('#loading').addClass('am-hide');
-            blink('#header .am-btn-fixed');
-        }, 800);
     });
 
+
+    // App start
+    if(!window.app) {
+        window.app = new App();
+        console.log(app);
+        app.loadPlan(function (e, r) {
+            app.vueHeader._data.plans = app.plans;
+            setTimeout(function () {
+                $('#loading').addClass('am-hide');
+                blink('#header .am-btn-fixed');
+            }, 800);
+        });
+    }
 }($);

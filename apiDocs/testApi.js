@@ -20,9 +20,6 @@ module.exports = {
                 }
             },
             body: {
-                content:{
-                    type:'email'
-                }
             }
             ,
             return: {
