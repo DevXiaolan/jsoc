@@ -79,7 +79,12 @@ App.prototype.apiCommon = function (api) {
 };
 
 App.prototype.apiObject = function (obj, title) {
-    var _html = '<fieldSet><legend>' + title + '<span data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
+    var _source = {
+        'entity':{},
+        'role':title,
+        'isNew':true
+    };
+    var _html = '<fieldSet role="'+title+'"><legend>' + title + '<span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
     for (var k in obj) {
         _html += this.apiEntity(k, obj[k],title);
     }
@@ -90,14 +95,19 @@ App.prototype.apiObject = function (obj, title) {
 
 App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
     if(feedBack){
+
         var arr = prefix.split('.');
         arr.push(key);
         this.feedBack(arr,entity);
     }
     var _html = '';
-    if (!entity.type && !entity.assert) {
-
-        _html += '<section class="entity"><label>' + key + ':</label><span data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span>';
+    if (!feedBack && !(entity.assert || entity.length || entity.to || entity.from || entity.type)) {
+        var _source = {
+            'entity':{},
+            'role':prefix+'.'+key,
+            'isNew':true
+        };
+        _html += '<section class="entity" role="'+_source.role+'"><label>' + key + ':</label><span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span>';
         for (var k in entity) {
             _html += this.apiEntity(k, entity[k],prefix+'.'+key);
         }
@@ -120,7 +130,9 @@ App.prototype.dialog = function (caller,type, cb) {
     console.log(type);
     switch(type){
         case 'd_add_entity':
-            this.vueDialog._data.entity = {};
+            var s = $(caller).data('s');
+            s.entity.type = 'String'
+            this.vueDialog._data.entity = s;
             break;
         case 'd_edit_entity':
             var s = $(caller).data('s');
@@ -211,11 +223,19 @@ App.prototype.feedBack = function (arr, data) {
     });
     $('#dialog_save_btn').click(function (e) {
         var role = app.vueDialog._data.entity.role;
-        if(role){
+        if(app.vueDialog._data.entity.isNew){
+            role += '.'+app.vueDialog._data.entity.name;
+        }
+        
+        if(role && app.vueDialog._data.entity.name){
             var _tmp = role.split('.');
             var key = _tmp.pop();
             var prefix = _tmp.join('.');
-            $('section[role="'+role+'"]').prop('outerHTML', app.apiEntity(key,app.vueDialog._data.entity.entity,prefix,true));
+            if(app.vueDialog._data.entity.isNew){
+                $('fieldset[role="' + prefix + '"],section[role="' + prefix + '"]').append(app.apiEntity(key, app.vueDialog._data.entity.entity, prefix, true));
+            }else {
+                $('section[role="' + role + '"]').prop('outerHTML', app.apiEntity(key, app.vueDialog._data.entity.entity, prefix, true));
+            }
         }
 
         app.vueDialog.close();

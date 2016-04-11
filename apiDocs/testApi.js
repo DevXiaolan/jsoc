@@ -10,6 +10,11 @@ module.exports = {
                 appId : {
                     type : 'Number',
                     length : 6
+                },
+                token : {
+                    type : 'String',
+                    name : 'token',
+                    length : 12
                 }
             },
             query : {
@@ -37,7 +42,11 @@ module.exports = {
                             length : 11
                         },
                         email : {
-                            type : 'string'
+                            type : 'Email'
+                        },
+                        address : {
+                            type : 'String',
+                            name : 'address'
                         }
                     }
                 },

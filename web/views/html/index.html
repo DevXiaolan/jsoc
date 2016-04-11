@@ -54,7 +54,7 @@
         </div>
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Type:</label>
             <div class="am-dropdown" data-am-dropdown>
-                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity.type}} <span
+                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity.type?entity.entity.type:'String'}} <span
                         class="am-icon-caret-down"></span></button>
                 <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="type">
                     <li class="am-dropdown-header"><a>String</a></li>
