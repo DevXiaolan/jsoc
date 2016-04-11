@@ -128,3 +128,6 @@ body{
 #dialog .am-panel-hd span{
     cursor: pointer;
 }
+.am-btn-toolbar > .am-btn-group-fixed{
+    margin-left: 1px;
+}

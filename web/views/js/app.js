@@ -7,6 +7,7 @@ var App = function () {
 
     this.plans = [];
     this.currentPlan = null;
+    this.currentPlanName = null;
     this.currentApi = null;
     this.vueHeader = new Vue({
         el: '#header',
@@ -54,6 +55,7 @@ App.prototype.loadDetail = function (plan, cb) {
     $.get('/index/detail?plan=' + plan, function (data) {
         if (data.code == 200) {
             _this.vueSider._data.plan = _this.currentPlan = data.data;
+            _this.currentPlanName = plan;
             _this.vueHeader._data.host = _this.currentPlan.host;
             cb && cb(null, _this.currentPlan);
         } else {
@@ -149,7 +151,7 @@ App.prototype.feedBack = function (arr, data) {
     };
 
     var loading = {
-        'delay': 400,
+        'delay': 300,
         'on': function () {
             $('#board').addClass('am-hide');
             $('#loading').removeClass('am-hide');
@@ -162,19 +164,6 @@ App.prototype.feedBack = function (arr, data) {
         }
     };
 
-    var prettyJson = function (obj, tabCount) {
-        tabCount++;
-        if (typeof obj == 'object') {
-            var r = '';
-            r += (obj.length) ? '[\n' : '{\n';
-            for (var k in obj) {
-                r += '    '.repeat(tabCount) + k + ' : ' + prettyJson(obj[k], tabCount);
-            }
-            return r += '    '.repeat(tabCount - 1) + ((obj.length) ? '],' : '},') + '\n';
-        } else {
-            return obj + ',\n';
-        }
-    };
 
     $('#header').find('ul').get(0).addEventListener('click', function (e) {
         if (e.target.className == 'am-dropdown-header') {
@@ -190,11 +179,12 @@ App.prototype.feedBack = function (arr, data) {
         if (e.target.className == 'li-api') {
             var api = e.target.dataset.api;
             app.currentApi = api;
+            $('#content>section').removeClass('am-hide');
             $('#content>div').html(app.apiCommon(api));
         }
     });
 
-    $('#content').get(0).addEventListener('click', function (e) {
+    $('#content>div').get(0).addEventListener('click', function (e) {
 
         var dialog = e.target.dataset.dialog;
         if(dialog){
@@ -213,7 +203,7 @@ App.prototype.feedBack = function (arr, data) {
 
     $('#dialog').get(0).addEventListener('click', function (e) {
         if (e.target.localName == 'a') {
-            var _text = e.target.innerText;
+            var _text = $(e.target).text();
             var op = $(e.target).parent().parent().data('op');
             $(e.target).parent().parent().parent().find('button').text(_text).click();
             app.vueDialog._data.entity.entity[op] = _text;
@@ -231,18 +221,34 @@ App.prototype.feedBack = function (arr, data) {
         app.vueDialog.close();
 
     });
+    $('#content>section').find('button').click(function (e) {
+        var cmd = $(e.target).attr('role');
+        console.log(cmd);
+        switch (cmd){
+            case 'cmd_save':
+                $.post('/index/savePlan',{
+                    name:app.currentPlanName,
+                    plan:JSON.stringify(app.currentPlan)
+                }, function (data) {
+                    console.log(data);
+                },'json');
+                break;
+            case 'cmd_run':
+
+                break;
+        }
+    });
 
 
     // App start
     if(!window.app) {
         window.app = new App();
-        console.log(app);
         app.loadPlan(function (e, r) {
             app.vueHeader._data.plans = app.plans;
             setTimeout(function () {
                 $('#loading').addClass('am-hide');
                 blink('#header .am-btn-fixed');
-            }, 800);
+            }, 500);
         });
     }
 }($);
