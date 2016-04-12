@@ -226,7 +226,7 @@ App.prototype.feedBack = function (arr, data) {
         if(app.vueDialog._data.entity.isNew){
             role += '.'+app.vueDialog._data.entity.name;
         }
-        
+
         if(role && app.vueDialog._data.entity.name){
             var _tmp = role.split('.');
             var key = _tmp.pop();
