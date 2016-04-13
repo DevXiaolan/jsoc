@@ -18,13 +18,19 @@ var App = function () {
         }
     });
 
+    this.vueContentHead = new Vue({
+        el:'#content',
+        data:{
+            api:{}
+        }
+    });
+
     this.vueSider = new Vue({
         el:'#sider',
         data:{
             plan:{}
         }
     });
-
     this.vueDialog = new Vue({
         el:'#dialog',
         data:{
@@ -68,13 +74,19 @@ App.prototype.loadDetail = function (plan, cb) {
 App.prototype.apiCommon = function (api) {
     var _html = '';
     api = this.currentPlan.apis[api];
-    _html += '<div><label>Name:</label><input name="name" value="' + api.name + '"> ( API identify name )</div>';
-    _html += '<div><label>URI:</label><input name="uri" value="' + api.uri + '"> ( HTTP request URI )</div>';
-    _html += '<div><label>METHOD:</label><input placeholder="get / post / put / delete" name=",ethod" value="' + api.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
+    _html += this.apiHead(api);
     _html += this.apiObject(api.header, 'header');
     _html += this.apiObject(api.query, 'query');
     _html += this.apiObject(api.body, 'body');
     _html += this.apiObject(api.return, 'return');
+    return _html;
+};
+
+App.prototype.apiHead = function (api) {
+    var _html = '';
+    _html += '<div><label>Name:</label><input role="api.name" class="apiHead" name="name" value="' + api.name + '"> ( API identify name )</div>';
+    _html += '<div><label>URI:</label><input role="api.uri" class="apiHead" name="uri" value="' + api.uri + '"> ( HTTP request URI )</div>';
+    _html += '<div><label>METHOD:</label><input role="api.method" class="apiHead" placeholder="get / post / put / delete" name="method" value="' + api.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
     return _html;
 };
 
@@ -191,11 +203,14 @@ App.prototype.feedBack = function (arr, data) {
         if (e.target.className == 'li-api') {
             var api = e.target.dataset.api;
             app.currentApi = api;
-            $('#content>section').removeClass('am-hide');
+            app.vueContentHead._data.api = app.currentPlan.apis[api];
+                $('#content>section').removeClass('am-hide');
             $('#content>div').html(app.apiCommon(api));
         }
     });
-
+    
+    
+    
     $('#content>div').get(0).addEventListener('click', function (e) {
 
         var dialog = e.target.dataset.dialog;
@@ -209,7 +224,7 @@ App.prototype.feedBack = function (arr, data) {
                 $('#dialog').show();
             });
         }else{
-            console.log('no dialog');
+            //console.log('no dialog');
         }
     });
 
@@ -258,7 +273,12 @@ App.prototype.feedBack = function (arr, data) {
                 break;
         }
     });
-
+    $('#content>div').get(0).addEventListener('change', function (e) {
+        if(e.target.className=='apiHead'){
+            var role = $(e.target).attr('role');
+            
+        }
+    });
 
     // App start
     if(!window.app) {
