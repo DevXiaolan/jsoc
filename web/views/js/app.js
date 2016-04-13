@@ -84,9 +84,9 @@ App.prototype.apiCommon = function (api) {
 
 App.prototype.apiHead = function (api) {
     var _html = '';
-    _html += '<div><label>Name:</label><input role="api.name" class="apiHead" name="name" value="' + api.name + '"> ( API identify name )</div>';
-    _html += '<div><label>URI:</label><input role="api.uri" class="apiHead" name="uri" value="' + api.uri + '"> ( HTTP request URI )</div>';
-    _html += '<div><label>METHOD:</label><input role="api.method" class="apiHead" placeholder="get / post / put / delete" name="method" value="' + api.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
+    _html += '<div><label>Name:</label><input role="name" class="apiHead" name="name" value="' + api.name + '"> ( API identify name )</div>';
+    _html += '<div><label>URI:</label><input role="uri" class="apiHead" name="uri" value="' + api.uri + '"> ( HTTP request URI )</div>';
+    _html += '<div><label>METHOD:</label><input role="method" class="apiHead" placeholder="get / post / put / delete" name="method" value="' + api.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
     return _html;
 };
 
@@ -190,13 +190,15 @@ App.prototype.feedBack = function (arr, data) {
 
 
     $('#header').find('ul').get(0).addEventListener('click', function (e) {
-        if (e.target.className == 'am-dropdown-header') {
+        if ($(e.target).hasClass('plan')) {
             var plan = e.target.innerHTML;
             loading.on();
             window.app.loadDetail(plan, function (e, r) {
                 loading.off();
             });
             $(this).parent().find('button').html(plan).click();
+        }else{
+            console.log($(e.target).text());
         }
     });
     $('#sider').find('ul').get(0).addEventListener('click', function (e) {
@@ -204,8 +206,26 @@ App.prototype.feedBack = function (arr, data) {
             var api = e.target.dataset.api;
             app.currentApi = api;
             app.vueContentHead._data.api = app.currentPlan.apis[api];
-                $('#content>section').removeClass('am-hide');
+            $('#content>section').removeClass('am-hide');
             $('#content>div').html(app.apiCommon(api));
+        }else{
+            var key = prompt('请输入接口标识名(英文key)');
+            if(/[a-z]+/.test(key)){
+
+                app.currentPlan.apis[key] = {
+                    'name':key,
+                    'uri':'',
+                    'method':'get',
+                    'header':{},
+                    'query':{},
+                    'body':{},
+                    'return':{}
+                };
+                app.vueSider.plan = app.currentPlan;
+                $(e.target).before('<li class="li-api" data-api="'+key+'"><i class="am-icon-chain am-icon-fw"></i>'+key+'</li>');
+            }else{
+                alert('请使用小写字母命名');
+            }
         }
     });
     
@@ -223,7 +243,18 @@ App.prototype.feedBack = function (arr, data) {
             app.dialog(e.target,dialog,function(e,r){
                 $('#dialog').show();
             });
-        }else{
+        }else if($(e.target).hasClass('am-text-warning')){
+            var parent = $(e.target).parent();
+            var role = parent.attr('role');
+            var roleArr = role.split('.');
+            var _p = app.currentPlan.apis[app.currentApi];
+            while(roleArr.length>1){
+                _p = _p[roleArr.shift()];
+            }
+            delete _p[roleArr[0]];
+            parent.remove();
+        }
+        else{
             //console.log('no dialog');
         }
     });
@@ -236,6 +267,7 @@ App.prototype.feedBack = function (arr, data) {
             app.vueDialog._data.entity.entity[op] = _text;
         }
     });
+
     $('#dialog_save_btn').click(function (e) {
         var role = app.vueDialog._data.entity.role;
         if(app.vueDialog._data.entity.isNew){
@@ -256,6 +288,7 @@ App.prototype.feedBack = function (arr, data) {
         app.vueDialog.close();
 
     });
+
     $('#content>section').find('button').click(function (e) {
         var cmd = $(e.target).attr('role');
         console.log(cmd);
@@ -273,10 +306,12 @@ App.prototype.feedBack = function (arr, data) {
                 break;
         }
     });
+
     $('#content>div').get(0).addEventListener('change', function (e) {
         if(e.target.className=='apiHead'){
             var role = $(e.target).attr('role');
-            
+            var value = $(e.target).val();
+            app.currentPlan.apis[app.currentApi][role] = value;
         }
     });
 

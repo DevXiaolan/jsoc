@@ -36,8 +36,8 @@ Controller.savePlan = function(req,res){
     if(!!plan){
         var content = '\'use strict\';'+os.EOL;
         content += 'module.exports = ';
-        content += prettyJson(plan,0);
-        fs.writeFileSync(process.cwd()+'/../apiDocs/'+planName+'.js',content.substr(0,content.length-2)+';'+os.EOL);
+        content += prettyJson(plan,4);
+        fs.writeFileSync(process.cwd()+'/../apiDocs/'+planName+'.js',content+';'+os.EOL);
         res.json(400,{},'good request');
     }else{
         res.json(400,{},'bad request');
@@ -54,34 +54,32 @@ Controller.detail = function(req,res){
 };
 
 var prettyJson = function (obj, tabCount) {
-    tabCount++;
-    if (typeof obj == 'object') {
-        var r = '';
-        var isArray = Array.isArray(obj);
-        r += (isArray) ? '['+os.EOL : '{'+os.EOL;
-        var keys = Object.keys(obj);
-        var k = null;
-        while(k=keys.shift()){
-            if(isArray){
-                r += '    '.repeat(tabCount) + prettyJson(obj[k], tabCount);
-            }else{
-                r += '    '.repeat(tabCount) + k + ' : ' + prettyJson(obj[k], tabCount);
-            }
-            if(keys.length == 0){
-                r = r.substr(0,r.length-2)+os.EOL;
-            }
-        }
-
-        return r += '    '.repeat(tabCount - 1) + ((isArray) ? '],' : '},') + os.EOL;
-    } else {
-        return (Number.isNaN(obj*1)?'\''+ obj +'\'':obj) +','+os.EOL;
-    }
+    return JSON.stringify(obj,null,tabCount);
+    //if(!tabCount)tabCount = 0;
+    //
+    //var EOL = (os && os.EOL)?os.EOL:'\n';
+    //tabCount++;
+    //if (typeof obj == 'object') {
+    //    var r = '';
+    //    var isArray = Array.isArray(obj);
+    //    r += (isArray) ? '['+EOL : '{'+EOL;
+    //    var keys = Object.keys(obj);
+    //    var k = null;
+    //    while(k=keys.shift()){
+    //        if(isArray){
+    //            r += '    '.repeat(tabCount) + prettyJson(obj[k], tabCount);
+    //        }else{
+    //            r += '    '.repeat(tabCount) + k + ' : ' + prettyJson(obj[k], tabCount);
+    //        }
+    //        if(keys.length == 0){
+    //            r = r.substr(0,r.length-2)+EOL;
+    //        }
+    //    }
+    //
+    //    return r += '    '.repeat(tabCount - 1) + ((isArray) ? '],' : '},') + EOL;
+    //} else {
+    //    return (Number.isNaN(obj*1)?'\''+ obj +'\'':obj) +','+EOL;
+    //}
 };
 
 module.exports = Controller;
-//console.log(prettyJson({
-//    a:{
-//        b:1,
-//        c:2
-//    }
-//},0));
