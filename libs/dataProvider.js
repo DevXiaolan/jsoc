@@ -46,7 +46,7 @@ DataProvider.prototype.generator = function(){
 
 DataProvider.prototype.data = function (item) {
     var ret = {};
-    if(!item._type && !item._assert){
+    if(!item._type && !item._assert && !item._to && !item._from){
         for(let k in item){
             ret[k] = this.data(item[k]);
         }
@@ -69,12 +69,12 @@ DataProvider.prototype.validation = function (body,config,report) {
     var returnConfig = config?config:this.apiConfig.return;
 
     for(let k in returnConfig){
-        if((typeof returnConfig[k] == 'object') && (!returnConfig[k]._type) && (!returnConfig[k]._assert)){
+
+        if((typeof returnConfig[k] == 'object') && (!returnConfig[k]._type) && (returnConfig[k]._assert===undefined)){
             report[k] = {};
             this.validation(body[k],returnConfig[k],report[k]);
         }else{
-
-            if(returnConfig[k]._assert && (returnConfig[k]._assert == body[k])){
+            if((returnConfig[k]._assert !== undefined ) && (returnConfig[k]._assert == body[k])){
                 report[k] = true;
             }else if((!returnConfig[k]._assert) && returnConfig[k]._type){
                 var allowType = returnConfig[k]._type.split('||');
