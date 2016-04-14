@@ -46,7 +46,7 @@ DataProvider.prototype.generator = function(){
 
 DataProvider.prototype.data = function (item) {
     var ret = {};
-    if(!item._type){
+    if(!item._type && !item._assert){
         for(let k in item){
             ret[k] = this.data(item[k]);
         }
@@ -55,7 +55,7 @@ DataProvider.prototype.data = function (item) {
         if (item._from && this.cache[item._from]) {
             ret = this.cache[item._from];
         } else {
-            ret = require('./func/makeData')(item._type, item._length);
+            ret = require('./func/makeData')(item._assert?item._assert:item._type, item._length);
         }
         if (item._to) {
             this.cache[item._to] = ret;

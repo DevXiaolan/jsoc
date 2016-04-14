@@ -113,7 +113,7 @@ App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
         this.feedBack(arr,entity);
     }
     var _html = '';
-    if (!(entity.assert || entity.length || entity.to || entity.from || entity.type)) {
+    if (!(entity._assert || entity._length || entity._to || entity._from || entity._type)) {
         var _source = {
             'entity':{},
             'role':prefix+'.'+key,
@@ -143,7 +143,7 @@ App.prototype.dialog = function (caller,type, cb) {
     switch(type){
         case 'd_add_entity':
             var s = $(caller).data('s');
-            s.entity.type = 'String'
+            s.entity._type = 'String'
             this.vueDialog._data.entity = s;
             break;
         case 'd_edit_entity':
@@ -157,8 +157,8 @@ App.prototype.dialog = function (caller,type, cb) {
 };
 
 App.prototype.feedBack = function (arr, data) {
-    if(data.type && data.type=='Number' && data.assert){
-        data.assert = 1 * data.assert;
+    if(data._type && data._type=='Number' && data._assert){
+        data._assert = 1 * data._assert;
     }
     var api = this.currentPlan.apis[this.currentApi];
     while(arr.length>1){
