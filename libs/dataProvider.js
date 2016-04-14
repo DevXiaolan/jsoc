@@ -60,13 +60,14 @@ DataProvider.prototype.data = function (item) {
 DataProvider.prototype.validation = function (body,config,report) {
     var report = report?report:this.report;
     var returnConfig = config?config:this.apiConfig.return;
+
     for(let k in returnConfig){
         if((typeof returnConfig[k] == 'object') && (!returnConfig[k].type) && (!returnConfig[k].assert)){
             report[k] = {};
             this.validation(body[k],returnConfig[k],report[k]);
         }else{
 
-            if(returnConfig[k].assert && (returnConfig[k].assert === body[k])){
+            if(returnConfig[k].assert && (returnConfig[k].assert == body[k])){
                 report[k] = true;
             }else if((!returnConfig[k].assert) && returnConfig[k].type){
                 var allowType = returnConfig[k].type.split('||');

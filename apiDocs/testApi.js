@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-    "host": "http://127.0.0.1:3001",
+    "host": "http://127.0.0.1:30011",
     "apis": {
         "user": {
             "name": "user",
@@ -86,7 +86,7 @@ module.exports = {
             "header": {
                 "appId": {
                     "type": "Number",
-                    "length": "6"
+                    "length": "8"
                 }
             },
             "query": {
@@ -105,8 +105,7 @@ module.exports = {
             "return": {
                 "code": {
                     "type": "Number",
-                    "length": "",
-                    "assert": "200"
+                    "assert": 200
                 }
             }
         }

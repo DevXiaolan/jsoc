@@ -13,7 +13,7 @@ var App = function () {
         el: '#header',
         data: {
             site:'JSOC.',
-            host:'',
+            host:{},
             plans: this.plans
         }
     });
@@ -62,7 +62,7 @@ App.prototype.loadDetail = function (plan, cb) {
         if (data.code == 200) {
             _this.vueSider._data.plan = _this.currentPlan = data.data;
             _this.currentPlanName = plan;
-            _this.vueHeader._data.host = _this.currentPlan.host;
+            _this.vueHeader._data.host = _this.currentPlan;
             cb && cb(null, _this.currentPlan);
         } else {
             //todo
@@ -157,6 +157,9 @@ App.prototype.dialog = function (caller,type, cb) {
 };
 
 App.prototype.feedBack = function (arr, data) {
+    if(data.type && data.type=='Number' && data.assert){
+        data.assert = 1 * data.assert;
+    }
     var api = this.currentPlan.apis[this.currentApi];
     while(arr.length>1){
         var _k = arr.shift();
@@ -198,7 +201,14 @@ App.prototype.feedBack = function (arr, data) {
             });
             $(this).parent().find('button').html(plan).click();
         }else{
-            console.log($(e.target).text());
+            var key = prompt('请输入接口标识名(英文key)');
+            if(/[a-z]+/.test(key)){
+                app.plans.push(key);
+                app.currentPlanName = key;
+
+            }else{
+                alert('请使用小写字母命名');
+            }
         }
     });
     $('#sider').find('ul').get(0).addEventListener('click', function (e) {

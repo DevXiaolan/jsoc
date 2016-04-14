@@ -45,7 +45,6 @@ var matchUrl = function (req, route) {
     var uri = req.url.split('?')[0];
     var method = req.method.toLowerCase();
     var uriReg = toRegExp(route.uri);
-    console.log(new RegExp(uriReg,'i'),uri);
     return !! (new RegExp(uriReg,'i').test(uri) && method == route.method.toLowerCase());
 };
 
