@@ -113,7 +113,7 @@ App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
         this.feedBack(arr,entity);
     }
     var _html = '';
-    if (!feedBack && !(entity.assert || entity.length || entity.to || entity.from || entity.type)) {
+    if (!(entity.assert || entity.length || entity.to || entity.from || entity.type)) {
         var _source = {
             'entity':{},
             'role':prefix+'.'+key,
@@ -272,9 +272,13 @@ App.prototype.feedBack = function (arr, data) {
     $('#dialog').get(0).addEventListener('click', function (e) {
         if (e.target.localName == 'a') {
             var _text = $(e.target).text();
-            var op = $(e.target).parent().parent().data('op');
+            if(_text == '父节点'){
+                app.vueDialog._data.entity.entity = {};
+            }else {
+                var op = $(e.target).parent().parent().data('op');
+                app.vueDialog._data.entity.entity[op] = _text;
+            }
             $(e.target).parent().parent().parent().find('button').text(_text).click();
-            app.vueDialog._data.entity.entity[op] = _text;
         }
     });
 

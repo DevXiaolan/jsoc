@@ -18,7 +18,14 @@ module.exports = {
                     "length": 10
                 }
             },
-            "body": {},
+            "body": {
+                "profile": {
+                    "tel": {
+                        "type": "String",
+                        "length": "11"
+                    }
+                }
+            },
             "return": {
                 "code": {
                     "type": "Number",
