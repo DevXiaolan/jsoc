@@ -23,3 +23,5 @@
 
     启动本地web界面实际上同时提供了mock服务，http://127.0.0.1:3001 下会给你mock你配置的方案的接口的返回案例
     （需要在 /web/config/config.js 里制定 apis:{projectName} ）
+    
+![](http://log.fyscu.com/usr/uploads/2016/04/1049222048.png)
