@@ -54,9 +54,9 @@
         </div>
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Type:</label>
             <div class="am-dropdown" data-am-dropdown>
-                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity.type?entity.entity.type:'String'}} <span
+                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity._type?entity.entity._type:'String'}} <span
                         class="am-icon-caret-down"></span></button>
-                <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="type">
+                <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="_type">
                     <li class="am-dropdown-header"><a>String</a></li>
                     <li class="am-dropdown-header"><a>Number</a></li>
                     <li class="am-dropdown-header"><a>Object</a></li>
@@ -66,15 +66,15 @@
                 </ul>
             </div>
         </div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Length:</label><input name="length" class="am-u-md-7" type="number" v-model="entity.entity.length"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Assert:</label><input name="assert" class="am-u-md-7" type="text" v-model="entity.entity.assert"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">To:</label><input name="to" class="am-u-md-7" type="text" v-model="entity.entity.to"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Form:</label><input name="from" class="am-u-md-7" type="text" v-model="entity.entity.from"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Length:</label><input name="_length" class="am-u-md-7" type="number" v-model="entity.entity._length"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Assert:</label><input name="_assert" class="am-u-md-7" type="text" v-model="entity.entity._assert"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">To:</label><input name="_to" class="am-u-md-7" type="text" v-model="entity.entity._to"></div>
+        <div class="am-g am-g-fixed"><label class="am-u-md-5">Form:</label><input name="_from" class="am-u-md-7" type="text" v-model="entity.entity._from"></div>
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Required:</label>
             <div class="am-dropdown" data-am-dropdown>
-                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity.required}} <span
+                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity._required}} <span
                         class="am-icon-caret-down"></span></button>
-                <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="required">
+                <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="_required">
                     <li class="am-dropdown-header"><a>true</a></li>
                     <li class="am-dropdown-header"><a>false</a></li>
                 </ul>

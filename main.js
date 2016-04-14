@@ -40,7 +40,7 @@ async.eachSeries(uc.apis, function (item, callback) {
     item = dp.generator();
     if(httpAgent[item.method]){
         httpAgent.headers = item.header;
-
+        console.log(item.body);
         httpAgent[item.method](uc.host+item.uri,item.body, function (e, r) {
             console.log(r.body);
             dp.validation(r.body);

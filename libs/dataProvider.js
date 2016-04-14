@@ -45,16 +45,23 @@ DataProvider.prototype.generator = function(){
 };
 
 DataProvider.prototype.data = function (item) {
-    var ret = null;
-    if(item.from && this.cache[item.from]){
-        ret = this.cache[item.from];
+    var ret = {};
+    if(!item._type){
+        for(let k in item){
+            ret[k] = this.data(item[k]);
+        }
+        return ret;
     }else {
-        ret = require('./func/makeData')(item.type,item.length);
+        if (item._from && this.cache[item._from]) {
+            ret = this.cache[item._from];
+        } else {
+            ret = require('./func/makeData')(item._type, item._length);
+        }
+        if (item._to) {
+            this.cache[item._to] = ret;
+        }
+        return ret;
     }
-    if(item.to){
-        this.cache[item.to] = ret;
-    }
-    return ret;
 };
 
 DataProvider.prototype.validation = function (body,config,report) {
@@ -62,15 +69,15 @@ DataProvider.prototype.validation = function (body,config,report) {
     var returnConfig = config?config:this.apiConfig.return;
 
     for(let k in returnConfig){
-        if((typeof returnConfig[k] == 'object') && (!returnConfig[k].type) && (!returnConfig[k].assert)){
+        if((typeof returnConfig[k] == 'object') && (!returnConfig[k]._type) && (!returnConfig[k]._assert)){
             report[k] = {};
             this.validation(body[k],returnConfig[k],report[k]);
         }else{
 
-            if(returnConfig[k].assert && (returnConfig[k].assert == body[k])){
+            if(returnConfig[k]._assert && (returnConfig[k]._assert == body[k])){
                 report[k] = true;
-            }else if((!returnConfig[k].assert) && returnConfig[k].type){
-                var allowType = returnConfig[k].type.split('||');
+            }else if((!returnConfig[k]._assert) && returnConfig[k]._type){
+                var allowType = returnConfig[k]._type.split('||');
                 report[k] = false;
                 for(let i in allowType){
                     report[k] = report[k] || this.isType(allowType[i].toLowerCase(),body[k]);
@@ -78,8 +85,8 @@ DataProvider.prototype.validation = function (body,config,report) {
             }else{
                 report[k] = false;
             }
-            if(returnConfig[k].to){
-                this.cache[returnConfig[k].to] = body[k];
+            if(returnConfig[k]._to){
+                this.cache[returnConfig[k]._to] = body[k];
             }
         }
     }

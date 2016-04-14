@@ -2,7 +2,7 @@
 
 let makeData = function(type,length){
     //console.log(type);
-    type = type?type.toLowerCase():null;
+    type = (type && typeof type == 'string')?type.toLowerCase():type;
     var ret = null;
     switch (type) {
         case 'string':
@@ -33,7 +33,7 @@ let makeData = function(type,length){
             return ['a','b','c'];
             break;
         default :
-            ret = null;
+            ret = type;
             break;
     }
     return ret;

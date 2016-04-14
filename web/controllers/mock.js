@@ -56,14 +56,16 @@ var toRegExp = function (route) {
 var checkRequest = function (req, route) {
 
     for(let k in route.body){
-        if(!isType(route.body[k].type,req.body[k])){
-            console.log('body error',route.body[k].type,req.body[k]);
+        //if(!isType(route.body[k].type,req.body[k])){
+        if(!checkType(route.body,req.body)){
+            console.log('body error');
             return false;
         }
     }
 
     for(let k in route.query){
-        if(!isType(route.query[k].type,req.query[k])){
+        //if(!isType(route.query[k].type,req.query[k])){
+        if(!checkType(route.query,req.query)){
             console.log('query error');
             return false;
         }
@@ -71,15 +73,27 @@ var checkRequest = function (req, route) {
     return true;
 };
 
+var checkType = function(obj,value){
+    var sig = true;
+    if(obj._type) {
+        return sig && isType(obj._type, value);
+    }else{
+        for(let k in obj){
+            sig = sig && checkType(obj[k],value[k]);
+        }
+        return sig;
+    }
+};
+
 var response = function(retData){
     var result = {};
     if(retData){
-        if(typeof retData == 'object' && (!retData.type) && (!retData.assert)){
+        if(typeof retData == 'object' && !((retData._type) || (retData._assert))){
             for(let k in retData){
                 result[k] = response(retData[k]);
             }
         }else{
-            result = makeData(retData.type);
+            result = makeData(retData._assert?retData._assert:retData._type);
         }
     }else{
         return {};
