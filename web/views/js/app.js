@@ -51,16 +51,22 @@ App.prototype.loadPlan = function (cb) {
 
 App.prototype.loadDetail = function (plan, cb) {
     var _this = this;
-    $.get('/index/detail?plan=' + plan, function (data) {
-        if (data.code == 200) {
-            _this.vueSider._data.plan = _this.currentPlan = data.data;
-            _this.currentPlanName = plan;
-            _this.vueHeader._data.host = _this.currentPlan;
-            cb && cb(null, _this.currentPlan);
-        } else {
-            //todo
-        }
-    });
+    if(app.currentPlanName==plan){
+        _this.currentPlanName = plan;
+        _this.vueHeader._data.host = _this.currentPlan;
+        cb && cb(null,_this.currentPlan) ;
+    }else {
+        $.get('/index/detail?plan=' + plan, function (data) {
+            if (data.code == 200) {
+                _this.vueSider._data.plan = _this.currentPlan = data.data;
+                _this.currentPlanName = plan;
+                _this.vueHeader._data.host = _this.currentPlan;
+                cb && cb(null, _this.currentPlan);
+            } else {
+                //todo
+            }
+        });
+    }
 };
 
 App.prototype.apiCommon = function (api) {
@@ -189,14 +195,18 @@ App.prototype.feedBack = function (arr, data) {
             });
             $(this).parent().find('button').html(plan).click();
         }else{
-            //var key = prompt('请输入接口标识名(英文key)');
-            //if(/[a-z]+/.test(key)){
-            //    app.plans.push(key);
-            //    app.currentPlanName = key;
-            //
-            //}else{
-            //    alert('请使用小写字母命名');
-            //}
+            var key = prompt('请输入接口标识名(英文key)');
+            if(/[a-z]+/.test(key)){
+                app.plans.push(key);
+                app.currentPlanName = key;
+                app.vueSider._data.plan = app.currentPlan = {
+                    host:'http://',
+                    apis:{}
+                };
+                //app.vueHeader._data.host = app.currentPlan;
+            }else{
+                alert('请使用小写字母命名');
+            }
         }
     });
 
