@@ -270,7 +270,7 @@ App.prototype.feedBack = function (arr, data) {
                 var op = $(e.target).parent().parent().data('op');
                 app.vueDialog._data.entity.entity[op] = _text;
             }
-            $(e.target).parent().parent().parent().find('button').text(_text).click();
+            $(e.target).parent().parent().parent().find('button').click();
         }
     });
 
