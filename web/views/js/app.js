@@ -4,11 +4,11 @@
 
 var App = function () {
     "use strict";
-
     this.plans = [];
     this.currentPlan = null;
     this.currentPlanName = null;
     this.currentApi = null;
+
     this.vueHeader = new Vue({
         el: '#header',
         data: {
@@ -17,14 +17,6 @@ var App = function () {
             plans: this.plans
         }
     });
-
-    this.vueContentHead = new Vue({
-        el:'#content',
-        data:{
-            api:{}
-        }
-    });
-
     this.vueSider = new Vue({
         el:'#sider',
         data:{
@@ -70,7 +62,6 @@ App.prototype.loadDetail = function (plan, cb) {
     });
 };
 
-
 App.prototype.apiCommon = function (api) {
     var _html = '';
     api = this.currentPlan.apis[api];
@@ -107,7 +98,6 @@ App.prototype.apiObject = function (obj, title) {
 
 App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
     if(feedBack){
-
         var arr = prefix.split('.');
         arr.push(key);
         this.feedBack(arr,entity);
@@ -201,21 +191,21 @@ App.prototype.feedBack = function (arr, data) {
             });
             $(this).parent().find('button').html(plan).click();
         }else{
-            var key = prompt('请输入接口标识名(英文key)');
-            if(/[a-z]+/.test(key)){
-                app.plans.push(key);
-                app.currentPlanName = key;
-
-            }else{
-                alert('请使用小写字母命名');
-            }
+            //var key = prompt('请输入接口标识名(英文key)');
+            //if(/[a-z]+/.test(key)){
+            //    app.plans.push(key);
+            //    app.currentPlanName = key;
+            //
+            //}else{
+            //    alert('请使用小写字母命名');
+            //}
         }
     });
     $('#sider').find('ul').get(0).addEventListener('click', function (e) {
         if (e.target.className == 'li-api') {
+            $('#content>div').html('loading...');
             var api = e.target.dataset.api;
             app.currentApi = api;
-            app.vueContentHead._data.api = app.currentPlan.apis[api];
             $('#content>section').removeClass('am-hide');
             $('#content>div').html(app.apiCommon(api));
         }else{
