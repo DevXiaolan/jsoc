@@ -34,6 +34,7 @@ var App = function () {
             }
         }
     });
+
 };
 
 App.prototype.loadPlan = function (cb) {
@@ -75,9 +76,9 @@ App.prototype.apiCommon = function (api) {
 
 App.prototype.apiHead = function (api) {
     var _html = '';
-    _html += '<div><label>Name:</label><input role="name" class="apiHead" name="name" value="' + api.name + '"> ( API identify name )</div>';
-    _html += '<div><label>URI:</label><input role="uri" class="apiHead" name="uri" value="' + api.uri + '"> ( HTTP request URI )</div>';
-    _html += '<div><label>METHOD:</label><input role="method" class="apiHead" placeholder="get / post / put / delete" name="method" value="' + api.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
+    _html += '<div><label>Name:</label><input role="name" class="apiHead" value="' + api.name + '"> ( API identify name )</div>';
+    _html += '<div><label>URI:</label><input role="uri" class="apiHead" value="' + api.uri + '"> ( HTTP request URI )</div>';
+    _html += '<div><label>METHOD:</label><input role="method" class="apiHead" placeholder="get / post / put / delete" value="' + api.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
     return _html;
 };
 
@@ -93,8 +94,6 @@ App.prototype.apiObject = function (obj, title) {
     }
     return _html + '</fieldSet>';
 };
-
-
 
 App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
     if(feedBack){
@@ -181,7 +180,6 @@ App.prototype.feedBack = function (arr, data) {
         }
     };
 
-
     $('#header').find('ul').get(0).addEventListener('click', function (e) {
         if ($(e.target).hasClass('plan')) {
             var plan = e.target.innerHTML;
@@ -201,6 +199,7 @@ App.prototype.feedBack = function (arr, data) {
             //}
         }
     });
+
     $('#sider').find('ul').get(0).addEventListener('click', function (e) {
         if (e.target.className == 'li-api') {
             $('#content>div').html('loading...');
@@ -211,7 +210,6 @@ App.prototype.feedBack = function (arr, data) {
         }else{
             var key = prompt('请输入接口标识名(英文key)');
             if(/[a-z]+/.test(key)){
-
                 app.currentPlan.apis[key] = {
                     'name':key,
                     'uri':'',
@@ -229,10 +227,7 @@ App.prototype.feedBack = function (arr, data) {
         }
     });
     
-    
-    
     $('#content>div').get(0).addEventListener('click', function (e) {
-
         var dialog = e.target.dataset.dialog;
         if(dialog){
             $('#dialog').hide().css({
@@ -254,9 +249,6 @@ App.prototype.feedBack = function (arr, data) {
             delete _p[roleArr[0]];
             parent.remove();
         }
-        else{
-            //console.log('no dialog');
-        }
     });
 
     $('#dialog').get(0).addEventListener('click', function (e) {
@@ -277,7 +269,6 @@ App.prototype.feedBack = function (arr, data) {
         if(app.vueDialog._data.entity.isNew){
             role += '.'+app.vueDialog._data.entity.name;
         }
-
         if(role && app.vueDialog._data.entity.name){
             var _tmp = role.split('.');
             var key = _tmp.pop();
@@ -288,9 +279,7 @@ App.prototype.feedBack = function (arr, data) {
                 $('section[role="' + role + '"]').prop('outerHTML', app.apiEntity(key, app.vueDialog._data.entity.entity, prefix, true));
             }
         }
-
         app.vueDialog.close();
-
     });
 
     $('#content>section').find('button').click(function (e) {
