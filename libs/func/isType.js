@@ -1,8 +1,10 @@
 'use strict';
 
-let isType = function(type,val){
-    type = type.toLowerCase();
-
+let isType = function(type,val,length){
+    type = (type && typeof type == 'string')?type.toLowerCase():type;
+    if(length && (''+val).length!=length){
+        return false;
+    }
     switch (type){
         case 'string':
             return /^[A-Za-z0-9_]+$/.test(val);
