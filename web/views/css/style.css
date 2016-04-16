@@ -45,6 +45,7 @@ body{
 }
 #sider{
     background-color: rgba(22, 28, 33,0.6);
+    padding-left: 0;
 }
 #sider ul li{
     padding: 5px 0;

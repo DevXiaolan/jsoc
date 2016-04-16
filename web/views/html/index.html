@@ -51,8 +51,8 @@
         </div>
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Type:</label>
             <div class="am-dropdown" data-am-dropdown>
-                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity._type?entity.entity._type:'String'}} <span
-                        class="am-icon-caret-down"></span></button>
+                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity._type?entity.entity._type:'String'}}
+                    <span class="am-icon-caret-down"></span></button>
                 <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="_type">
                     <li class="am-dropdown-header"><a>String</a></li>
                     <li class="am-dropdown-header"><a>Number</a></li>
@@ -68,14 +68,7 @@
         <div class="am-g am-g-fixed"><label class="am-u-md-5">To:</label><input class="am-u-md-7" type="text" v-model="entity.entity._to"></div>
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Form:</label><input class="am-u-md-7" type="text" v-model="entity.entity._from"></div>
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Required:</label>
-            <div class="am-dropdown" data-am-dropdown>
-                <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity._required}} <span
-                        class="am-icon-caret-down"></span></button>
-                <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="_required">
-                    <li class="am-dropdown-header"><a>true</a></li>
-                    <li class="am-dropdown-header"><a>false</a></li>
-                </ul>
-            </div>
+            <input type="checkbox" v-model="entity.entity._required">
         </div>
         <div class="am-g am-g-fixed">
             <button id="dialog_save_btn" type="button" class="am-btn am-btn-primary am-fr">Save</button>

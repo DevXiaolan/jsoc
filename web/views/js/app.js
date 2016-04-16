@@ -134,7 +134,6 @@ App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
 };
 
 App.prototype.dialog = function (caller,type, cb) {
-    console.log(type);
     switch(type){
         case 'd_add_entity':
             var s = $(caller).data('s');
@@ -175,6 +174,8 @@ App.prototype.feedBack = function (arr, data) {
     var loading = {
         'delay': 300,
         'on': function () {
+            $('#content>section').addClass('am-hide');
+            $('#content>div').html('');
             $('#board').addClass('am-hide');
             $('#loading').removeClass('am-hide');
         },
@@ -219,7 +220,7 @@ App.prototype.feedBack = function (arr, data) {
             $('#content>div').html(app.apiCommon(api));
         }else{
             var key = prompt('请输入接口标识名(英文key)');
-            if(/[a-z]+/.test(key)){
+            if(key && /[a-z]+/.test(key)){
                 app.currentPlan.apis[key] = {
                     'name':key,
                     'uri':'',
