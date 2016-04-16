@@ -1,7 +1,6 @@
 'use strict';
 
 let makeData = function(type,length){
-    //console.log(type);
     type = (type && typeof type == 'string')?type.toLowerCase():type;
     var ret = null;
     switch (type) {

@@ -10,7 +10,6 @@
 <body>
 <header id="header" class="am-topbar admin-header">
     <h1 class="am-topbar-brand am-text-secondary am-text-xl am-serif">{{site}}</h1>
-
     <div class="am-dropdown" data-am-dropdown>
         <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>选择方案 <span
                 class="am-icon-caret-down"></span></button>
@@ -42,13 +41,11 @@
                 </div>
             </section>
             <div>
-
             </div>
         </div>
     </div>
     <div id="dialog" >
         <div class="am-panel-hd am-cf">TITLE<span class="am-icon-close am-fr" v-on:click="close();"></span></div>
-
         <div class="am-g am-g-fixed"><label class="am-u-md-5">Name:</label>
             <input class="am-u-md-7" type="text" v-model="entity.name">
         </div>
@@ -84,7 +81,6 @@
             <button id="dialog_save_btn" type="button" class="am-btn am-btn-primary am-fr">Save</button>
         </div>
     </div>
-
 </div>
 </body>
 <script src="/assets/jquery/dist/jquery.min.js"></script>
