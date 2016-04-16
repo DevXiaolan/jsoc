@@ -24,7 +24,7 @@ Controller.mock = function(req,res){
                 break;
             }
         }
-        
+
         if(route && checkRequest(req,route)){
             res.json(200,response(route.return.data),'');
         }else {
@@ -75,8 +75,14 @@ var checkRequest = function (req, route) {
 
 var checkType = function(obj,value){
     var sig = true;
+    console.log(obj);
     if(obj._type) {
-        return sig && isType(obj._type, value);
+        if(obj._required==true ){
+            return sig && isType(obj._type, value,obj._length);
+        }
+        else{
+            return true;
+        }
     }else{
         for(let k in obj){
             sig = sig && checkType(obj[k],value[k]);

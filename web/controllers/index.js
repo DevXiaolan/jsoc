@@ -49,6 +49,7 @@ Controller.detail = function(req,res){
     if(Controller.plansCache[plan]){
         res.json(200,Controller.plansCache[plan]);
     }else{
+        console.log(Controller.plansCache);
         res.json(404,{},'plan not found');
     }
 };
