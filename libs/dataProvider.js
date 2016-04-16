@@ -74,6 +74,9 @@ DataProvider.prototype.validation = function (body,config,report) {
             report[k] = {};
             this.validation(body[k],returnConfig[k],report[k]);
         }else{
+            if(returnConfig[k]._required == false){
+                return true;
+            }
             if((returnConfig[k]._assert !== undefined ) && (returnConfig[k]._assert == body[k])){
                 report[k] = true;
             }else if((!returnConfig[k]._assert) && returnConfig[k]._type){
