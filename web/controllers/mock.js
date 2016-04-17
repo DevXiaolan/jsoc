@@ -99,7 +99,7 @@ var response = function(retData){
                 result[k] = response(retData[k]);
             }
         }else{
-            result = makeData(retData._assert?retData._assert:retData._type);
+            result = makeData(retData._assert?retData._assert:retData._type,retData._length);
         }
     }else{
         return {};

@@ -5,7 +5,7 @@ let makeData = function(type,length){
     var ret = null;
     switch (type) {
         case 'string':
-            ret = 'string_' + Date.now();
+            ret = 'string_' + (''+Date.now()).repeat(5);
             if(length){
                 ret = ret.substr(0,length);
             }
