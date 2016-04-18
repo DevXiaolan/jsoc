@@ -213,11 +213,11 @@ App.prototype.feedBack = function (arr, data) {
 
     $('#sider').find('ul').get(0).addEventListener('click', function (e) {
         if (e.target.className == 'li-api') {
-            $('#content>div').html('loading...');
+            $('#api').html('loading...');
             var api = e.target.dataset.api;
             app.currentApi = api;
             $('#content>section').removeClass('am-hide');
-            $('#content>div').html(app.apiCommon(api));
+            $('#api').html(app.apiCommon(api));
         }else{
             var key = prompt('请输入接口标识名(英文key)');
             if(key && /[a-z]+/.test(key)){
@@ -238,7 +238,7 @@ App.prototype.feedBack = function (arr, data) {
         }
     });
     
-    $('#content>div').get(0).addEventListener('click', function (e) {
+    $('#api').get(0).addEventListener('click', function (e) {
         var dialog = e.target.dataset.dialog;
         if(dialog){
             $('#dialog').hide().css({
