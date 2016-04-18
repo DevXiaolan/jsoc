@@ -5,6 +5,7 @@
 var fs = require('fs');
 var os = require('os');
 var async = require('async');
+var config = require('../config/config.js');
 var Controller = {};
 
 Controller.plansCache = {};
@@ -46,6 +47,7 @@ Controller.savePlan = function(req,res){
 
 Controller.detail = function(req,res){
     var plan = req.query.plan;
+    config.apis = plan;
     if(Controller.plansCache[plan]){
         res.json(200,Controller.plansCache[plan]);
     }else{
