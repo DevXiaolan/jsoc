@@ -3,7 +3,7 @@ module.exports = {
     "host": "http://127.0.0.1:3001",
     "apis": {
         'user': {
-            name: 'user',
+            name: '测试接口之用户示例',
             uri: '/test/user/{uid}',
             method: 'get',
             header: {
@@ -39,7 +39,8 @@ module.exports = {
                             _length:'11'
                         },
                         email:{
-                            _type:'string'
+                            _type:'Email',
+                            _length:20
                         }
                     }
                 }
@@ -50,7 +51,7 @@ module.exports = {
             }
         },
         'order': {
-            name: 'order',
+            name: '测试接口之订单示例',
             uri: '/test/order',
             method: 'get',
             header: {
@@ -75,7 +76,7 @@ module.exports = {
             }
         },
         "test": {
-            "name": "test",
+            "name": "测试接口之test示例",
             "uri": "/test/lalala",
             "method": "get",
             "header": {

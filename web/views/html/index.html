@@ -19,6 +19,8 @@
         </ul>
     </div>
     <em><input v-show="host.host" type="text" v-model="host.host"></em>
+
+    <em><a target="_blank" href="/index/docs/{{currentPlanName}}"><span  v-show="host.host"  class="am-icon-file-pdf-o am-icon-fixed  am-text-success">文档生成</span></a></em>
 </header>
 <div id="main">
     <div id="loading">

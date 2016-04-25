@@ -14,6 +14,7 @@ var App = function () {
         data: {
             site:'JSOC.',
             host:{},
+            currentPlanName:'',
             plans: this.plans
         }
     });
@@ -52,14 +53,14 @@ App.prototype.loadPlan = function (cb) {
 App.prototype.loadDetail = function (plan, cb) {
     var _this = this;
     if(app.currentPlanName==plan){
-        _this.currentPlanName = plan;
+        _this.vueHeader._data.currentPlanName = _this.currentPlanName = plan;
         _this.vueHeader._data.host = _this.currentPlan;
         cb && cb(null,_this.currentPlan) ;
     }else {
         $.get('/index/detail?plan=' + plan, function (data) {
             if (data.code == 200) {
                 _this.vueSider._data.plan = _this.currentPlan = data.data;
-                _this.currentPlanName = plan;
+                _this.vueHeader._data.currentPlanName = _this.currentPlanName = plan;
                 _this.vueHeader._data.host = _this.currentPlan;
                 cb && cb(null, _this.currentPlan);
             } else {
