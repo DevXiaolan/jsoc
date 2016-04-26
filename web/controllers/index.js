@@ -25,7 +25,7 @@ Controller.index = function (req,res) {
         cb(null,null);
     }, function (err, ret) {
         if(!err){
-            console.log('load plans success');
+            console.log('load plans success',ret);
         }
     });
 }();
@@ -35,10 +35,10 @@ Controller.plans = function(req,res){
 };
 
 Controller.savePlan = function(req,res){
+    var plan = false;
     try{
-        var plan = JSON.parse(req.body.plan);
+        plan = JSON.parse(req.body.plan);
     }catch(ex){
-        var plan = false;
     }
     var planName = req.body.name;
     if(!!plan){
@@ -75,15 +75,14 @@ Controller.docs = function(req,res){
         content += '    '+plan.host+EOL+EOL;
 
         for(let k in plan.apis){
-            content += '***'+EOL;
-            content += '### '+plan.apis[k].name+EOL;
-            content += '**请求路径**:   '+EOL+'>'+plan.apis[k].method.toUpperCase()+'   '+plan.apis[k].uri+EOL+EOL;
-            content += object2md(plan.apis[k].header,'请求头部');
-            content += object2md(plan.apis[k].query,'QueryString');
-            content += object2md(plan.apis[k].body,'Body');
-            content += '**返回示例**:'+EOL+EOL;
-            content += '    '+prettyJson2(response(plan.apis[k].return),1)+EOL;
-
+            content += '***' + EOL;
+            content += '## ' + plan.apis[k].name + EOL;
+            content += '**请求路径**:   ' + EOL + '>' + plan.apis[k].method.toUpperCase() + '   ' + plan.apis[k].uri + EOL + EOL;
+            content += object2md(plan.apis[k].header, '请求头部');
+            content += object2md(plan.apis[k].query, 'QueryString');
+            content += object2md(plan.apis[k].body, 'Body');
+            content += '**返回示例**:' + EOL + EOL;
+            content += '    ' + prettyJson2(response(plan.apis[k].return), 1).replace(/},/g,'}') + EOL;
         }
         res.end(content);
     }else{
@@ -104,7 +103,7 @@ var prettyJson2 = function (obj, tabCount) {
         var isArray = Array.isArray(obj);
         r += (isArray) ? '['+EOL : '{'+EOL;
         var keys = Object.keys(obj);
-        var k = null;
+        var k ;
         while(k=keys.shift()){
             if(isArray){
                 r += '  '+'  '.repeat(tabCount) + prettyJson2(obj[k], tabCount);
@@ -120,27 +119,29 @@ var prettyJson2 = function (obj, tabCount) {
     } else {
         return (Number.isNaN(obj*1)?'\''+ obj +'\'':obj) +','+EOL;
     }
-}
+};
 
 var object2md = function (obj,title) {
     var content = '';
     content += '**'+title+'**:   '+EOL+EOL;
-    content += '| 参数名        | 参数值           | 长度       | 必填  | '+EOL+'|:-------------:|:-------------:|:-------------:|:-------------:|'+EOL;
+    content += '<table style="width: 90%;text-align: center;">'+EOL+'<thead><th>参数名</th><th>参数值</th><th>长度</th><th>必填</th></thead>'+EOL+'<tbody>';
+
     for(let i in obj){
-        content += '| '+i+'  | '+obj[i]._type+'      | '+obj[i]._length+'       | '+(obj[i]._required?'Yes':'No')+'  | '+EOL;
+        content += '<tr><td>' + i + '</td><td>' + obj[i]._type + '</td><td>' + (obj[i]._length?obj[i]._length:'') + '</td><td>' + (obj[i]._required ? 'Yes' : 'No') + '</td></tr>' + EOL;
     }
+    content += '</tbody>'+EOL+'</table>'+EOL;
     return content+EOL;
-}
+};
 
 var response = function(retData){
     var result = {};
     if(retData){
-        if(typeof retData == 'object' && !((retData._type) || (retData._assert))){
+        if(typeof retData == 'object' && !(retData._type) && !(retData._assert!=undefined)){
             for(let k in retData){
                 result[k] = response(retData[k]);
             }
         }else{
-            result = makeData(retData._assert?retData._assert:retData._type,retData._length);
+            result = makeData((retData._assert!=undefined)?retData._assert:retData._type,retData._length);
         }
     }else{
         return {};

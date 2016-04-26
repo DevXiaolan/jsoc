@@ -109,7 +109,7 @@ App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
         this.feedBack(arr,entity);
     }
     var _html = '';
-    if (!(entity._assert || entity._length || entity._to || entity._from || entity._type)) {
+    if (!((entity._assert!=undefined) || entity._length || entity._to || entity._from || entity._type)) {
         var _source = {
             'entity':{},
             'role':prefix+'.'+key,
