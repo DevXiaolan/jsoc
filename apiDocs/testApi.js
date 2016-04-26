@@ -82,7 +82,8 @@ module.exports = {
             "header": {
                 "appId": {
                     "_type": "Number",
-                    "_length": "8"
+                    "_length": "8",
+                    "_choices":[]
                 }
             },
             "query": {

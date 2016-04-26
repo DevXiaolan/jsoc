@@ -124,13 +124,25 @@ var prettyJson2 = function (obj, tabCount) {
 var object2md = function (obj,title) {
     var content = '';
     content += '**'+title+'**:   '+EOL+EOL;
-    content += '<table style="width: 90%;text-align: center;">'+EOL+'<thead><th>参数名</th><th>参数值</th><th>长度</th><th>必填</th></thead>'+EOL+'<tbody>';
+    content += '<table style="width: 90%;text-align: center;">'+EOL+'<thead>'+EOL+'<tr><th>参数名</th><th>参数值</th><th>长度</th><th>必填</th>'+EOL+'</tr></thead>'+EOL+'<tbody>'+EOL;
 
-    for(let i in obj){
-        content += '<tr><td>' + i + '</td><td>' + obj[i]._type + '</td><td>' + (obj[i]._length?obj[i]._length:'') + '</td><td>' + (obj[i]._required ? 'Yes' : 'No') + '</td></tr>' + EOL;
-    }
-    content += '</tbody>'+EOL+'</table>'+EOL;
+    content += entity2tr(obj);
+
+    content += EOL+'</tbody>'+EOL+'</table>'+EOL;
     return content+EOL;
+};
+
+var entity2tr = function (obj,prefix) {
+    var content = '';
+    prefix = prefix?prefix+'.':'';
+    for(let i in obj){
+        if(obj[i]._type || obj[i]._length || obj[i]._assert) {
+            content += '<tr><td>' + prefix + i + '</td><td>' + obj[i]._type + '</td><td>' + (obj[i]._length ? obj[i]._length : '') + '</td><td>' + (obj[i]._required ? 'Yes' : 'No') + '</td></tr>' + EOL;
+        }else{
+            content += entity2tr(obj[i],i);
+        }
+    }
+    return content;
 };
 
 var response = function(retData){
