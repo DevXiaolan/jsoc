@@ -2,88 +2,79 @@
 module.exports = {
     "host": "http://127.0.0.1:3001",
     "apis": {
-        'user': {
-            name: '测试接口之用户示例',
-            uri: '/test/user/{uid}',
-            method: 'get',
-            header: {
-                appId:{
-                    _type:'Number',
-                    _length:8
+        "user": {
+            "name": "用户示例",
+            "uri": "/test/user/{uid}",
+            "method": "get",
+            "header": {
+                "appId": {
+                    "_type": "Number",
+                    "_length": 8
                 }
             },
-            query:{
-                time: {
-                    _type: 'Number',
-                    _length:10
+            "query": {
+                "time": {
+                    "_type": "Number",
+                    "_length": 10
                 }
             },
-            body: {
-            }
-            ,
-            return: {
-                code: {
-                    _type: 'Number',
-                    _assert: 200
-                }
-                ,
-                data: {
-                    uid:{
-                        _type:'Number',
-                        _length:10,
-                        _to:'temp_uid'
+            "body": {},
+            "return": {
+                "code": {
+                    "_type": "Number",
+                    "_assert": 200
+                },
+                "data": {
+                    "uid": {
+                        "_type": "Number",
+                        "_length": 10,
+                        "_to": "temp_uid"
                     },
-                    profile:{
-                        tel:{
-                            _type:'Number',
-                            _length:'11'
+                    "profile": {
+                        "tel": {
+                            "_type": "Number",
+                            "_length": "11"
                         },
-                        email:{
-                            _type:'Email',
-                            _length:20
+                        "email": {
+                            "_type": "Email",
+                            "_length": 20
                         }
                     }
-                }
-                ,
-                msg: {
-                    _type: 'String'
+                },
+                "msg": {
+                    "_type": "String"
                 }
             }
         },
-        'order': {
-            name: '测试接口之订单示例',
-            uri: '/test/order',
-            method: 'get',
-            header: {
-            },
-            query:{
-            },
-            body: {
-            },
-            return: {
-                code: {
-                    _type: 'Number',
-                    _assert: 200
-                }
-                ,
-                data: {
-                    _type:'Array'
-                }
-                ,
-                msg: {
-                    _type: 'String'
+        "order": {
+            "name": "订单示例",
+            "uri": "/test/order",
+            "method": "get",
+            "header": {},
+            "query": {},
+            "body": {},
+            "return": {
+                "code": {
+                    "_type": "Number",
+                    "_assert": 200
+                },
+                "data": {
+                    "_type": "Array"
+                },
+                "msg": {
+                    "_type": "String"
                 }
             }
         },
         "test": {
-            "name": "测试接口之test示例",
+            "name": "其他示例",
             "uri": "/test/lalala",
             "method": "get",
             "header": {
                 "appId": {
                     "_type": "Number",
                     "_length": "8",
-                    "_choices":[]
+                    "_choices": "1000,1001,1,1009"
                 }
             },
             "query": {
@@ -95,12 +86,12 @@ module.exports = {
             },
             "body": {
                 "content": {
-                    "tel":{
+                    "tel": {
                         "_type": "Number",
                         "_required": "false"
                     },
-                    "email":{
-                        "_type":"Email"
+                    "email": {
+                        "_type": "Email"
                     }
                 }
             },
@@ -109,18 +100,19 @@ module.exports = {
                     "_type": "Number",
                     "_assert": 200
                 },
-                "data":{
-                    "tel":{
-                        "value":{
+                "data": {
+                    "tel": {
+                        "value": {
                             "_type": "Number",
-                            "_assert":110
+                            "_assert": 110
                         },
-                        "note":{
-                            "_assert":"home"
+                        "note": {
+                            "_type": "String",
+                            "_assert": "home"
                         }
                     },
-                    "email":{
-                        "_type":"Email"
+                    "email": {
+                        "_type": "Email"
                     }
                 }
             }

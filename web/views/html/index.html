@@ -5,6 +5,7 @@
     <meta name="renderer" content="webkit">
     <title>JSOC - the json doc engine</title>
     <link rel="stylesheet" href="/assets/amazeui/dist/css/amazeui.min.css">
+    <link rel="stylesheet" href="/assets/amazeui-tagsinput/amazeui.tagsinput.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -20,7 +21,7 @@
     </div>
     <em><input v-show="host.host" type="text" v-model="host.host"></em>
 
-    <em><a target="_blank" href="/index/docs/{{currentPlanName}}"><span  v-show="host.host"  class="am-icon-file-pdf-o am-icon-fixed  am-text-success">文档生成</span></a></em>
+    <em><a target="_blank" href="/index/docs/{{currentPlanName}}"><span v-show="host.host"  class="am-icon-file-pdf-o am-icon-fixed  am-text-success">文档生成</span></a></em>
 </header>
 <div id="main">
     <div id="loading">
@@ -48,11 +49,13 @@
     </div>
     <div id="dialog" >
         <div class="am-panel-hd am-cf">TITLE<span class="am-icon-close am-fr" v-on:click="close();"></span></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Name:</label>
-            <input class="am-u-md-7" type="text" v-model="entity.name">
+        <div class="am-g am-g-fixed">
+            <label class="am-u-md-3">Name:</label>
+            <input class="am-u-md-9" type="text" v-model="entity.name">
         </div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Type:</label>
-            <div class="am-dropdown" data-am-dropdown>
+        <div class="am-g am-g-fixed">
+            <label class="am-u-md-3">Type:</label>
+            <div class="am-dropdown am-u-md-3" data-am-dropdown>
                 <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>{{entity.entity._type?entity.entity._type:'String'}}
                     <span class="am-icon-caret-down"></span></button>
                 <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="_type">
@@ -64,13 +67,25 @@
                     <li class="am-dropdown-header"><a>父节点</a></li>
                 </ul>
             </div>
+            <label class="am-u-md-3">Length:</label>
+            <input class="am-u-md-3" type="number" v-model="entity.entity._length">
         </div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Length:</label><input class="am-u-md-7" type="number" v-model="entity.entity._length"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Assert:</label><input class="am-u-md-7" type="text" v-model="entity.entity._assert"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">To:</label><input class="am-u-md-7" type="text" v-model="entity.entity._to"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Form:</label><input class="am-u-md-7" type="text" v-model="entity.entity._from"></div>
-        <div class="am-g am-g-fixed"><label class="am-u-md-5">Required:</label>
-            <input type="checkbox" v-model="entity.entity._required">
+        <div class="am-g am-g-fixed">
+            <label class="am-u-md-3">To:</label>
+            <input class="am-u-md-3" type="text" v-model="entity.entity._to">
+            <label class="am-u-md-3">Form:</label>
+            <input class="am-u-md-3" type="text" v-model="entity.entity._from">
+        </div>
+        <div class="am-g am-g-fixed">
+            <label class="am-u-md-3">Assert:</label>
+            <input class="am-u-md-3" type="text" v-model="entity.entity._assert">
+            <label class="am-u-md-3">Required:</label>
+            <input class="am-u-md-3" type="checkbox" v-model="entity.entity._required">
+        </div>
+
+        <div class="am-g am-g-fixed">
+            <label class="am-u-md-12">可选值:</label>
+            <input id="dialog_tags" type="text" value="{{entity.entity._choices}}" >
         </div>
         <div class="am-g am-g-fixed">
             <button id="dialog_save_btn" type="button" class="am-btn am-btn-primary am-fr">Save</button>
@@ -81,5 +96,6 @@
 <script src="/assets/jquery/dist/jquery.min.js"></script>
 <script src="/assets/amazeui/dist/js/amazeui.min.js"></script>
 <script src="/assets/vue/dist/vue.min.js"></script>
+<script src="/assets/amazeui-tagsinput/amazeui.tagsinput.min.js"></script>
 <script src="/js/app.js"></script>
 </html>

@@ -248,6 +248,13 @@ App.prototype.feedBack = function (arr, data) {
             });
             //根据 target 给dialog绑定数据（vue）
             app.dialog(e.target,dialog,function(e,r){
+                $('#dialog_tags').tagsinput();
+                var _choices = r.entity._choices.split(',');
+                if(_choices.length>0) {
+                    for (var k in _choices) {
+                        $('#dialog_tags').tagsinput('add', _choices[k]);
+                    }
+                }
                 $('#dialog').show();
             });
         }else if($(e.target).hasClass('am-text-warning')){
@@ -277,6 +284,7 @@ App.prototype.feedBack = function (arr, data) {
     });
 
     $('#dialog_save_btn').click(function (e) {
+
         var role = app.vueDialog._data.entity.role;
         if(app.vueDialog._data.entity.isNew){
             role += '.'+app.vueDialog._data.entity.name;
@@ -285,6 +293,7 @@ App.prototype.feedBack = function (arr, data) {
             var _tmp = role.split('.');
             var key = _tmp.pop();
             var prefix = _tmp.join('.');
+            app.vueDialog._data.entity.entity._choices = $('#dialog_tags').val();
             if(app.vueDialog._data.entity.isNew){
                 $('fieldset[role="' + prefix + '"],section[role="' + prefix + '"]').append(app.apiEntity(key, app.vueDialog._data.entity.entity, prefix, true));
             }else {

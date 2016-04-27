@@ -108,14 +108,14 @@ body{
     position: absolute;
     margin: 0 auto;
     height: 350px;
-    width: 240px;
+    width: 500px;
     background-color: rgb(245, 245, 245);
     border-radius:2px;
     display: none;
     z-index: 2;
 }
 #dialog .am-g-fixed{
-    margin: 5px 10px;
+    margin: 10px;
     width: auto;
 }
 #dialog label{
@@ -128,6 +128,13 @@ body{
 }
 #dialog .am-panel-hd span{
     cursor: pointer;
+}
+#dialog .am-btn-fixed{
+    padding: 0;
+    margin-left: -1rem;
+}
+#dialog .am-tagsinput{
+    width: 100%;
 }
 .am-btn-toolbar > .am-btn-group-fixed{
     margin-left: 1px;
