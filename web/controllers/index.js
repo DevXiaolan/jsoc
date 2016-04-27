@@ -153,7 +153,7 @@ var response = function(retData){
                 result[k] = response(retData[k]);
             }
         }else{
-            result = makeData((retData._assert!=undefined)?retData._assert:retData._type,retData._length);
+            result = makeData(retData);
         }
     }else{
         return {};

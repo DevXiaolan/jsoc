@@ -28,7 +28,8 @@ module.exports = {
                     "uid": {
                         "_type": "Number",
                         "_length": 10,
-                        "_to": "temp_uid"
+                        "_to": "temp_uid",
+                        "_choices":'3,5,7'
                     },
                     "profile": {
                         "tel": {

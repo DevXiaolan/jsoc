@@ -1,7 +1,21 @@
 'use strict';
 
-let makeData = function(type,length){
+let makeData = function(item){
+    let type = item._type;
+    let assert = item._assert;
+    let length = item._length;
+    let choices = item._choices?item._choices.split(','):[];
+
     type = (type && typeof type == 'string')?type.toLowerCase():type;
+
+    if(assert != undefined){
+        return assert;
+    }
+
+    if(choices.length>0){
+        return choices[Number.parseInt(Math.random()*choices.length)];
+    }
+
     var ret = null;
     switch (type) {
         case 'string':
@@ -32,7 +46,7 @@ let makeData = function(type,length){
             return ['a','b','c'];
             break;
         default :
-            ret = type;
+            ret = '';
             break;
     }
     return ret;
