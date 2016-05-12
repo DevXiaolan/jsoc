@@ -65,10 +65,12 @@ Controller.detail = function(req,res){
 
 Controller.docs = function(req,res){
     var plan = Controller.plansCache[req.params[2]];
+    var type = req.query.type;
     if(plan){
-        res.setHeader("Content-Disposition", "attachment;filename="+req.params[2]+'.md');
-        res.setHeader('Content-type', 'application/octet-stream');
-
+        if(type!='json') {
+            res.setHeader("Content-Disposition", "attachment;filename="+req.params[2]+'.md');
+            res.setHeader('Content-type', 'application/octet-stream');
+        }
         let content = '';
         content += '## 接口文档 ['+req.params[2]+'] '+EOL;
         content += '### 接口地址:'+EOL+EOL;
