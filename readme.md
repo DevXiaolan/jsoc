@@ -20,6 +20,7 @@
     jsonString  :  通过一个json字符串，传入预设数据，如  '{"uid":1}'
     
     完整例子 :  node main.js testApi all '{"uid":1}'
+![](http://log.fyscu.com/usr/uploads/2016/04/908170112.png)
     
 ## mock 服务
 
@@ -28,4 +29,3 @@
     
 
 
-![](http://log.fyscu.com/usr/uploads/2016/04/908170112.png)
