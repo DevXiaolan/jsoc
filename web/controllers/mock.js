@@ -75,7 +75,6 @@ var checkRequest = function (req, route) {
 
 var checkType = function(obj,value){
     var sig = true;
-    console.log(obj);
     if(obj._type) {
         if(obj._required==true ){
             return sig && isType(obj._type, value,obj._length);
@@ -85,7 +84,7 @@ var checkType = function(obj,value){
         }
     }else{
         for(let k in obj){
-            sig = sig && checkType(obj[k],value[k]);
+            sig = sig && checkType(obj[k],value?value[k]:null);
         }
         return sig;
     }

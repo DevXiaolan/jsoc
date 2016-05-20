@@ -29,7 +29,7 @@ module.exports = {
                         "_type": "Number",
                         "_length": 10,
                         "_to": "temp_uid",
-                        "_choices":'3,5,7'
+                        "_choices": "3,5,7"
                     },
                     "profile": {
                         "tel": {
@@ -75,14 +75,14 @@ module.exports = {
                 "appId": {
                     "_type": "Number",
                     "_length": "8",
-                    "_choices": "1000,1001,1,1009"
+                    "_choices": "1000,1001,1009"
                 }
             },
             "query": {
                 "time": {
                     "_type": "String",
                     "_length": "11",
-                    "_required": "true"
+                    "_required": "false"
                 }
             },
             "body": {
@@ -92,7 +92,8 @@ module.exports = {
                         "_required": "false"
                     },
                     "email": {
-                        "_type": "Email"
+                        "_type": "Email",
+                        "_required": "false"
                     }
                 }
             },
@@ -114,6 +115,11 @@ module.exports = {
                     },
                     "email": {
                         "_type": "Email"
+                    },
+                    "level": {
+                        "_type": "Number",
+                        "_length": "2",
+                        "_choices": "10,11,12"
                     }
                 }
             }

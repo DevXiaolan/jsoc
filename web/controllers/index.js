@@ -37,10 +37,11 @@ Controller.plans = function(req,res){
 Controller.savePlan = function(req,res){
     var plan = false;
     try{
-        plan = JSON.parse(req.body.plan);
+        plan = JSON.parse(decodeURIComponent(req.body.plan));
     }catch(ex){
     }
     var planName = req.body.name;
+
     if(!!plan){
         var content = '\'use strict\';'+os.EOL;
         content += 'module.exports = ';

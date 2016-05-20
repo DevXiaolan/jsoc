@@ -1,6 +1,6 @@
 # 一颗赛艇，
 
-## 本地操作界面 & mock 服务
+## 本地操作界面 
     step 1 : git clone
  
     step 2 : npm install

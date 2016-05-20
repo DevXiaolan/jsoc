@@ -248,7 +248,9 @@ App.prototype.feedBack = function (arr, data) {
             });
             //根据 target 给dialog绑定数据（vue）
             app.dialog(e.target,dialog,function(e,r){
+
                 $('#dialog_tags').tagsinput();
+                $('#dialog_tags').tagsinput('removeAll');
                 var _choices = r.entity._choices?r.entity._choices.split(','):[];
                 if(_choices.length>0) {
                     for (var k in _choices) {
