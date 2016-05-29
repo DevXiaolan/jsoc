@@ -74,20 +74,24 @@ App.prototype.apiCommon = function (api) {
     var _html = '';
     api = this.currentPlan.apis[api];
     _html += this.apiHead(api);
-    _html += this.apiObject(api.header, 'header');
-    _html += this.apiObject(api.query, 'query');
-    _html += this.apiObject(api.body, 'body');
-    _html += this.apiObject(api.return, 'return');
+    _html += '<h1>REQUEST:</h1>';
+    _html += this.apiObject(api.request.headers, 'request.headers');
+    _html += this.apiObject(api.request.query, 'request.query');
+    _html += this.apiObject(api.request.body, 'request.body');
+    _html += '<h1>RESPONSE:</h1>';
+    _html += this.apiObject(api.response.headers, 'response.headers');
+    _html += this.apiObject(api.response.body, 'response.body');
     return _html;
 };
 
 App.prototype.apiHead = function (api) {
     var _html = '';
     _html += '<div><label>Name:</label><input role="name" class="apiHead" value="' + api.name + '"> ( API identify name )</div>';
-    _html += '<div><label>URI:</label><input role="uri" class="apiHead" value="' + api.uri + '"> ( HTTP request URI )</div>';
-    _html += '<div><label>METHOD:</label><input role="method" class="apiHead" placeholder="get / post / put / delete" value="' + api.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
+    _html += '<div><label>URI:</label><input role="request.uri" class="apiHead" value="' + api.request.uri + '"> ( HTTP request URI )</div>';
+    _html += '<div><label>METHOD:</label><input role="request.method" class="apiHead" placeholder="get / post / put / delete" value="' + api.request.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
     return _html;
 };
+
 
 App.prototype.apiObject = function (obj, title) {
     var _source = {
@@ -95,7 +99,7 @@ App.prototype.apiObject = function (obj, title) {
         'role':title,
         'isNew':true
     };
-    var _html = '<fieldSet role="'+title+'"><legend>' + title + '<span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
+    var _html = '<fieldSet role="'+title+'"><legend>' + title.split('.').pop() + '<span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
     for (var k in obj) {
         _html += this.apiEntity(k, obj[k],title);
     }
@@ -138,7 +142,6 @@ App.prototype.dialog = function (caller,type, cb) {
     switch(type){
         case 'd_add_entity':
             var s = $(caller).data('s');
-            s.entity._type = 'String'
             this.vueDialog._data.entity = s;
             break;
         case 'd_edit_entity':
@@ -212,6 +215,7 @@ App.prototype.feedBack = function (arr, data) {
         }
     });
 
+    //侧边栏
     $('#sider').find('ul').get(0).addEventListener('click', function (e) {
         if (e.target.className == 'li-api') {
             $('#api').html('loading...');
@@ -224,12 +228,17 @@ App.prototype.feedBack = function (arr, data) {
             if(key && /[a-z]+/.test(key)){
                 app.currentPlan.apis[key] = {
                     'name':key,
-                    'uri':'',
-                    'method':'get',
-                    'header':{},
-                    'query':{},
-                    'body':{},
-                    'return':{}
+                    'request':{
+                        'uri':'',
+                        'method':'get',
+                        'headers':{},
+                        'query':{},
+                        'body':{}
+                    },
+                    'response':{
+                        'headers':{},
+                        'body':{}
+                    }
                 };
                 app.vueSider.plan = app.currentPlan;
                 $(e.target).before('<li class="li-api" data-api="'+key+'"><i class="am-icon-chain am-icon-fw"></i>'+key+'</li>');
@@ -238,7 +247,8 @@ App.prototype.feedBack = function (arr, data) {
             }
         }
     });
-    
+
+    //竹主界面下所有 add edit 事件
     $('#api').get(0).addEventListener('click', function (e) {
         var dialog = e.target.dataset.dialog;
         if(dialog){
@@ -248,15 +258,18 @@ App.prototype.feedBack = function (arr, data) {
             });
             //根据 target 给dialog绑定数据（vue）
             app.dialog(e.target,dialog,function(e,r){
-
+                //choices 清空
                 $('#dialog_tags').tagsinput();
                 $('#dialog_tags').tagsinput('removeAll');
+                //choices 设置
                 var _choices = r.entity._choices?r.entity._choices.split(','):[];
                 if(_choices.length>0) {
                     for (var k in _choices) {
                         $('#dialog_tags').tagsinput('add', _choices[k]);
                     }
                 }
+                console.log(e,r);
+                $('#dialog').find('button.am-dropdown-toggle').html(r.entity._type?r.entity._type:'<span class="am-icon-caret-down"></span>');
                 $('#dialog').show();
             });
         }else if($(e.target).hasClass('am-text-warning')){
@@ -272,19 +285,23 @@ App.prototype.feedBack = function (arr, data) {
         }
     });
 
+    //弹出层  数据类型选择
     $('#dialog').get(0).addEventListener('click', function (e) {
         if (e.target.localName == 'a') {
             var _text = $(e.target).text();
+            console.log(app.vueDialog._data.entity);
             if(_text == '父节点'){
                 app.vueDialog._data.entity.entity = {};
+
             }else {
                 var op = $(e.target).parent().parent().data('op');
                 app.vueDialog._data.entity.entity[op] = _text;
             }
-            $(e.target).parent().parent().parent().find('button').click();
+            $(e.target).parent().parent().parent().find('button').html(_text).click();
         }
     });
 
+    //弹出层保存
     $('#dialog_save_btn').click(function (e) {
 
         var role = app.vueDialog._data.entity.role;
@@ -305,9 +322,9 @@ App.prototype.feedBack = function (arr, data) {
         app.vueDialog.close();
     });
 
+    //Save Run 功能按钮
     $('#content>section').find('button').click(function (e) {
         var cmd = $(e.target).attr('role');
-        console.log(cmd);
         switch (cmd){
             case 'cmd_save':
                 $.post('/index/savePlan',{
@@ -322,6 +339,7 @@ App.prototype.feedBack = function (arr, data) {
                 break;
         }
     });
+
 
     $('#content>div').get(0).addEventListener('change', function (e) {
         if(e.target.className=='apiHead'){

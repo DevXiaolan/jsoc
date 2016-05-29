@@ -29,6 +29,9 @@ let isType = function(type,val,length){
         case 'array':
             return Array.isArray(val);
             break;
+        case 'bool':
+            return val===true || val===false;
+            break;
         default :
             break;
     }

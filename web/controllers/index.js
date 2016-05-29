@@ -40,7 +40,7 @@ Controller.savePlan = function(req,res){
         plan = JSON.parse(decodeURIComponent(req.body.plan));
     }catch(ex){
     }
-    var planName = req.body.name;
+    var planName = decodeURIComponent(req.body.name);
 
     if(!!plan){
         var content = '\'use strict\';'+os.EOL;

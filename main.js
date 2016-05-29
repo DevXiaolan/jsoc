@@ -42,7 +42,6 @@ async.eachSeries(uc.apis, function (item, callback) {
         httpAgent.headers = item.header;
 
         httpAgent[item.method](uc.host+item.uri,item.body, function (e, r) {
-            //console.log(item);
             console.log(r.body);
             dp.validation(r.body);
             console.log(colorsFy(dp.report));

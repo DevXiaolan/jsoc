@@ -11,6 +11,7 @@ let DataProvider = function(apiConfig){
 
 DataProvider.prototype.generator = function(){
     var apiConfig = this.apiConfig;
+
     if(apiConfig.header && (typeof apiConfig.header) == 'object'){
         for(let k in apiConfig.header){
             apiConfig.header[k] = this.data(apiConfig.header[k]);

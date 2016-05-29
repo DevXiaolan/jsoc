@@ -45,6 +45,9 @@ let makeData = function(item){
         case 'array':
             return ['a','b','c'];
             break;
+        case 'bool':
+            return !!(Date.now()%2);
+            break;
         default :
             ret = '';
             break;

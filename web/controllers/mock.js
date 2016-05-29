@@ -2,22 +2,23 @@
  * Created by lanhao on 15/5/17.
  */
 'use strict';
-var fs  =require('fs');
+let fs  =require('fs');
 
-var config = require('../config/config.js');
-var isType = require('../../libs/func/isType.js');
-var makeData = require('../../libs/func/makeData.js');
-var Controller = {};
+let config = require('../config/config.js');
+let isType = require('../../libs/func/isType.js');
+let makeData = require('../../libs/func/makeData.js');
+let Controller = {};
 
-Controller.index = function (req,res) {
+Controller.index = (req,res) => {
     res.render('index.html');
 };
 
-Controller.mock = function(req,res){
+
+Controller.mock = (req,res) => {
     if(config.apis){
         delete require.cache[require.resolve('../../apiDocs/'+config.apis)];
-        var apis = require('../../apiDocs/'+config.apis).apis;
-        var route = false;
+        let apis = require('../../apiDocs/'+config.apis).apis;
+        let route = false;
         for(let k in apis){
             if(matchUrl(req,apis[k])){
                 route = apis[k];
@@ -26,7 +27,8 @@ Controller.mock = function(req,res){
         }
 
         if(route && checkRequest(req,route)){
-            res.json(200,response(route.return.data),'');
+            let data = response(route);
+            res.raw(data.code,data.headers,data.body);
         }else {
             res.json(400, {},'请求有误，请检查参数与请求方法');
         }
@@ -36,45 +38,55 @@ Controller.mock = function(req,res){
 };
 /**
  *
- * @param uri pathinfo
- * @param route route object
- * @param method req.method
+ * @param req
+ * @param route
  * @returns {boolean}
  */
-var matchUrl = function (req, route) {
-    var uri = req.url.split('?')[0];
-    var method = req.method.toLowerCase();
-    var uriReg = toRegExp(route.uri);
+let matchUrl = (req, route) => {
+    let uri = req.url.split('?')[0];
+    let method = req.method.toLowerCase();
+    let uriReg = toRegExp(route.uri);
     return !! (new RegExp(uriReg,'i').test(uri) && method == route.method.toLowerCase());
 };
 
-var toRegExp = function (route) {
-    var r = route.replace(/{.+}/ig,'[a-zA-Z0-9]+');
+/**
+ *
+ * @param route
+ * @returns {string}
+ */
+let toRegExp = (route) => {
+    let r = route.replace(/{.+}/ig,'[a-zA-Z0-9]+');
     return '^'+r.replace(/\//ig,'\\/')+'$';
 };
 
-var checkRequest = function (req, route) {
+/**
+ *
+ * @param req
+ * @param route
+ * @returns {boolean}
+ */
+let checkRequest = (req, route) => {
 
-    for(let k in route.body){
-        //if(!isType(route.body[k].type,req.body[k])){
-        if(!checkType(route.body,req.body)){
-            console.log('body error');
-            return false;
-        }
+    if(!checkType(route.body,req.body)){
+        console.log('body error');
+        return false;
     }
 
-    for(let k in route.query){
-        //if(!isType(route.query[k].type,req.query[k])){
-        if(!checkType(route.query,req.query)){
-            console.log('query error');
-            return false;
-        }
+    if(!checkType(route.query,req.query)){
+        console.log('query error');
+        return false;
     }
     return true;
 };
 
-var checkType = function(obj,value){
-    var sig = true;
+/**
+ *
+ * @param obj
+ * @param value
+ * @returns {*}
+ */
+let checkType = (obj,value) => {
+    let sig = true;
     if(obj._type) {
         if(obj._required==true ){
             return sig && isType(obj._type, value,obj._length);
@@ -84,14 +96,20 @@ var checkType = function(obj,value){
         }
     }else{
         for(let k in obj){
-            sig = sig && checkType(obj[k],value?value[k]:null);
+            sig = sig && checkType(obj[k],(value && value[k])?value[k]:null);
         }
         return sig;
     }
 };
 
-var response = function(retData){
-    var result = {};
+/**
+ *
+ * @param route
+ * @returns {{}}
+ */
+let response = (route) => {
+    let result = {};
+    let retData = route.return;
     if(retData){
         if(typeof retData == 'object' && !((retData._type) || (retData._assert))){
             for(let k in retData){

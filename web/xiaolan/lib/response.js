@@ -66,6 +66,16 @@ Response.redirect = function redirect(res) {
         res.end();
     }
 };
+
+//raw
+Response.raw = (res) => {
+    return (code,header,body) => {
+        res.writeHeader(code,header);
+        res.end(JSON.stringify(body));
+    };
+};
+
+
 //将函数扩展到res对象
 Response.init = function (res) {
     res.redirect = Response.redirect(res);
@@ -73,6 +83,7 @@ Response.init = function (res) {
     res.render = Response.render(res);
     res.html = Response.sendFile(res);
     res.rollback = Response.rollback(res);
+    res.raw = Response.raw(res);
     if(global.app.config.cors){
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
