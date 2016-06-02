@@ -83,6 +83,7 @@ Controller.docs = function(req,res){
             content += '***' + EOL;
             content += '## ' + plan.apis[k].name + EOL;
             content += '**请求路径**:   ' + EOL + '>' + plan.apis[k].request.method.toUpperCase() + '   ' + plan.apis[k].request.uri + EOL + EOL;
+            content += object2md(plan.apis[k].request.params, 'URL占位参数');
             content += object2md(plan.apis[k].request.headers, '请求头部');
             content += object2md(plan.apis[k].request.query, 'QueryString');
             content += object2md(plan.apis[k].request.body, 'Body');
@@ -129,7 +130,7 @@ var prettyJson2 = function (obj, tabCount) {
 var object2md = function (obj,title) {
     var content = '';
     content += '**'+title+'**:   '+EOL+EOL;
-    content += '<table style="width: 90%;text-align: center;">'+EOL+'<thead>'+EOL+'<tr><th>参数名</th><th>参数值</th><th>长度</th><th>必填</th>'+EOL+'</tr></thead>'+EOL+'<tbody>'+EOL;
+    content += '<table style="width: 90%;text-align: center;">'+EOL+'<thead>'+EOL+'<tr><th>参数名</th><th>参数值</th><th>最大长度</th><th>必填</th>'+EOL+'</tr></thead>'+EOL+'<tbody>'+EOL;
 
     content += entity2tr(obj);
 

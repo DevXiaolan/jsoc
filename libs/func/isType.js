@@ -38,4 +38,3 @@ let isType = function(type,val,length){
 };
 
 module.exports = isType;
-console.log(isType('string','验证失败'));
