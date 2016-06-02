@@ -48,7 +48,7 @@
         </div>
     </div>
     <div id="dialog" >
-        <div class="am-panel-hd am-cf">TITLE<span class="am-icon-close am-fr" v-on:click="close();"></span></div>
+        <div class="am-panel-hd am-cf">.<span class="am-icon-close am-fr" v-on:click="close();"></span></div>
         <div class="am-g am-g-fixed">
             <label class="am-u-md-3">Name:</label>
             <input class="am-u-md-9" type="text" v-model="entity.name">
@@ -61,6 +61,7 @@
                 <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="_type">
                     <li class="am-dropdown-header"><a>String</a></li>
                     <li class="am-dropdown-header"><a>Number</a></li>
+                    <li class="am-dropdown-header"><a>Bool</a></li>
                     <li class="am-dropdown-header"><a>Object</a></li>
                     <li class="am-dropdown-header"><a>Array</a></li>
                     <li class="am-dropdown-header"><a>Email</a></li>

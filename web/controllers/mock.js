@@ -27,8 +27,9 @@ Controller.mock = (req,res) => {
         }
 
         if(route && checkRequest(req,route)){
-            let data = response(route);
-            res.raw(data.code,data.headers,data.body);
+            let data = response(route.response.body);
+
+            res.raw(200,{'content-type':'application/json'},data);
         }else {
             res.json(400, {},'请求有误，请检查参数与请求方法');
         }
@@ -45,8 +46,8 @@ Controller.mock = (req,res) => {
 let matchUrl = (req, route) => {
     let uri = req.url.split('?')[0];
     let method = req.method.toLowerCase();
-    let uriReg = toRegExp(route.uri);
-    return !! (new RegExp(uriReg,'i').test(uri) && method == route.method.toLowerCase());
+    let uriReg = toRegExp(route.request.uri);
+    return !! (new RegExp(uriReg,'i').test(uri) && method == route.request.method.toLowerCase());
 };
 
 /**
@@ -67,12 +68,12 @@ let toRegExp = (route) => {
  */
 let checkRequest = (req, route) => {
 
-    if(!checkType(route.body,req.body)){
+    if(!checkType(route.request.body,req.body)){
         console.log('body error');
         return false;
     }
 
-    if(!checkType(route.query,req.query)){
+    if(!checkType(route.request.query,req.query)){
         console.log('query error');
         return false;
     }
@@ -107,11 +108,11 @@ let checkType = (obj,value) => {
  * @param route
  * @returns {{}}
  */
-let response = (route) => {
+let response = (retData) => {
     let result = {};
-    let retData = route.return;
+
     if(retData){
-        if(typeof retData == 'object' && !((retData._type) || (retData._assert))){
+        if(typeof retData == 'object' && !(retData._type) && !(retData._assert!==undefined)){
             for(let k in retData){
                 result[k] = response(retData[k]);
             }

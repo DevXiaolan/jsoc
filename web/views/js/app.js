@@ -36,6 +36,13 @@ var App = function () {
         }
     });
 
+    this.dict = function (name) {
+        var DIC = {
+            'params':'URI Params',
+            'query':'Query String'
+        };
+        return DIC[name]?DIC[name]:name;
+    };
 };
 
 App.prototype.loadPlan = function (cb) {
@@ -87,8 +94,9 @@ App.prototype.apiCommon = function (api) {
 App.prototype.apiHead = function (api) {
     var _html = '';
     _html += '<div><label>Name:</label><input role="name" class="apiHead" value="' + api.name + '"> ( API identify name )</div>';
-    _html += '<div><label>URI:</label><input role="request.uri" class="apiHead" value="' + api.request.uri + '"> ( HTTP request URI )</div>';
     _html += '<div><label>METHOD:</label><input role="request.method" class="apiHead" placeholder="get / post / put / delete" value="' + api.request.method + '"> ( HTTP request method : [ get , post , put , delete ] )</div>';
+    _html += '<div><label>URI:</label><input role="request.uri" class="apiHead" value="' + api.request.uri + '"> ( HTTP request URI )</div>';
+    _html += this.apiObject(api.request.params,'request.params');
     return _html;
 };
 
@@ -99,7 +107,7 @@ App.prototype.apiObject = function (obj, title) {
         'role':title,
         'isNew':true
     };
-    var _html = '<fieldSet role="'+title+'"><legend>' + title.split('.').pop() + '<span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
+    var _html = '<fieldSet role="'+title+'"><legend>' + this.dict(title.split('.').pop()) + '<span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
     for (var k in obj) {
         _html += this.apiEntity(k, obj[k],title);
     }
@@ -113,7 +121,7 @@ App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
         this.feedBack(arr,entity);
     }
     var _html = '';
-    if (!((entity._assert!=undefined) || entity._length || entity._to || entity._from || entity._type)) {
+    if (!((entity._assert!==undefined) || entity._length || entity._to || entity._from || entity._type)) {
         var _source = {
             'entity':{},
             'role':prefix+'.'+key,
@@ -161,6 +169,9 @@ App.prototype.feedBack = function (arr, data) {
     var api = this.currentPlan.apis[this.currentApi];
     while(arr.length>1){
         var _k = arr.shift();
+        if(!api[_k]){
+            api[_k] = {};
+        }
         api = api[_k];
     }
     api[arr[0]] = data;
@@ -268,7 +279,6 @@ App.prototype.feedBack = function (arr, data) {
                         $('#dialog_tags').tagsinput('add', _choices[k]);
                     }
                 }
-                console.log(e,r);
                 $('#dialog').find('button.am-dropdown-toggle').html(r.entity._type?r.entity._type:'<span class="am-icon-caret-down"></span>');
                 $('#dialog').show();
             });
@@ -289,7 +299,7 @@ App.prototype.feedBack = function (arr, data) {
     $('#dialog').get(0).addEventListener('click', function (e) {
         if (e.target.localName == 'a') {
             var _text = $(e.target).text();
-            console.log(app.vueDialog._data.entity);
+
             if(_text == '父节点'){
                 app.vueDialog._data.entity.entity = {};
 
@@ -343,9 +353,13 @@ App.prototype.feedBack = function (arr, data) {
 
     $('#content>div').get(0).addEventListener('change', function (e) {
         if(e.target.className=='apiHead'){
-            var role = $(e.target).attr('role');
+            var role = $(e.target).attr('role').split('.');
             var value = $(e.target).val();
-            app.currentPlan.apis[app.currentApi][role] = value;
+            var _target = app.currentPlan.apis[app.currentApi];
+            while(role.length>1){
+                _target = _target[role.shift()];
+            }
+            _target[role[0]] = value;
         }
     });
 

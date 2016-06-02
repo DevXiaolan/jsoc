@@ -10,35 +10,38 @@ let DataProvider = function(apiConfig){
 };
 
 DataProvider.prototype.generator = function(){
+    var _self = this;
     var apiConfig = this.apiConfig;
 
-    if(apiConfig.header && (typeof apiConfig.header) == 'object'){
-        for(let k in apiConfig.header){
-            apiConfig.header[k] = this.data(apiConfig.header[k]);
+    if(apiConfig.request.headers && (typeof apiConfig.request.headers) == 'object'){
+        for(let k in apiConfig.request.headers){
+            apiConfig.request.headers[k] = this.data(apiConfig.request.headers[k]);
         }
     }
-    if(apiConfig.body && typeof apiConfig.body == 'object'){
-        for(let k in apiConfig.body){
-            apiConfig.body[k] = this.data(apiConfig.body[k]);
+    if(apiConfig.request.body && typeof apiConfig.request.body == 'object'){
+        for(let k in apiConfig.request.body){
+            apiConfig.request.body[k] = this.data(apiConfig.request.body[k]);
         }
     }
-    
-    if(apiConfig.uri.indexOf('{')!=-1){
-        for(let k in this.cache){
-            apiConfig.uri = apiConfig.uri.replace('{' + k + '}', this.cache[k]);
-        }
-        if(apiConfig.uri.indexOf('{')!=-1) {
-            console.log('未找到预设数据，URL生成失败');
-            console.log(apiConfig.uri);
-            process.exit(-2);
-        }
+
+    if(apiConfig.request.uri.indexOf('{')!=-1){
+        apiConfig.request.uri = apiConfig.request.uri.replace(/{(.*?)}/g, function () {
+            let p = arguments[1];
+
+            if(apiConfig.request.params[p]){
+                return _self.data(apiConfig.request.params[p]);
+            }else{
+                return p;
+            }
+        });
     }
-    if(apiConfig.query && typeof apiConfig.query == 'object'){
-        for(let k in apiConfig.query){
-            apiConfig.uri += '?';
-            for(let k in apiConfig.query){
-                apiConfig.query[k] = this.data(apiConfig.query[k]);
-                apiConfig.uri += k+'='+apiConfig.query[k]+'&';
+
+    if(apiConfig.request.query && typeof apiConfig.request.query == 'object'){
+        for(let k in apiConfig.request.query){
+            apiConfig.request.uri += '?';
+            for(let k in apiConfig.request.query){
+                apiConfig.request.query[k] = this.data(apiConfig.request.query[k]);
+                apiConfig.request.uri += k+'='+apiConfig.request.query[k]+'&';
             }
         }
     }
@@ -66,26 +69,25 @@ DataProvider.prototype.data = function (item) {
 };
 
 DataProvider.prototype.validation = function (body,config,report) {
-    var report = report?report:this.report;
-    var returnConfig = config?config:this.apiConfig.return;
 
+    var report = report?report:this.report;
+    var returnConfig = config?config:this.apiConfig.response.body;
+
+    //fixme 将来加入response headers检查
     for(let k in returnConfig){
 
         if((typeof returnConfig[k] == 'object') && (!returnConfig[k]._type) && (returnConfig[k]._assert===undefined)){
             report[k] = {};
             this.validation(body[k],returnConfig[k],report[k]);
         }else{
-            if(returnConfig[k]._required == false){
+            if(returnConfig[k]._required === false){
                 return true;
             }
             if((returnConfig[k]._assert !== undefined ) && (returnConfig[k]._assert == body[k])){
                 report[k] = true;
             }else if((!returnConfig[k]._assert) && returnConfig[k]._type){
-                var allowType = returnConfig[k]._type.split('||');
-                report[k] = false;
-                for(let i in allowType){
-                    report[k] = report[k] || this.isType(allowType[i].toLowerCase(),body[k]);
-                }
+                var allowType = returnConfig[k]._type;
+                report[k] = this.isType(allowType.toLowerCase(),body[k]);
             }else{
                 report[k] = false;
             }
@@ -100,4 +102,3 @@ DataProvider.prototype.isType = require('./func/isType.js');
 
 
 module.exports = DataProvider;
-

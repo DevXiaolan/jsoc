@@ -8,7 +8,7 @@ let makeData = function(item){
 
     type = (type && typeof type == 'string')?type.toLowerCase():type;
 
-    if(assert != undefined){
+    if(assert !== undefined){
         return assert;
     }
 
@@ -19,7 +19,7 @@ let makeData = function(item){
     var ret = null;
     switch (type) {
         case 'string':
-            ret = 'string_' + (''+Date.now()).repeat(2);
+            ret = 'str_' + (''+Date.now()).repeat(2);
             if(length){
                 ret = ret.substr(0,length);
             }

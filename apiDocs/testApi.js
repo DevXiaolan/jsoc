@@ -19,14 +19,20 @@ module.exports = {
                         "_length": 10
                     }
                 },
-                "body": {}
+                "body": {},
+                "params": {
+                    "uid": {
+                        "_type": "Number",
+                        "_length": "11",
+                        "_choices": "1,2"
+                    }
+                }
             },
             "response": {
-
-                "headers":{
-                    "content-type":{
-                        "_type":"String",
-                        "_assert":"application/json"
+                "headers": {
+                    "content-type": {
+                        "_type": "String",
+                        "_assert": "application/json"
                     }
                 },
                 "body": {

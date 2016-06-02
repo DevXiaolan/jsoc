@@ -7,10 +7,24 @@ var async = require('async');
 var httpAgent = require('./libs/httpAgent');
 var dataProvider = require('./libs/dataProvider');
 
+var options = {
+    'body':false
+};
+
 if(!process.argv[2]){
-    console.log('usage: node tester [apiConfig]');
+    console.log('usage: node main.js [apiConfig]');
     process.exit(-1);
 }
+
+
+for(let k in process.argv){
+    if(process.argv[k] == '--body'){
+        process.argv.splice(k ,1);
+        options.body = true;
+    }
+}
+
+
 var uc = require('./apiDocs/'+process.argv[2]);
 
 if(process.argv[3] && process.argv[3]!='all'){
@@ -33,16 +47,20 @@ if(process.argv[4]){
     }
 }
 
-
 async.eachSeries(uc.apis, function (item, callback) {
     console.log('测试接口：［'+colors.blue(item.name)+']');
     var dp = new dataProvider(item);
     item = dp.generator();
-    if(httpAgent[item.method]){
-        httpAgent.headers = item.header;
 
-        httpAgent[item.method](uc.host+item.uri,item.body, function (e, r) {
-            console.log(r.body);
+    if(httpAgent[item.request.method]){
+        httpAgent.headers = item.request.header;
+    
+        httpAgent[item.request.method](uc.host+item.request.uri,item.request.body, function (e, r) {
+            if(options.body){
+                console.log(item.request);
+                console.log(r.body);
+            }
+
             dp.validation(r.body);
             console.log(colorsFy(dp.report));
 

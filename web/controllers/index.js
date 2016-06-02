@@ -75,17 +75,19 @@ Controller.docs = function(req,res){
         let content = '';
         content += '## 接口文档 ['+req.params[2]+'] '+EOL;
         content += '### 接口地址:'+EOL+EOL;
+        let date = new Date();
+        content += '### 生成日期:'+(date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate())+EOL+EOL;
         content += '    '+plan.host+EOL+EOL;
 
         for(let k in plan.apis){
             content += '***' + EOL;
             content += '## ' + plan.apis[k].name + EOL;
-            content += '**请求路径**:   ' + EOL + '>' + plan.apis[k].method.toUpperCase() + '   ' + plan.apis[k].uri + EOL + EOL;
-            content += object2md(plan.apis[k].header, '请求头部');
-            content += object2md(plan.apis[k].query, 'QueryString');
-            content += object2md(plan.apis[k].body, 'Body');
+            content += '**请求路径**:   ' + EOL + '>' + plan.apis[k].request.method.toUpperCase() + '   ' + plan.apis[k].request.uri + EOL + EOL;
+            content += object2md(plan.apis[k].request.headers, '请求头部');
+            content += object2md(plan.apis[k].request.query, 'QueryString');
+            content += object2md(plan.apis[k].request.body, 'Body');
             content += '**返回示例**:' + EOL + EOL;
-            content += '    ' + prettyJson2(response(plan.apis[k].return), 1).replace(/},/g,'}') + EOL;
+            content += '    ' + prettyJson2(response(plan.apis[k].response.body), 1).replace(/},/g,'}') + EOL;
         }
         res.end(content);
     }else{
@@ -101,7 +103,7 @@ var prettyJson2 = function (obj, tabCount) {
 
     var EOL = (os && os.EOL)?os.EOL:'\n';
     tabCount++;
-    if (typeof obj == 'object') {
+    if (typeof obj == 'object' && obj!==null) {
         var r = '';
         var isArray = Array.isArray(obj);
         r += (isArray) ? '['+EOL : '{'+EOL;
@@ -151,7 +153,7 @@ var entity2tr = function (obj,prefix) {
 var response = function(retData){
     var result = {};
     if(retData){
-        if(typeof retData == 'object' && !(retData._type) && !(retData._assert!=undefined)){
+        if(typeof retData == 'object' && !(retData._type) && !(retData._assert!==undefined)){
             for(let k in retData){
                 result[k] = response(retData[k]);
             }

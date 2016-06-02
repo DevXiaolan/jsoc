@@ -7,7 +7,7 @@ let isType = function(type,val,length){
     }
     switch (type){
         case 'string':
-            return /^[A-Za-z0-9_]+$/.test(val);
+            return typeof val === 'string';
             break;
         case 'number':
             return /[0-9]+/.test(val);
@@ -38,3 +38,4 @@ let isType = function(type,val,length){
 };
 
 module.exports = isType;
+console.log(isType('string','验证失败'));
