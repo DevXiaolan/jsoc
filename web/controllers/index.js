@@ -128,13 +128,17 @@ var prettyJson2 = function (obj, tabCount) {
 };
 
 var object2md = function (obj,title) {
+
     var content = '';
     content += '**'+title+'**:   '+EOL+EOL;
-    content += '<table style="width: 90%;text-align: center;">'+EOL+'<thead>'+EOL+'<tr><th>参数名</th><th>参数值</th><th>最大长度</th><th>必填</th>'+EOL+'</tr></thead>'+EOL+'<tbody>'+EOL;
 
-    content += entity2tr(obj);
-
-    content += EOL+'</tbody>'+EOL+'</table>'+EOL;
+    if(obj && Object.keys(obj).length>0){
+        content += '<table style="width: 90%;text-align: center;">' + EOL + '<thead>' + EOL + '<tr><th>参数名</th><th>参数值</th><th>最大长度</th><th>必填</th>' + EOL + '</tr></thead>' + EOL + '<tbody>' + EOL;
+        content += entity2tr(obj);
+        content += EOL + '</tbody>' + EOL + '</table>' + EOL;
+    }else {
+        content += '<p>（无）</p>' + EOL;
+    }
     return content+EOL;
 };
 
