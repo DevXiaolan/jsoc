@@ -2,6 +2,8 @@
  * Created by lanhao on 16/3/14.
  */
 'use strict';
+var os = require('os');
+var EOL = (os && os.EOL)?os.EOL:'\n';
 var colors = require('colors');
 var async = require('async');
 var httpAgent = require('./libs/httpAgent');
@@ -73,16 +75,19 @@ async.eachSeries(uc.apis, function (item, callback) {
     //console.log(err,ret);
 });
 
-function colorsFy(obj){
+function colorsFy(obj,tab){
+    var tab = tab || 1;
+    var len = Object.keys(obj).length;
     var result = '{';
     for(let i in obj){
-        result += i+' : ';
+        result += EOL+'    '.repeat(tab)+i+' : ';
         if(typeof obj[i] == 'object'){
-            result += colorsFy(obj[i]);
+            result += colorsFy(obj[i],tab+1);
         }else{
             result += (obj[i]==true)?colors.green('true'):colors.red('false');
         }
+        if(i<len-1)
         result += ' , ';
     }
-    return result+'}';
+    return result+EOL+'    '.repeat(tab-1)+'}';
 }
