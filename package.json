@@ -6,13 +6,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": "jsoc.js",
   "author": "lanhao.name",
   "license": "ISC",
   "dependencies": {
+    "EventEmitter": "^1.0.0",
     "async": "^1.5.2",
     "colors": "^1.1.2",
     "request": "^2.69.0",
-    "EventEmitter": "^1.0.0",
-    "xiaolan": "^1.0.47"
+    "request-agent": "^1.0.3",
+    "xiaolan": "^1.0.47",
+    "yargs": "^4.7.1"
   }
 }
