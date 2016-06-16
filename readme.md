@@ -3,7 +3,7 @@
 ## 本地操作界面 
     step 1 : git clone
  
-    step 2 : npm install
+    step 2 : cd jsoc && npm install
 
     step 3 : cd web
              node server.js
