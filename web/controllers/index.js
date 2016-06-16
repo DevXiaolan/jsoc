@@ -17,10 +17,10 @@ Controller.index = function (req,res) {
 };
 
 !function(){
-    var files = fs.readdirSync(process.cwd()+'/../apiDocs');
+    var files = fs.readdirSync(process.cwd()+'/../plans');
     async.each(files, function (it, cb) {
-        delete require.cache[require.resolve(process.cwd()+'/../apiDocs/'+it)];
-        var _tmp = require(process.cwd()+'/../apiDocs/'+it);
+        delete require.cache[require.resolve(process.cwd()+'/../plans/'+it)];
+        var _tmp = require(process.cwd()+'/../plans/'+it);
         Controller.plansCache[_tmp.name?_tmp.name:it.split('.')[0]] = _tmp;
         cb(null,null);
     }, function (err, ret) {
