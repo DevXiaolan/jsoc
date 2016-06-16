@@ -46,7 +46,7 @@ Controller.savePlan = (req,res) => {
         var content = '\'use strict\';'+os.EOL;
         content += 'module.exports = ';
         content += prettyJson(plan,4);
-        fs.writeFileSync(process.cwd()+'/../apiDocs/'+planName+'.js',content+';'+os.EOL);
+        fs.writeFileSync(process.cwd()+'/../plans/'+planName+'.js',content+';'+os.EOL);
         loadPlan();
         res.json(200,{},'good request');
     }else{
