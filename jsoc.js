@@ -85,12 +85,13 @@ if(fs.existsSync(__dirname+'/plans/'+planName+'.js')){
 
     async.eachSeries(plan.apis,  (item, callback) => {
         console.log('测试接口：［'+colors.blue(item.name)+']');
-        let dp = new dataProvider(item);
+        let dp = new dataProvider(item,argv.data);
         item = dp.generator();
 
         requestAgent
             .url(plan.host+item.request.uri)
             .headers(item.request.headers)
+            .method(item.request.method)
             .query(item.request.query)
             .body(item.request.body)
             .send()
@@ -110,23 +111,6 @@ if(fs.existsSync(__dirname+'/plans/'+planName+'.js')){
             .catch( (err) => {
                 errorReport('Error: '+colors.red(err.toString()));
             });
-
-        //httpAgent.headers = item.request.headers;
-        //
-        //httpAgent[item.request.method](plan.host+item.request.uri,item.request.body,  (e, r) => {
-        //    if(argv.body){
-        //        console.log('===== REQUEST =====');
-        //        console.log(item.request);
-        //        console.log('===== RESPONSE ====');
-        //        console.log(r.body);
-        //        console.log('===== REPORT  =====');
-        //    }
-        //
-        //    dp.validation(r.body);
-        //    console.log(argv.color?colorsFy(dp.report):dp.report);
-        //
-        //    callback(null,null);
-        //});
 
     }, (err, ret) => {
         //console.log(err,ret);

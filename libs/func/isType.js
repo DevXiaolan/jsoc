@@ -15,6 +15,9 @@ let isType = function(type,val,length){
         case 'mobile':
             return /1[0-9]{10}/.test(val);
             break;
+        case 'fullmobile':
+            return /86\-1[0-9]{10}/.test(val);
+            break;
         case 'email':
             return /[A-Za-z0-9]+@[A-Za-z0-9]+.[A-Za-z0-9]+/.test(val);
             break;

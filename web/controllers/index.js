@@ -9,10 +9,11 @@ const async = require('async');
 const makeData = require('../../libs/func/makeData.js');
 const config = require('../config/config.js');
 const Controller = {};
-
+const VERSION = require('../../package.json').version;
 Controller.plansCache = {};
 
 Controller.index =  (req,res) => {
+    console.log(VERSION);
     res.html('index.html');
 };
 let loadPlan = () =>{
