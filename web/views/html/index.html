@@ -51,13 +51,14 @@
         <div class="am-panel-hd am-cf">.<span class="am-icon-close am-fr" v-on:click="close();"></span></div>
         <div class="am-g am-g-fixed">
             <label class="am-u-md-3">Name:</label>
-            <input class="am-u-md-9" type="text" v-model="entity.name">
+            <input class="am-u-md-9 option" type="text" name="name">
         </div>
         <div class="am-g am-g-fixed">
             <label class="am-u-md-3">Type:</label>
             <div class="am-dropdown am-u-md-3" data-am-dropdown>
                 <button class="am-btn am-btn-fixed am-dropdown-toggle am-monospace" data-am-dropdown-toggle>
                     <span class="am-icon-caret-down"></span></button>
+                <input type="hidden" name="_type" class="option">
                 <ul class="am-dropdown-content am-dropdown-content-fixed" data-op="_type">
                     <li class="am-dropdown-header"><a>String</a></li>
                     <li class="am-dropdown-header"><a>Number</a></li>
@@ -69,26 +70,27 @@
                 </ul>
             </div>
             <label class="am-u-md-3">Length:</label>
-            <input class="am-u-md-3" type="number" v-model="entity.entity._length">
+            <input class="am-u-md-3 option" type="number" name="_length">
         </div>
         <div class="am-g am-g-fixed">
             <label class="am-u-md-3">To:</label>
-            <input class="am-u-md-3" type="text" v-model="entity.entity._to">
+            <input class="am-u-md-3 option" type="text" name="_to">
             <label class="am-u-md-3">Form:</label>
-            <input class="am-u-md-3" type="text" v-model="entity.entity._from">
+            <input class="am-u-md-3 option" type="text" name="_from">
         </div>
         <div class="am-g am-g-fixed">
             <label class="am-u-md-3">Assert:</label>
-            <input class="am-u-md-3" type="text" v-model="entity.entity._assert">
+            <input class="am-u-md-3 option" type="text" name="_assert">
             <label class="am-u-md-3">Required:</label>
-            <input class="am-u-md-3" type="checkbox" v-model="entity.entity._required">
+            <input class="am-u-md-3 option" type="checkbox" name="_required" >
         </div>
 
         <div class="am-g am-g-fixed">
             <label class="am-u-md-12">可选值:</label>
-            <input id="dialog_tags" type="text" value="{{entity.entity._choices}}" >
+            <input id="dialog_tags" type="text" value="" name="_choices" class="option" >
         </div>
         <div class="am-g am-g-fixed">
+            <input type="hidden" name="_new" class="option">
             <button id="dialog_save_btn" type="button" class="am-btn am-btn-primary am-fr">Save</button>
         </div>
     </div>

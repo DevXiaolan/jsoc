@@ -27,7 +27,7 @@ var App = function () {
     this.vueDialog = new Vue({
         el:'#dialog',
         data:{
-            entity:{}
+            role:''
         },
         methods:{
             close: function () {
@@ -102,12 +102,8 @@ App.prototype.apiHead = function (api) {
 
 
 App.prototype.apiObject = function (obj, title) {
-    var _source = {
-        'entity':{},
-        'role':title,
-        'isNew':true
-    };
-    var _html = '<fieldSet role="'+title+'"><legend>' + this.dict(title.split('.').pop()) + '<span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
+    var role = title;
+    var _html = '<fieldSet role="'+title+'"><legend>' + this.dict(title.split('.').pop()) + '<span data-s=\''+role+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span></legend>';
     for (var k in obj) {
         _html += this.apiEntity(k, obj[k],title);
     }
@@ -122,22 +118,14 @@ App.prototype.apiEntity = function (key, entity,prefix,feedBack) {
     }
     var _html = '';
     if (!((entity._assert!==undefined) || entity._length || entity._to || entity._from || entity._type)) {
-        var _source = {
-            'entity':{},
-            'role':prefix+'.'+key,
-            'isNew':true
-        };
-        _html += '<section class="entity" role="'+_source.role+'"><label>' + key + ':</label><span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span>';
+        var role =prefix+'.'+key;
+        _html += '<section class="entity" role="'+role+'"><label>' + key + ':</label><span data-s=\''+role+'\' data-dialog="d_add_entity" class="am-icon-plus-square am-icon-fixed am-text-success">Add</span>';
         for (var k in entity) {
             _html += this.apiEntity(k, entity[k],prefix+'.'+key);
         }
     } else {
-        var _source = {
-            'entity':entity
-        };
-        _source['role'] = prefix+'.'+key;
-        _source['name'] = key;
-        _html += '<section class="entity"  role="'+prefix+'.'+key+'"><label>' + key + ':</label><span data-s=\''+JSON.stringify(_source)+'\' data-dialog="d_edit_entity" class="am-icon-edit am-icon-fixed am-text-primary">Edit</span><span class="am-icon-trash am-icon-fixed am-text-warning">Remove</span>';
+        var role = prefix+'.'+key;
+        _html += '<section class="entity"  role="'+role+'"><label>' + key + ':</label><span data-s=\''+role+'\' data-dialog="d_edit_entity" class="am-icon-edit am-icon-fixed am-text-primary">Edit</span><span class="am-icon-trash am-icon-fixed am-text-warning">Remove</span>';
         for (var k in entity) {
             if(k=='role')continue;
             _html += '<div class="option"><label>' + k + ':</label>' + '<span class="option-value">'+entity[k]+'</span></div>'
@@ -150,19 +138,32 @@ App.prototype.dialog = function (caller,type, cb) {
     switch(type){
         case 'd_add_entity':
             var s = $(caller).data('s');
-            this.vueDialog._data.entity = s;
+            this.vueDialog._data.role = s;
+            var data = {name:'',data:{_assert:'',_choices:'',_from:'',_to:'',_length:'',_required:'off',_type:'',_new:true}};
+            this.renderDialog(data);
             break;
         case 'd_edit_entity':
             var s = $(caller).data('s');
-            this.vueDialog._data.entity = s;
+            this.vueDialog._data.role = s;
+            var data = this.getData(s);
+            this.renderDialog(data);
             break;
         default :
             break;
     }
-    cb && cb(null,this.vueDialog._data.entity);
+    cb && cb(null,data);
+};
+
+App.prototype.renderDialog = function (data) {
+    var _dialog = $('#dialog');
+    _dialog.find('input[name=name]').val(data.name);
+    for(var k in data.data){
+        _dialog.find('input[name='+k+']').val(data.data[k]);
+    }
 };
 
 App.prototype.feedBack = function (arr, data) {
+
     if(data._type && data._type=='Number' && data._assert){
         data._assert = 1 * data._assert;
     }
@@ -175,6 +176,19 @@ App.prototype.feedBack = function (arr, data) {
         api = api[_k];
     }
     api[arr[0]] = data;
+
+};
+
+App.prototype.getData = function (role) {
+    var _a = role.split('.');
+    var currentApi = app.currentPlan.apis[app.currentApi];
+    var _k = '';
+    var _data = currentApi;
+    while(_a.length>0){
+        _k = _a.shift();
+        _data = _data[_k];
+    }
+    return {name:_k,data:_data};
 };
 
 !function ($) {
@@ -273,13 +287,13 @@ App.prototype.feedBack = function (arr, data) {
                 $('#dialog_tags').tagsinput();
                 $('#dialog_tags').tagsinput('removeAll');
                 //choices 设置
-                var _choices = r.entity._choices?r.entity._choices.split(','):[];
+                var _choices = r.data._choices?r.data._choices.split(','):[];
                 if(_choices.length>0) {
                     for (var k in _choices) {
                         $('#dialog_tags').tagsinput('add', _choices[k]);
                     }
                 }
-                $('#dialog').find('button.am-dropdown-toggle').html(r.entity._type?r.entity._type:'<span class="am-icon-caret-down"></span>');
+                $('#dialog').find('button.am-dropdown-toggle').html(r.data._type?r.data._type:'<span class="am-icon-caret-down"></span>');
                 $('#dialog').show();
             });
         }else if($(e.target).hasClass('am-text-warning')){
@@ -299,34 +313,44 @@ App.prototype.feedBack = function (arr, data) {
     $('#dialog').get(0).addEventListener('click', function (e) {
         if (e.target.localName == 'a') {
             var _text = $(e.target).text();
-
-            if(_text == '父节点'){
-                app.vueDialog._data.entity.entity = {};
-
-            }else {
-                var op = $(e.target).parent().parent().data('op');
-                app.vueDialog._data.entity.entity[op] = _text;
-            }
+            $('input[name=_type]').val(_text);
+            //if(_text == '父节点'){
+            //    app.vueDialog._data.entity.entity = {};
+            //
+            //}else {
+            //    var op = $(e.target).parent().parent().data('op');
+            //    app.vueDialog._data.entity.entity[op] = _text;
+            //}
             $(e.target).parent().parent().parent().find('button').html(_text).click();
         }
     });
 
     //弹出层保存
     $('#dialog_save_btn').click(function (e) {
-
-        var role = app.vueDialog._data.entity.role;
-        if(app.vueDialog._data.entity.isNew){
-            role += '.'+app.vueDialog._data.entity.name;
+        var data = {};
+        var role = app.vueDialog.role;
+        var inputs = $('#dialog').find('input.option');
+        for(var i=0;i<inputs.length;i++){
+            if(inputs[i].value=='')continue;
+            data[inputs[i].name] = inputs[i].value;
         }
-        if(role && app.vueDialog._data.entity.name){
+
+        if(data._new == 'true'){
+            role += '.'+data.name;
+        }
+
+        if(role && data.name){
             var _tmp = role.split('.');
             var key = _tmp.pop();
             var prefix = _tmp.join('.');
-            app.vueDialog._data.entity.entity._choices = $('#dialog_tags').val();
-            if(app.vueDialog._data.entity.isNew){
-                $('fieldset[role="' + prefix + '"],section[role="' + prefix + '"]').append(app.apiEntity(key, app.vueDialog._data.entity.entity, prefix, true));
+            delete data.name;
+            //app.vueDialog._data.entity.entity._choices = $('#dialog_tags').val();
+            if(data._new == 'true'){
+                delete data._new;
+                $('fieldset[role="' + prefix + '"],section[role="' + prefix + '"]').append(app.apiEntity(key, data, prefix, true));
             }else {
-                $('section[role="' + role + '"]').prop('outerHTML', app.apiEntity(key, app.vueDialog._data.entity.entity, prefix, true));
+                delete data._new;
+                $('section[role="' + role + '"]').prop('outerHTML', app.apiEntity(key, data, prefix, true));
             }
         }
         app.vueDialog.close();
