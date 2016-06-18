@@ -16,8 +16,8 @@ Controller.index = (req,res) => {
 
 Controller.mock = (req,res) => {
     if(config.apis){
-        delete require.cache[require.resolve('../../apiDocs/'+config.apis)];
-        let apis = require('../../apiDocs/'+config.apis).apis;
+        delete require.cache[require.resolve('../../plans/'+config.apis)];
+        let apis = require('../../plans/'+config.apis).apis;
         let route = false;
         for(let k in apis){
             if(matchUrl(req,apis[k])){

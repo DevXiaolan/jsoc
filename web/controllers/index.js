@@ -2,39 +2,40 @@
  * Created by lanhao on 15/5/17.
  */
 'use strict';
-var fs = require('fs');
-var os = require('os');
-var EOL = (os && os.EOL)?os.EOL:'\n';
-var async = require('async');
-var makeData = require('../../libs/func/makeData.js');
-var config = require('../config/config.js');
-var Controller = {};
-
+const fs = require('fs');
+const os = require('os');
+const EOL = (os && os.EOL)?os.EOL:'\n';
+const async = require('async');
+const makeData = require('../../libs/func/makeData.js');
+const config = require('../config/config.js');
+const Controller = {};
+const VERSION = require('../../package.json').version;
 Controller.plansCache = {};
 
-Controller.index = function (req,res) {
+Controller.index =  (req,res) => {
+    console.log(VERSION);
     res.html('index.html');
 };
-
-!function(){
-    var files = fs.readdirSync(process.cwd()+'/../apiDocs');
-    async.each(files, function (it, cb) {
-        delete require.cache[require.resolve(process.cwd()+'/../apiDocs/'+it)];
-        var _tmp = require(process.cwd()+'/../apiDocs/'+it);
+let loadPlan = () =>{
+    var files = fs.readdirSync(process.cwd()+'/../plans');
+    async.each(files,  (it, cb) => {
+        delete require.cache[require.resolve(process.cwd()+'/../plans/'+it)];
+        let _tmp = require(process.cwd()+'/../plans/'+it);
         Controller.plansCache[_tmp.name?_tmp.name:it.split('.')[0]] = _tmp;
         cb(null,null);
-    }, function (err, ret) {
+    },  (err, ret) => {
         if(!err){
             console.log('load plans success',ret);
         }
     });
-}();
+};
+loadPlan();
 
-Controller.plans = function(req,res){
+Controller.plans = (req,res) => {
     res.json(200,Object.keys(Controller.plansCache));
 };
 
-Controller.savePlan = function(req,res){
+Controller.savePlan = (req,res) => {
     var plan = false;
     try{
         plan = JSON.parse(decodeURIComponent(req.body.plan));
@@ -46,14 +47,15 @@ Controller.savePlan = function(req,res){
         var content = '\'use strict\';'+os.EOL;
         content += 'module.exports = ';
         content += prettyJson(plan,4);
-        fs.writeFileSync(process.cwd()+'/../apiDocs/'+planName+'.js',content+';'+os.EOL);
-        res.json(400,{},'good request');
+        fs.writeFileSync(process.cwd()+'/../plans/'+planName+'.js',content+';'+os.EOL);
+        loadPlan();
+        res.json(200,{},'good request');
     }else{
         res.json(400,{},'bad request');
     }
 };
 
-Controller.detail = function(req,res){
+Controller.detail = (req,res) => {
     var plan = req.query.plan;
     config.apis = plan;
     if(Controller.plansCache[plan]){
@@ -64,7 +66,7 @@ Controller.detail = function(req,res){
     }
 };
 
-Controller.docs = function(req,res){
+Controller.docs = (req,res) => {
     var plan = Controller.plansCache[req.params[2]];
     var type = req.query.type;
     if(plan){
@@ -83,6 +85,7 @@ Controller.docs = function(req,res){
             content += '***' + EOL;
             content += '## ' + plan.apis[k].name + EOL;
             content += '**请求路径**:   ' + EOL + '>' + plan.apis[k].request.method.toUpperCase() + '   ' + plan.apis[k].request.uri + EOL + EOL;
+            content += object2md(plan.apis[k].request.params, 'URL占位参数');
             content += object2md(plan.apis[k].request.headers, '请求头部');
             content += object2md(plan.apis[k].request.query, 'QueryString');
             content += object2md(plan.apis[k].request.body, 'Body');
@@ -95,10 +98,10 @@ Controller.docs = function(req,res){
     }
 };
 
-var prettyJson = function (obj, tabCount) {
+var prettyJson =  (obj, tabCount) => {
     return JSON.stringify(obj,null,tabCount);
 };
-var prettyJson2 = function (obj, tabCount) {
+var prettyJson2 =  (obj, tabCount) => {
     if(!tabCount)tabCount = 0;
 
     var EOL = (os && os.EOL)?os.EOL:'\n';
@@ -126,18 +129,22 @@ var prettyJson2 = function (obj, tabCount) {
     }
 };
 
-var object2md = function (obj,title) {
+var object2md =  (obj,title) => {
+
     var content = '';
     content += '**'+title+'**:   '+EOL+EOL;
-    content += '<table style="width: 90%;text-align: center;">'+EOL+'<thead>'+EOL+'<tr><th>参数名</th><th>参数值</th><th>长度</th><th>必填</th>'+EOL+'</tr></thead>'+EOL+'<tbody>'+EOL;
 
-    content += entity2tr(obj);
-
-    content += EOL+'</tbody>'+EOL+'</table>'+EOL;
+    if(obj && Object.keys(obj).length>0){
+        content += '<table style="width: 90%;text-align: center;">' + EOL + '<thead>' + EOL + '<tr><th>参数名</th><th>参数值</th><th>最大长度</th><th>必填</th>' + EOL + '</tr></thead>' + EOL + '<tbody>' + EOL;
+        content += entity2tr(obj);
+        content += EOL + '</tbody>' + EOL + '</table>' + EOL;
+    }else {
+        content += '<p>（无）</p>' + EOL;
+    }
     return content+EOL;
 };
 
-var entity2tr = function (obj,prefix) {
+var entity2tr = (obj,prefix) => {
     var content = '';
     prefix = prefix?prefix+'.':'';
     for(let i in obj){
@@ -150,7 +157,7 @@ var entity2tr = function (obj,prefix) {
     return content;
 };
 
-var response = function(retData){
+var response = (retData) => {
     var result = {};
     if(retData){
         if(typeof retData == 'object' && !(retData._type) && !(retData._assert!==undefined)){

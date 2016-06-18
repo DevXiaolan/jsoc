@@ -33,6 +33,9 @@ let makeData = function(item){
         case 'mobile':
             ret = Number.parseInt('13800' + Math.floor(Math.random() * 777777 + 152718));
             break;
+        case 'fullmobile':
+            ret = '86-'+Number.parseInt('13800' + Math.floor(Math.random() * 777777 + 152718));
+            break;
         case 'email':
             ret = 'test_email_' + (Date.now() % 1000000) + '@test.cn';
             break;

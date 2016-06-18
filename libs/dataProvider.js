@@ -1,11 +1,11 @@
 'use strict';
 var colors = require('colors');
-let DataProvider = function(apiConfig){
+let DataProvider = function(apiConfig,data){
     this.apiConfig = apiConfig;
     if(!process.dataProviderCache){
         process.dataProviderCache = {};
     }
-    this.cache = process.dataProviderCache;
+    this.cache = process.dataProviderCache = data;
     this.report = {};
 };
 
@@ -73,7 +73,6 @@ DataProvider.prototype.validation = function (body,config,report) {
     var report = report?report:this.report;
     var returnConfig = config?config:this.apiConfig.response.body;
 
-    //fixme 将来加入response headers检查
     for(let k in returnConfig){
 
         if((typeof returnConfig[k] == 'object') && (!returnConfig[k]._type) && (returnConfig[k]._assert===undefined)){

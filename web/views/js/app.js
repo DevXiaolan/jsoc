@@ -13,6 +13,7 @@ var App = function () {
         el: '#header',
         data: {
             site:'JSOC.',
+            version:'0.9.0',
             host:{},
             currentPlanName:'',
             plans: this.plans
