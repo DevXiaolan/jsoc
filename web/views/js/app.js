@@ -147,6 +147,8 @@ App.prototype.dialog = function (caller,type, cb) {
             var s = $(caller).data('s');
             this.vueDialog._data.role = s;
             var data = this.getData(s);
+            data.data._new = false;
+
             this.renderDialog(data);
             break;
         default :
@@ -345,7 +347,6 @@ App.prototype.getData = function (role) {
             var key = _tmp.pop();
             var prefix = _tmp.join('.');
             delete data.name;
-            //app.vueDialog._data.entity.entity._choices = $('#dialog_tags').val();
             if(data._new == 'true'){
                 delete data._new;
                 $('fieldset[role="' + prefix + '"],section[role="' + prefix + '"]').append(app.apiEntity(key, data, prefix, true));
