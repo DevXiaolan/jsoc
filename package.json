@@ -1,10 +1,10 @@
 {
   "name": "jsoc",
-  "version": "0.9.0",
+  "version": "0.9.2",
   "description": "",
-  "main": "dataProvider.js",
+  "main": "jsoc.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": ""
   },
   "bin": "jsoc.js",
   "author": "lanhao.name",

@@ -66,13 +66,16 @@ if(fs.existsSync(__dirname+'/plans/'+planName+'.js')){
     let plan = require(__dirname+'/plans/'+planName+'.js');
 
     if(argv.api != 'all'){
-        if(plan.apis[argv.api]){
-            let currentApi = plan.apis[argv.api]; 
-            plan.apis = {};
-            plan.apis[argv.api] = currentApi;
-        }else{
-            errorReport('Api [ '+colors.red(argv.api)+' ] not defined');
+        let apis = argv.api.split(',');
+        let Apis = {};
+        for(let k in apis){
+            if(plan.apis[apis[k]]){
+                Apis[apis[k]] = plan.apis[apis[k]];
+            }else{
+                errorReport('Api [ '+colors.red(apis[k])+' ] not defined');
+            }
         }
+        plan.apis = Apis;
     }
 
     try{
