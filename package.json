@@ -13,6 +13,7 @@
     "EventEmitter": "^1.0.0",
     "async": "^1.5.2",
     "colors": "^1.1.2",
+    "faker": "^3.1.0",
     "request": "^2.69.0",
     "request-agent": "^1.0.3",
     "xiaolan": "^1.0.47",
