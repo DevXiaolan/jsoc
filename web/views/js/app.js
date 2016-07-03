@@ -336,8 +336,10 @@ App.prototype.getData = function (role) {
         for(var i=0;i<inputs.length;i++){
             if(inputs[i].value=='')continue;
             data[inputs[i].name] = inputs[i].value;
+            if(inputs[i].type == 'checkbox'){
+                data[inputs[i].name] = inputs[i].checked;
+            }
         }
-
         if(data._new == 'true'){
             role += '.'+data.name;
         }
