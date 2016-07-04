@@ -21,7 +21,7 @@
 让打印信息色彩丰富 ，boolean  ，默认true  (所以说，没事就忽略这个参数)
 
 ### -d ( --data )
-给接口注入预定义参数  （[关于预定义参数](#toc_8)）
+给接口注入预定义参数  （[关于预定义参数](#预定义参数)）
 
     jsoc testApi -a user -d '{"userID":1,"page":1}'  //json 字符串形式
     jsoc testApi -a user -d.userId 1 -d.page 1       // jsoc 参数形式 （ 推荐 ） 
