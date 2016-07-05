@@ -82,8 +82,14 @@ DataProvider.prototype.validation = function (body,config,report) {
             if(returnConfig[k]._required === false){
                 return true;
             }
-            if((returnConfig[k]._assert !== undefined ) && (returnConfig[k]._assert == body[k])){
-                report[k] = true;
+
+            if((returnConfig[k]._assert !== undefined ) ){
+                if(returnConfig[k]._assert == body[k]){
+                    report[k] = true;
+                }else{
+                    report[k] = false;
+                }
+
             }else if((!returnConfig[k]._assert) && returnConfig[k]._type){
                 var allowType = returnConfig[k]._type;
                 report[k] = this.isType(allowType.toLowerCase(),body[k]);
