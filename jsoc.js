@@ -58,6 +58,11 @@ let argv = yargs
     boolean: true,
     default: false
   })
+  .options('i', {
+    alias: 'info',
+    boolean: true,
+    default: false
+  })
   .usage('Usage : jsoc {PlanName} [options]')
   .example('jsoc testApi -a user -d \'{"a":123}\'  // 测试testApi中的user接口 ')
   .help('h')
@@ -87,7 +92,10 @@ if (fs.existsSync(__dirname + '/plans/' + planName + '.js')) {
     }
     plan.apis = Apis;
   }
-
+  if(argv.info){
+    console.log(JSON.stringify(plan.apis,null,4));
+    process.exit(-1);
+  }
   try {
     if(typeof argv.data === 'string'){
       argv.data = JSON.parse(argv.data);
