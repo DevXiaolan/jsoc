@@ -1,6 +1,6 @@
 'use strict';
 
-let isType = function(type,val,length){
+let isType = (type,val,length) => {
     type = (type && typeof type == 'string')?type.toLowerCase():type;
     if(length && (''+val).length!=length){
         return false;

@@ -1,6 +1,6 @@
 'use strict';
-var colors = require('colors');
-let DataProvider = function(apiConfig,data){
+const colors = require('colors');
+let DataProvider = (apiConfig,data) => {
     this.apiConfig = apiConfig;
     if(!process.dataProviderCache){
         process.dataProviderCache = {};
@@ -9,9 +9,9 @@ let DataProvider = function(apiConfig,data){
     this.report = {};
 };
 
-DataProvider.prototype.generator = function(){
-    var _self = this;
-    var apiConfig = this.apiConfig;
+DataProvider.prototype.generator = () => {
+    let _self = this;
+    let apiConfig = this.apiConfig;
 
     if(apiConfig.request.headers && (typeof apiConfig.request.headers) == 'object'){
         for(let k in apiConfig.request.headers){
@@ -25,7 +25,7 @@ DataProvider.prototype.generator = function(){
     }
 
     if(apiConfig.request.uri.indexOf('{')!=-1){
-        apiConfig.request.uri = apiConfig.request.uri.replace(/{(.*?)}/g, function () {
+        apiConfig.request.uri = apiConfig.request.uri.replace(/{(.*?)}/g, () => {
             let p = arguments[1];
 
             if(apiConfig.request.params[p]){
@@ -48,8 +48,8 @@ DataProvider.prototype.generator = function(){
     return apiConfig;
 };
 
-DataProvider.prototype.data = function (item) {
-    var ret = {};
+DataProvider.prototype.data = (item) => {
+    let ret = {};
     if(!item._type && !item._assert && !item._to && !item._from){
         for(let k in item){
             ret[k] = this.data(item[k]);
@@ -68,10 +68,10 @@ DataProvider.prototype.data = function (item) {
     }
 };
 
-DataProvider.prototype.validation = function (body,config,report) {
+DataProvider.prototype.validation = (body,config,report) => {
 
-    var report = report?report:this.report;
-    var returnConfig = config?config:this.apiConfig.response.body;
+    let report = report?report:this.report;
+    let returnConfig = config?config:this.apiConfig.response.body;
 
     for(let k in returnConfig){
 
@@ -91,7 +91,7 @@ DataProvider.prototype.validation = function (body,config,report) {
                 }
 
             }else if((!returnConfig[k]._assert) && returnConfig[k]._type){
-                var allowType = returnConfig[k]._type;
+                let allowType = returnConfig[k]._type;
                 report[k] = this.isType(allowType.toLowerCase(),body[k]);
             }else{
                 report[k] = false;

@@ -2,7 +2,7 @@
 
 const faker = require('faker');
 
-let makeData = function (item) {
+let makeData = (item) => {
   let type = item._type;
   let assert = item._assert;
   let length = item._length;
@@ -18,7 +18,7 @@ let makeData = function (item) {
     return choices[Number.parseInt(Math.random() * choices.length)];
   }
 
-  var ret = null;
+  let ret = null;
   switch (type) {
     case 'string':
       ret = faker.random.word();
