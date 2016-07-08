@@ -1,6 +1,6 @@
 'use strict';
 const colors = require('colors');
-let DataProvider = (apiConfig,data) => {
+let DataProvider = function(apiConfig,data){
     this.apiConfig = apiConfig;
     if(!process.dataProviderCache){
         process.dataProviderCache = {};
@@ -69,8 +69,7 @@ DataProvider.prototype.data = (item) => {
 };
 
 DataProvider.prototype.validation = (body,config,report) => {
-
-    let report = report?report:this.report;
+    report = report?report:this.report;
     let returnConfig = config?config:this.apiConfig.response.body;
 
     for(let k in returnConfig){
