@@ -108,6 +108,7 @@ if (fs.existsSync(__dirname + '/plans/' + planName + '.js')) {
 
   async.eachSeries(plan.apis, (item, callback) => {
     console.log('测试接口：［' + colors.blue(item.name) + ']');
+
     let dp = new dataProvider(item, argv.data);
     item = dp.generator();
 
