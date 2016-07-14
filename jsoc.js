@@ -55,7 +55,6 @@ let argv = yargs
   })
   .options('l', {
     alias: 'list',
-    boolean: true,
     default: false
   })
   .options('i', {
@@ -74,9 +73,18 @@ let planName = argv._[0];
 if (fs.existsSync(__dirname + '/plans/' + planName + '.js')) {
 
   let plan = require(__dirname + '/plans/' + planName + '.js');
-
+  
   if(argv.list){
-    console.log(Object.keys(plan.apis));
+    let apis = Object.keys(plan.apis);
+    let out = [];
+    if(argv.list!==true){
+      for(let k in apis){
+        if(apis[k].toLowerCase().indexOf(argv.list.toLowerCase()) !== -1)out.push(apis[k]);
+      }
+    }else{
+      out = apis;
+    }
+    console.log(out);
     process.exit(-1);
   }
 
