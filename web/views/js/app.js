@@ -372,9 +372,6 @@ App.prototype.getData = function (role) {
                     console.log(data);
                 },'json');
                 break;
-            case 'cmd_run':
-
-                break;
         }
     });
 
