@@ -78,12 +78,16 @@ let argv = yargs
   .argv;
 
 if(argv.gen!==false){
-  let files = fs.readdirSync(__dirname +'/'+argv.gen);
-
+  let files = [];
+  if(fs.statSync(argv.gen).isDirectory()) {
+    files = fs.readdirSync(argv.gen).map(file=>argv.gen+'/'+file);
+  }else {
+    files = [argv.gen];
+  }
   for(let k in files){
+    if(fs.statSync(files[k]).isDirectory()) continue;
     let T = new trans();
-    T.buf.host = 'http://';
-    T.loadContent(fs.readFileSync(__dirname +'/'+argv.gen+'/'+files[k], { encoding: 'utf8' }).toString());
+    T.loadContent(fs.readFileSync(files[k], { encoding: 'utf8' }).toString());
     fs.writeFileSync(__dirname+'/plans/'+(argv.output?argv.output:files[k]),T.toFile());
   }
 

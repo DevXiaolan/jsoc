@@ -5,7 +5,8 @@ const faker = require('faker');
 let makeData = (item) => {
   let type = item._type;
   let assert = item._assert;
-  let length = item._length;
+  let _default = item._default;
+  let _length = item._length;
   let choices = item._choices ? item._choices.split(',') : [];
 
   type = (type && typeof type == 'string') ? type.toLowerCase() : type;
@@ -22,14 +23,14 @@ let makeData = (item) => {
   switch (type) {
     case 'string':
       ret = faker.random.word();
-      if (length) {
-        ret = ret.substr(0, length);
+      if (_length) {
+        ret = ret.substr(0, _length);
       }
       break;
     case 'number':
       let options = {};
-      if (length) {
-        options['max'] = Number.parseInt('1'+'0'.repeat(length)) - 1;
+      if (_length) {
+        options['max'] = Number.parseInt('1'+'0'.repeat(_length)) - 1;
       }
       ret = faker.random.number(options);
 
@@ -56,9 +57,14 @@ let makeData = (item) => {
       return faker.random.boolean();
       break;
     default :
-      ret = '';
+      ret = null;
       break;
   }
+
+  if(ret === null && _default){
+    ret = _default;
+  }
+
   return ret;
 };
 

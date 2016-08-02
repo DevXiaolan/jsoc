@@ -51,7 +51,7 @@ DataProvider.prototype.generator = function() {
 
 DataProvider.prototype.data = function(item) {
   let ret = {};
-  if (!item._type && !item._assert && !item._to && !item._from) {
+  if (!item._type && !item._assert && !item._default && !item._to && !item._from) {
     for (let k in item) {
       ret[k] = this.data(item[k]);
     }

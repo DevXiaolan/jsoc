@@ -67,13 +67,12 @@ let toRegExp = (route) => {
  * @returns {boolean}
  */
 let checkRequest = (req, route) => {
-
-    if(!checkType(route.request.body,req.body)){
+    if(route.request.body && !checkType(route.request.body,req.body)){
         console.log('body error');
         return false;
     }
 
-    if(!checkType(route.request.query,req.query)){
+    if(route.request.query && !checkType(route.request.query,req.query)){
         console.log('query error');
         return false;
     }

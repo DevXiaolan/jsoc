@@ -18,6 +18,10 @@ class translate{
     this.buf.apis = this.buf.apis || {};
     for(let k in matches){
       if(matches[k].indexOf('@jsoc')!== -1) {
+        if(matches[k].indexOf('@jsoc.host')!== -1){
+          this.buf.host = matches[k].replace(/\/\*|\*\/|\*|@jsoc.host|\s+/g, '');
+          continue;
+        }
         let lines = matches[k].replace(/\/\*|\*\/|\*|@jsoc/g, '').split('\n');
         let api = this.transformHelper(lines, 0);
         if(api.name){
