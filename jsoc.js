@@ -84,13 +84,12 @@ if(argv.gen!==false){
   }else {
     files = [argv.gen];
   }
+  let T = new trans();
   for(let k in files){
     if(fs.statSync(files[k]).isDirectory()) continue;
-    let T = new trans();
     T.loadContent(fs.readFileSync(files[k], { encoding: 'utf8' }).toString());
-    fs.writeFileSync(__dirname+'/plans/'+(argv.output?argv.output:files[k]),T.toFile());
   }
-
+  fs.writeFileSync(__dirname+'/plans/'+(argv.output?argv.output:files[k]),T.toFile());
   process.exit(-1);
 }
 

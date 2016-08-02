@@ -3,14 +3,12 @@
 
 let route_demo = {};
 
-/**
- * @jsoc.host http://127.0.0.1:3001
- */
+
 
 /**
  * @jsoc
- *   name:test2
- *   desc:a test2 doc
+ *   name:test3
+ *   desc:a test3 doc
  *   group:test
  *   request
  *     uri:/test/api2/{id}
