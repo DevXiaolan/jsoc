@@ -112,3 +112,6 @@ DataProvider.prototype.isType = require('./func/isType.js');
 
 
 module.exports = DataProvider;
+
+//test code
+//new DataProvider().generator();

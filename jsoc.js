@@ -11,6 +11,7 @@ const requestAgent = require('request-agent').init();
 
 const dataProvider = require('./libs/dataProvider');
 const httpAgent = require('./libs/httpAgent');
+const trans = require('./libs/translate');
 
 const errorReport = (msg) => {
   console.log(EOL.repeat(2) + msg + EOL.repeat(2));
@@ -62,11 +63,28 @@ let argv = yargs
     boolean: true,
     default: false
   })
+  .options('g', {
+    alias: 'gen',
+    default: false
+  })
   .usage('Usage : jsoc {PlanName} [options]')
   .example('jsoc testApi -a user -d \'{"a":123}\'  // 测试testApi中的user接口 ')
   .help('h')
   .epilog('Power by Xiaolan 2016')
   .argv;
+
+if(argv.gen!==false){
+  let files = fs.readdirSync(__dirname +'/'+argv.gen);
+
+  for(let k in files){
+    let T = new trans();
+    T.loadContent(fs.readFileSync(__dirname +'/'+argv.gen+'/'+files[k], { encoding: 'utf8' }).toString());
+    T.buf.host = 'http://';
+    fs.writeFileSync(__dirname+'/plans/'+(argv.output?argv.output:files[k]),T.toFile());
+  }
+
+  process.exit(-1);
+}
 
 let planName = argv._[0];
 
