@@ -67,6 +67,10 @@ let argv = yargs
     alias: 'gen',
     default: false
   })
+  .options('o', {
+    alias: 'output',
+    default: false
+  })
   .usage('Usage : jsoc {PlanName} [options]')
   .example('jsoc testApi -a user -d \'{"a":123}\'  // 测试testApi中的user接口 ')
   .help('h')
@@ -78,8 +82,8 @@ if(argv.gen!==false){
 
   for(let k in files){
     let T = new trans();
-    T.loadContent(fs.readFileSync(__dirname +'/'+argv.gen+'/'+files[k], { encoding: 'utf8' }).toString());
     T.buf.host = 'http://';
+    T.loadContent(fs.readFileSync(__dirname +'/'+argv.gen+'/'+files[k], { encoding: 'utf8' }).toString());
     fs.writeFileSync(__dirname+'/plans/'+(argv.output?argv.output:files[k]),T.toFile());
   }
 
