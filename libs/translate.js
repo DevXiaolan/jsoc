@@ -13,6 +13,8 @@ class translate{
     this.jsdoc = /\/\*\*([\s\S]*?)\*\//gm;
   };
 
+
+
   loadContent(content){
     let matches = content.match(this.jsdoc);
     this.buf.apis = this.buf.apis || {};
