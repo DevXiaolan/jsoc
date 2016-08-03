@@ -15,6 +15,11 @@ let makeData = (item) => {
     return assert;
   }
 
+  if(_default !== undefined){
+    return _default;
+  }
+  //todo 优先级
+
   if (choices.length > 0) {
     return choices[Number.parseInt(Math.random() * choices.length)];
   }
@@ -59,10 +64,6 @@ let makeData = (item) => {
     default :
       ret = null;
       break;
-  }
-
-  if(ret === null && _default){
-    ret = _default;
   }
 
   return ret;

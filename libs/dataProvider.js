@@ -83,7 +83,7 @@ DataProvider.prototype.validation = function(body, config, report){
         this.validation(body[k], returnConfig[k], report[k]);
       }
     } else {
-      if (returnConfig[k]._required === false) {
+      if (returnConfig[k]._required == 'false') {
         return true;
       }
 
