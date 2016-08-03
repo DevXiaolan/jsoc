@@ -12,6 +12,7 @@ const requestAgent = require('request-agent').init();
 const dataProvider = require('./libs/dataProvider');
 const httpAgent = require('./libs/httpAgent');
 const trans = require('./libs/translate');
+const obj2md = require('./libs/func/obj2md');
 
 const errorReport = (msg) => {
   console.log(EOL.repeat(2) + msg + EOL.repeat(2));
@@ -71,6 +72,10 @@ let argv = yargs
     alias: 'output',
     default: false
   })
+  .options('m', {
+    alias: 'markdown',
+    default: false
+  })
   .usage('Usage : jsoc {PlanName} [options]')
   .example('jsoc testApi -a user -d \'{"a":123}\'  // 测试testApi中的user接口 ')
   .help('h')
@@ -90,6 +95,12 @@ if(argv.gen!==false){
     T.loadContent(fs.readFileSync(files[k], { encoding: 'utf8' }).toString());
   }
   fs.writeFileSync(__dirname+'/plans/'+(argv.output?argv.output:files[k]),T.toFile());
+  process.exit(-1);
+}
+
+if(argv.markdown !== false){
+  let md = obj2md.make(argv.markdown);
+  fs.writeFileSync(__dirname+'/plans/'+argv.markdown + '.md',md);
   process.exit(-1);
 }
 
