@@ -8,7 +8,8 @@ var config = require('./config/config');
 if(process.mock){
   config.apis = process.mock;
 }
-console.log(config);
+
+console.log('Mock in '+config.apis);
 
 //引入小蓝框架
 var xiaolan = require('./xiaolan')(config);
