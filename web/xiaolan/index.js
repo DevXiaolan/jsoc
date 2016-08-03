@@ -72,12 +72,13 @@ Xiaolan.createServer = function () {
 
 
 Xiaolan.handler = function (req, res) {
-    try {
-        require(Xiaolan.basePath + '/controllers/' + req.params[0])[req.params[1]](req, res);
-    } catch (ex) {
-        //console.log(ex);
-        require(Xiaolan.basePath + '/controllers/mock').mock(req, res);
-    }
+    require(Xiaolan.basePath + '/controllers/mock').mock(req, res);
+    //try {
+    //    require(Xiaolan.basePath + '/controllers/' + req.params[0])[req.params[1]](req, res);
+    //} catch (ex) {
+    //    //console.log(ex);
+    //    require(Xiaolan.basePath + '/controllers/mock').mock(req, res);
+    //}
 }
 
 

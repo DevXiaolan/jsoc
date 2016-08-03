@@ -76,116 +76,127 @@ let argv = yargs
     alias: 'markdown',
     default: false
   })
+  .options('mock', {
+    default: false
+  })
   .usage('Usage : jsoc {PlanName} [options]')
   .example('jsoc testApi -a user -d \'{"a":123}\'  // 测试testApi中的user接口 ')
   .help('h')
   .epilog('Power by Xiaolan 2016')
   .argv;
 
-if(argv.gen!==false){
-  let files = [];
-  if(fs.statSync(argv.gen).isDirectory()) {
-    files = fs.readdirSync(argv.gen).map(file=>argv.gen+'/'+file);
-  }else {
-    files = [argv.gen];
-  }
-  let T = new trans();
-  for(let k in files){
-    if(fs.statSync(files[k]).isDirectory()) continue;
-    T.loadContent(fs.readFileSync(files[k], { encoding: 'utf8' }).toString());
-  }
-  fs.writeFileSync(__dirname+'/plans/'+(argv.output?argv.output:files[k]),T.toFile());
-  process.exit(-1);
-}
+if(argv.mock !== false){
+  process.chdir(__dirname+'/web');
+  process.mock = argv.mock;
+  require(process.cwd()+'/server');
 
-if(argv.markdown !== false){
-  let md = obj2md.make(argv.markdown);
-  fs.writeFileSync(__dirname+'/plans/'+argv.markdown + '.md',md);
-  process.exit(-1);
-}
+}else {
 
-let planName = argv._[0];
-
-if (fs.existsSync(__dirname + '/plans/' + planName + '.js')) {
-
-  let plan = require(__dirname + '/plans/' + planName + '.js');
-  
-  if(argv.list){
-    let apis = Object.keys(plan.apis);
-    let out = [];
-    if(argv.list!==true){
-      for(let k in apis){
-        if(apis[k].toLowerCase().indexOf(argv.list.toLowerCase()) !== -1)out.push(apis[k]);
-      }
-    }else{
-      out = apis;
+  if (argv.gen !== false) {
+    let files = [];
+    if (fs.statSync(argv.gen).isDirectory()) {
+      files = fs.readdirSync(argv.gen).map(file=>argv.gen + '/' + file);
+    } else {
+      files = [argv.gen];
     }
-    console.log(out);
+    let T = new trans();
+    for (let k in files) {
+      if (fs.statSync(files[k]).isDirectory()) continue;
+      T.loadContent(fs.readFileSync(files[k], {encoding: 'utf8'}).toString());
+    }
+    fs.writeFileSync(__dirname + '/plans/' + (argv.output ? argv.output : files[k]), T.toFile());
     process.exit(-1);
   }
 
-  if (argv.api != 'all') {
-    let apis = argv.api.split(',');
-    let Apis = {};
-    for (let k in apis) {
-      if (plan.apis[apis[k]]) {
-        Apis[apis[k]] = plan.apis[apis[k]];
-      } else {
-        errorReport('Api [ ' + colors.red(apis[k]) + ' ] not defined');
-      }
-    }
-    plan.apis = Apis;
-  }
-  if(argv.info){
-    console.log(JSON.stringify(plan.apis,null,4));
+  if (argv.markdown !== false) {
+    let md = obj2md.make(argv.markdown);
+    fs.writeFileSync(__dirname + '/plans/' + argv.markdown + '.md', md);
     process.exit(-1);
   }
-  try {
-    if(typeof argv.data === 'string'){
-      argv.data = JSON.parse(argv.data);
-    }
-  } catch (ex) {
-    errorReport('Parse data failed :  ' + colors.red(argv.d)
-      + ' is not a correct JSON string.'
-      + EOL + 'See  ' + colors.blue('jsoc -h') + ' for more help');
-  }
 
-  async.eachSeries(plan.apis, (item, callback) => {
-    console.log('测试接口：［' + colors.blue(item.name) + ']');
+  let planName = argv._[0];
 
-    let dp = new dataProvider(item, argv.data);
-    item = dp.generator();
+  if (fs.existsSync(__dirname + '/plans/' + planName + '.js')) {
 
-    requestAgent
-      .url(plan.host + item.request.uri)
-      .headers(item.request.headers)
-      .method(item.request.method)
-      .query(item.request.query)
-      .body(item.request.body)
-      .send()
-      .then(requestAgent.toJson)
-      .then((obj) => {
-        if (argv.body) {
-          console.log('===== REQUEST =====');
-          console.log(item.request);
-          console.log('===== RESPONSE ====');
-          console.log(obj);
-          console.log('===== REPORT  =====');
+    let plan = require(__dirname + '/plans/' + planName + '.js');
+
+    if (argv.list) {
+      let apis = Object.keys(plan.apis);
+      let out = [];
+      if (argv.list !== true) {
+        for (let k in apis) {
+          if (apis[k].toLowerCase().indexOf(argv.list.toLowerCase()) !== -1)out.push(apis[k]);
         }
-        dp.validation(obj);
-        console.log(argv.color ? colorsFy(dp.report) : dp.report);
-        callback(null, null);
-      })
-      .catch((err) => {
-        errorReport('Error: ' + colors.red(err.toString()));
-      });
+      } else {
+        out = apis;
+      }
+      console.log(out);
+      process.exit(-1);
+    }
 
-  }, (err, ret) => {
-    //console.log(err,ret);
-  });
+    if (argv.api != 'all') {
+      let apis = argv.api.split(',');
+      let Apis = {};
+      for (let k in apis) {
+        if (plan.apis[apis[k]]) {
+          Apis[apis[k]] = plan.apis[apis[k]];
+        } else {
+          errorReport('Api [ ' + colors.red(apis[k]) + ' ] not defined');
+        }
+      }
+      plan.apis = Apis;
+    }
+    if (argv.info) {
+      console.log(JSON.stringify(plan.apis, null, 4));
+      process.exit(-1);
+    }
+    try {
+      if (typeof argv.data === 'string') {
+        argv.data = JSON.parse(argv.data);
+      }
+    } catch (ex) {
+      errorReport('Parse data failed :  ' + colors.red(argv.d)
+        + ' is not a correct JSON string.'
+        + EOL + 'See  ' + colors.blue('jsoc -h') + ' for more help');
+    }
+
+    async.eachSeries(plan.apis, (item, callback) => {
+      console.log('测试接口：［' + colors.blue(item.name) + ']');
+
+      let dp = new dataProvider(item, argv.data);
+      item = dp.generator();
+
+      requestAgent
+        .url(plan.host + item.request.uri)
+        .headers(item.request.headers)
+        .method(item.request.method)
+        .query(item.request.query)
+        .body(item.request.body)
+        .send()
+        .then(requestAgent.toJson)
+        .then((obj) => {
+          if (argv.body) {
+            console.log('===== REQUEST =====');
+            console.log(item.request);
+            console.log('===== RESPONSE ====');
+            console.log(obj);
+            console.log('===== REPORT  =====');
+          }
+          dp.validation(obj);
+          console.log(argv.color ? colorsFy(dp.report) : dp.report);
+          callback(null, null);
+        })
+        .catch((err) => {
+          errorReport('Error: ' + colors.red(err.toString()));
+        });
+
+    }, (err, ret) => {
+      //console.log(err,ret);
+    });
 
 
-} else {
-  errorReport('Plan [ ' + colors.red(planName) + ' ] not exists');
+  } else {
+    errorReport('Plan [ ' + colors.red(planName) + ' ] not exists');
+  }
+
 }
-
