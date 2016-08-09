@@ -91,20 +91,24 @@ if(argv.mock !== false){
   require(process.cwd()+'/server');
 
 }else {
-
   if (argv.gen !== false) {
+    if(typeof argv.gen !== 'string'){
+      errorReport('path must be a string , usage:  '+colors.red('jsoc --gen {path}'));
+      process.exit(-1);
+    }
     let files = [];
     if (fs.statSync(argv.gen).isDirectory()) {
       files = fs.readdirSync(argv.gen).map(file=>argv.gen + '/' + file);
     } else {
       files = [argv.gen];
     }
+
     let T = new trans();
     for (let k in files) {
       if (fs.statSync(files[k]).isDirectory()) continue;
       T.loadContent(fs.readFileSync(files[k], {encoding: 'utf8'}).toString());
     }
-    fs.writeFileSync(__dirname + '/plans/' + (argv.output ? argv.output : files[k]), T.toFile());
+    fs.writeFileSync(__dirname + '/plans/' + (argv.output ? argv.output : 'out.js'), T.toFile());
     process.exit(-1);
   }
 

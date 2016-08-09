@@ -9,27 +9,31 @@ let route_demo = {};
 
 /**
  * @jsoc
- *   name:test2
- *   desc:a test2 doc
+ *   name:api1
+ *   desc:a demo doc
  *   group:test
  *   request
- *     uri:/test/api2/{id}
+ *     method:get
+ *     uri:/demo/{id}
  *     params
  *       id
  *         _type:number
  *         _required:true
- *     headers
- *       appId:number 10
- *       content-type:application/json
- *     body
- *       name:string 32
- *       password:string 32
+ *     query
+ *       page
+ *         _type:number
+ *         _default:1
  *   response
- *     headers
  *     body
- *       code:200
- *       data:array
- *       message:string 20
+ *       code
+ *         _type:number
+ *         _assert:200
+ *       data
+ *         _type:object
+ *       message
+ *         _type:string
+ *         _required:false
  */
+
 
 module.exports = route_demo;
