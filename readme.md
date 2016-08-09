@@ -1,4 +1,5 @@
 ## JSOC
+
 ![](http://lanhao.name/img/upload/JSOC.png?_v=1)
 
 - ### jsoc entity 
@@ -49,6 +50,7 @@
 		 *         _required:true
 		 *     query
 		 *       page
+		 *         _from:pageNum
 		 *         _type:number
 		 *         _default:1
 		 *   response
@@ -228,3 +230,59 @@
 		如果你想看到这个请求的详细信息，可以加上 -b 参数，将会打印请求体和返回体。
 
 - ### 附录
+
+#### A . jsoc test进阶用法
+这一节我们详细说说 `jsoc test`的各种参数。
+
+基本格式：  `jsoc demo [options]`
+
+- -l  / --list
+
+		返回一个数组，列出demo所有的接口。
+- -a  / --api
+	
+		指定测试的接口名，
+- -b  /  --body
+
+		打印请求、返回的详细信息。
+- -d / --data
+
+		注入数据的方式，举个例子，比如前面 demo 里的query
+		query
+		  page
+		    _from:pageNum
+		    _type:number
+		    _default:1
+	    
+	    你可以用  jsoc demo -a api1 -d.pageNum 2 来注入page的值，
+	    如果你不这么做，page就是默认值 1 。
+	    
+	    -d 支持另一种格式,要求是标准的json字符串，书写比较麻烦
+	    jsoc demo -a api1 -d '{"pageNum":2}'
+	    
+	    如果需要注入多个参数，除了使用json字符串，第一种方式也是可以的
+	    jsoc demo -a api1 -d.pageNum 2 -d.other 3 -d.more 4
+	    
+- 一次性测试多个接口
+	
+		如果忽略 -a 参数，会默认按照你书写的顺序全部接口测试一遍。
+		jsoc demo
+		测试接口：［api1]
+	    测试接口：［api2]
+	    测试接口：［api3]
+	    ... 
+	    
+	    
+	    有时我们并不希望这样，我们希望自行决定测试哪些接口，自行决定调用顺序。
+	    
+	    万幸，-a 是支持多个接口的，下面是例子
+	    
+	    jsoc ucenterApi -a create,auth,getProfile
+	    
+	    将会按照create,auth,getProfile的顺序进行测试
+	  ![](http://lanhao.name/img/upload/jsoc_01.png)
+	    
+#### B . jsoc entity 深入
+下面详解一下`jsoc entity`每个描述带来
+（未完）
+	
