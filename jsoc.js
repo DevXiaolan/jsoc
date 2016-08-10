@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 "use strict";
 
+const VERSION = require(__dirname+'/package.json').version;
+
 const async = require('async');
 const os = require('os');
 const fs = require('fs');
@@ -79,12 +81,19 @@ let argv = yargs
   .options('mock', {
     default: false
   })
+  .options('v', {
+    alias: 'version',
+    default: false
+  })
   .usage('Usage : jsoc {PlanName} [options]')
   .example('jsoc testApi -a user -d \'{"a":123}\'  // 测试testApi中的user接口 ')
   .help('h')
   .epilog('Power by Xiaolan 2016')
   .argv;
-
+if(argv.version){
+  console.log(VERSION);
+  process.exit(-1);
+}
 if(argv.mock !== false){
   process.chdir(__dirname+'/web');
   process.mock = argv.mock;
