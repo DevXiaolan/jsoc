@@ -22,9 +22,9 @@ obj2md.make = function (plan) {
     let content = '';
     content += '## 接口文档 [' + plan + '] ' + EOL;
     content += '### 接口地址:' + EOL + EOL;
+    content += '    ' + obj.host + EOL + EOL;
     let date = new Date();
     content += '### 生成日期:' + (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()) + EOL + EOL;
-    content += '    ' + obj.host + EOL + EOL;
 
     for (let k in obj.apis) {
       content += '***' + EOL+ EOL;
