@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 "use strict";
-
+const _time = process.hrtime();
 const VERSION = require(__dirname+'/package.json').version;
 
 const async = require('async');
-const os = require('os');
+const EOL = require('os').EOL;
 const fs = require('fs');
-const EOL = (os && os.EOL) ? os.EOL : '\n';
 const colors = require('colors');
 const yargs = require('yargs');
 const requestAgent = require('request-agent').init();
 
 const dataProvider = require('./libs/dataProvider');
-const httpAgent = require('./libs/httpAgent');
+
 const trans = require('./libs/translate');
 const obj2md = require('./libs/func/obj2md');
 
@@ -37,6 +36,7 @@ const colorsFy = (obj, tab) => {
   }
   return result + EOL + '    '.repeat(tab - 1) + '}';
 };
+
 
 let argv = yargs
   .options('a', {

@@ -4,8 +4,8 @@
 
 'use strict';
 const fs = require('fs');
-const os = require('os');
-const EOL = (os && os.EOL)?os.EOL:'\n';
+
+const EOL = require('os').EOL;
 const makeData = require('./makeData.js');
 
 let obj2md = {};
@@ -46,7 +46,6 @@ obj2md.make = function (plan) {
 let prettyJson2 =  (obj, tabCount) => {
   if(!tabCount)tabCount = 0;
 
-  var EOL = (os && os.EOL)?os.EOL:'\n';
   tabCount++;
   if (typeof obj == 'object' && obj!==null) {
     var r = '';
