@@ -19,7 +19,9 @@ module.exports = {
                         "_length": 10
                     }
                 },
-                "body": {},
+                "body": {
+                    "_type":"object"
+                },
                 "params": {
                     "uid": {
                         "_type": "Number",

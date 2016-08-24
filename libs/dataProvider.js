@@ -14,16 +14,12 @@ DataProvider.prototype.generator = function() {
   let _self = this;
   let apiConfig = this.apiConfig;
   if (apiConfig.request.headers && (typeof apiConfig.request.headers) == 'object') {
-    for (let k in apiConfig.request.headers) {
-      apiConfig.request.headers[k] = this.data(apiConfig.request.headers[k]);
-    }
-  }
-  if (apiConfig.request.body && typeof apiConfig.request.body == 'object') {
-    for (let k in apiConfig.request.body) {
-      apiConfig.request.body[k] = this.data(apiConfig.request.body[k]);
-    }
+    apiConfig.request.headers = this.data(apiConfig.request.headers);
   }
 
+  if (apiConfig.request.body && typeof apiConfig.request.body == 'object') {
+    apiConfig.request.body = this.data(apiConfig.request.body);
+  }
   if (apiConfig.request.uri.indexOf('{') != -1) {
 
     apiConfig.request.uri = apiConfig.request.uri.replace(/{(.*?)}/g, function() {
@@ -40,8 +36,8 @@ DataProvider.prototype.generator = function() {
   if (apiConfig.request.query && typeof apiConfig.request.query == 'object') {
     for (let k in apiConfig.request.query) {
       apiConfig.request.uri += '?';
+      apiConfig.request.query = this.data(apiConfig.request.query);
       for (let k in apiConfig.request.query) {
-        apiConfig.request.query[k] = this.data(apiConfig.request.query[k]);
         apiConfig.request.uri += k + '=' + apiConfig.request.query[k] + '&';
       }
     }

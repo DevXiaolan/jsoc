@@ -44,7 +44,7 @@ let makeData = (item) => {
       ret = faker.phone.phoneNumber('1##########');
       break;
     case 'fullmobile':
-      ret = '86-' + faker.phone.phoneNumber('1##########');
+      ret = faker.random.number({max:99})+'-' + faker.phone.phoneNumber('1##########');
       break;
     case 'email':
       ret = faker.internet.email();
