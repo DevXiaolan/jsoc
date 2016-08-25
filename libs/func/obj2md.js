@@ -12,15 +12,19 @@ let obj2md = {};
 
 obj2md.make = function (plan) {
   let obj = null;
+  plan = process.cwd()+'/'+plan;
+  if(!fs.existsSync(plan)){
+    plan = __dirname+'/../../plans/'+plan+'.js';
+  }
   try{
-    obj = require(__dirname+'/../../plans/'+plan+'.js');
+    obj = require(plan);
   }catch(ex){
     
   }
 
   if(obj) {
     let content = '';
-    content += '## 接口文档 [' + plan + '] ' + EOL;
+    content += '## 接口文档 [' + plan.split('/').pop().split('.').shift() + '] ' + EOL;
     content += '### 接口地址:' + EOL + EOL;
     content += '    ' + obj.host + EOL + EOL;
     let date = new Date();
@@ -88,7 +92,7 @@ let entity2tr = (obj,prefix) => {
   var content = '';
   prefix = prefix?prefix+'.':'';
   for(let i in obj){
-    if(obj[i]._type || obj[i]._length || obj[i]._assert) {
+    if(obj[i]._type || obj[i]._length || obj[i]._assert || obj[i]._from) {
       content += '<tr><td>' + prefix + i + '</td><td>' + obj[i]._type + '</td><td>' + (obj[i]._desc ? obj[i]._desc : '') + '</td><td>' + (obj[i]._required ? 'Yes' : 'No') + '</td></tr>' + EOL;
     }else{
       content += entity2tr(obj[i],i);

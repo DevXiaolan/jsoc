@@ -123,7 +123,8 @@ if(argv.mock !== false){
 
   if (argv.markdown !== false) {
     let md = obj2md.make(argv.markdown);
-    fs.writeFileSync(__dirname + '/plans/' + argv.markdown + '.md', md);
+    let output = argv.output ? argv.output :  __dirname + '/plans/' + argv.markdown + '.md';
+    fs.writeFileSync(output, md);
     process.exit(-1);
   }
 
