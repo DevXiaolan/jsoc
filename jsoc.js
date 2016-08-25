@@ -117,7 +117,7 @@ if(argv.mock !== false){
       if (fs.statSync(files[k]).isDirectory()) continue;
       T.loadContent(fs.readFileSync(files[k], {encoding: 'utf8'}).toString());
     }
-    fs.writeFileSync(__dirname + '/plans/' + (argv.output ? argv.output : 'out.js'), T.toFile());
+    fs.writeFileSync((argv.output ? argv.output : 'out.js'), T.toFile());
     process.exit(-1);
   }
 
@@ -128,10 +128,14 @@ if(argv.mock !== false){
   }
 
   let planName = argv._[0];
+  planName = process.cwd()+'/'+planName;
+  if(!fs.existsSync(planName)){
+    planName = __dirname + '/plans/' + planName + '.js';
+  }
 
-  if (fs.existsSync(__dirname + '/plans/' + planName + '.js')) {
+  if (fs.existsSync(planName)) {
 
-    let plan = require(__dirname + '/plans/' + planName + '.js');
+    let plan = require(planName);
 
     if (argv.list) {
       let apis = Object.keys(plan.apis);
@@ -211,5 +215,4 @@ if(argv.mock !== false){
   } else {
     errorReport('Plan [ ' + colors.red(planName) + ' ] not exists');
   }
-
 }
