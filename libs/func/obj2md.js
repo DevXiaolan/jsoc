@@ -33,7 +33,7 @@ obj2md.make = function (plan) {
     let contentArr = {};
     for(let k in groupApis){
       let content = '';
-      content += '## 接口文档 [' + plan.split('/').pop().split('.').shift() + '] ' + EOL;
+      content += '## 接口文档 [' + plan.split('/').pop().split('.').shift() + '_'+k+'] ' + EOL;
       content += '### 接口地址:' + EOL + EOL;
       content += '    ' + obj.host + EOL + EOL;
       let date = new Date();
