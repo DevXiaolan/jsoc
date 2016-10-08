@@ -30,7 +30,7 @@ obj2md.make = function (plan) {
       groupApis[obj.apis[k].group][obj.apis[k].name] = obj.apis[k];
     }
 
-    let contentArr = [];
+    let contentArr = {};
     for(let k in groupApis){
       let content = '';
       content += '## 接口文档 [' + plan.split('/').pop().split('.').shift() + '] ' + EOL;
@@ -50,7 +50,7 @@ obj2md.make = function (plan) {
         content += '**返回示例**:' + EOL + EOL;
         content += '    ' + prettyJson2(response(obj.apis[k].response.body), 1).replace(/},/g, '}') + EOL;
       }
-      contentArr.push(content);
+      contentArr[k] = content;
     }
     return contentArr;
   }else{

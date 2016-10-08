@@ -126,8 +126,10 @@ if(argv.mock !== false){
     if(md.length<1){
       errorReport('generating markdown error!');
     }
+    let output = argv.output ? argv.output :  __dirname + '/plans/' + argv.markdown + '.md';
     for(let k in md){
-      let output = argv.output ? argv.output :  __dirname + '/plans/' + argv.markdown + '.md';
+
+      fs.writeFileSync(output.replace('.md', '_'+k+'.md'), md[k]);
     }
     process.exit(-1);
   }
