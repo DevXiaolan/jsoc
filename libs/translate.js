@@ -14,7 +14,6 @@ class translate{
   };
 
 
-
   loadContent(content){
     let matches = content.match(this.jsdoc);
     this.buf.apis = this.buf.apis || {};

@@ -12,10 +12,11 @@ let obj2md = {};
 
 obj2md.make = function (plan) {
   let obj = null;
-  plan = process.cwd()+'/'+plan;
+
   if(!fs.existsSync(plan)){
     plan = __dirname+'/../../plans/'+plan+'.js';
   }
+
   try{
     obj = require(plan);
   }catch(ex){
@@ -23,25 +24,35 @@ obj2md.make = function (plan) {
   }
 
   if(obj) {
-    let content = '';
-    content += '## 接口文档 [' + plan.split('/').pop().split('.').shift() + '] ' + EOL;
-    content += '### 接口地址:' + EOL + EOL;
-    content += '    ' + obj.host + EOL + EOL;
-    let date = new Date();
-    content += '### 生成日期:' + (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()) + EOL + EOL;
-
-    for (let k in obj.apis) {
-      content += '***' + EOL+ EOL;
-      content += '## ' + obj.apis[k].name + EOL;
-      content += '**请求路径**:   ' + EOL + '>' + obj.apis[k].request.method.toUpperCase() + '   ' + obj.apis[k].request.uri + EOL + EOL;
-      content += object2md(obj.apis[k].request.params, 'URL占位参数');
-      content += object2md(obj.apis[k].request.headers, '请求头部');
-      content += object2md(obj.apis[k].request.query, 'QueryString');
-      content += object2md(obj.apis[k].request.body, 'Body');
-      content += '**返回示例**:' + EOL + EOL;
-      content += '    ' + prettyJson2(response(obj.apis[k].response.body), 1).replace(/},/g, '}') + EOL;
+    let groupApis = {};
+    for(let k in obj.apis){
+      groupApis[obj.apis[k].group] = groupApis[obj.apis[k].group] || {};
+      groupApis[obj.apis[k].group][obj.apis[k].name] = obj.apis[k];
     }
-    return content;
+
+    let contentArr = [];
+    for(let k in groupApis){
+      let content = '';
+      content += '## 接口文档 [' + plan.split('/').pop().split('.').shift() + '] ' + EOL;
+      content += '### 接口地址:' + EOL + EOL;
+      content += '    ' + obj.host + EOL + EOL;
+      let date = new Date();
+      content += '### 生成日期:' + (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()) + EOL + EOL;
+
+      for (let k in obj.apis) {
+        content += '***' + EOL+ EOL;
+        content += '## ' + obj.apis[k].name + EOL;
+        content += '**请求路径**:   ' + EOL + '>' + obj.apis[k].request.method.toUpperCase() + '   ' + obj.apis[k].request.uri + EOL + EOL;
+        content += object2md(obj.apis[k].request.params, 'URL占位参数');
+        content += object2md(obj.apis[k].request.headers, '请求头部');
+        content += object2md(obj.apis[k].request.query, 'QueryString');
+        content += object2md(obj.apis[k].request.body, 'Body');
+        content += '**返回示例**:' + EOL + EOL;
+        content += '    ' + prettyJson2(response(obj.apis[k].response.body), 1).replace(/},/g, '}') + EOL;
+      }
+      contentArr.push(content);
+    }
+    return contentArr;
   }else{
     return false;
   }
