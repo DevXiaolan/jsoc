@@ -123,6 +123,7 @@ if(argv.mock !== false){
 
   if (argv.markdown !== false) {
     let md = obj2md.make(argv.markdown);
+
     if(md.length<1){
       errorReport('generating markdown error!');
     }

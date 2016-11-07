@@ -13,6 +13,7 @@ let obj2md = {};
 obj2md.make = function (plan) {
   let obj = null;
 
+  plan = fs.realpathSync(plan);
   if(!fs.existsSync(plan)){
     plan = __dirname+'/../../plans/'+plan+'.js';
   }
@@ -38,17 +39,17 @@ obj2md.make = function (plan) {
       content += '    ' + obj.host + EOL + EOL;
       let date = new Date();
       content += '### 生成日期:' + (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()) + EOL + EOL;
-
-      for (let k in obj.apis) {
+      let _obj = groupApis[k];
+      for (let k in _obj) {
         content += '***' + EOL+ EOL;
-        content += '## ' + obj.apis[k].name + EOL;
-        content += '**请求路径**:   ' + EOL + '>' + obj.apis[k].request.method.toUpperCase() + '   ' + obj.apis[k].request.uri + EOL + EOL;
-        content += object2md(obj.apis[k].request.params, 'URL占位参数');
-        content += object2md(obj.apis[k].request.headers, '请求头部');
-        content += object2md(obj.apis[k].request.query, 'QueryString');
-        content += object2md(obj.apis[k].request.body, 'Body');
+        content += '## ' + _obj[k].name + EOL;
+        content += '**请求路径**:   ' + EOL + '>' + _obj[k].request.method.toUpperCase() + '   ' + _obj[k].request.uri + EOL + EOL;
+        content += object2md(_obj[k].request.params, 'URL占位参数');
+        content += object2md(_obj[k].request.headers, '请求头部');
+        content += object2md(_obj[k].request.query, 'QueryString');
+        content += object2md(_obj[k].request.body, 'Body');
         content += '**返回示例**:' + EOL + EOL;
-        content += '    ' + prettyJson2(response(obj.apis[k].response.body), 1).replace(/},/g, '}') + EOL;
+        content += '    ' + prettyJson2(response(_obj[k].response.body), 1).replace(/},/g, '}') + EOL;
       }
       contentArr[k] = content;
     }
