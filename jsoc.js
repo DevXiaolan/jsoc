@@ -136,10 +136,14 @@ if(argv.mock !== false){
   }
 
   let planName = argv._[0];
-  planName = process.cwd()+'/'+planName;
-  if(!fs.existsSync(planName)){
-    planName = __dirname + '/plans/' + planName + '.js';
+  if(planName === undefined){
+    errorReport('Usage : jsoc {PlanName} [options]');
   }
+
+  if(!planName.endsWith('.js')){
+    planName += '.js';
+  }
+  planName = fs.realpathSync(planName);
 
   if (fs.existsSync(planName)) {
 
