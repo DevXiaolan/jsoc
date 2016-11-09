@@ -105,7 +105,7 @@ let entity2tr = (obj,prefix) => {
   prefix = prefix?prefix+'.':'';
   for(let i in obj){
     if(obj[i]._type || obj[i]._length || obj[i]._assert || obj[i]._from) {
-      content += '<tr><td>' + prefix + i + '</td><td>' + obj[i]._type + '</td><td>' + (obj[i]._desc ? obj[i]._desc : '') + '</td><td>' + (obj[i]._required ? 'Yes' : 'No') + '</td></tr>' + EOL;
+      content += '<tr><td>' + prefix + i + '</td><td>' + ((obj[i]._type==undefined)?'':obj[i]._type) + '</td><td>' + (obj[i]._desc ? obj[i]._desc : '') + '</td><td>' + (obj[i]._required ? 'Yes' : 'No') + '</td></tr>' + EOL;
     }else{
       content += entity2tr(obj[i],i);
     }
