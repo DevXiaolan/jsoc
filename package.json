@@ -1,6 +1,6 @@
 {
   "name": "jsoc",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "",
   "main": "jsoc.js",
   "scripts": {
