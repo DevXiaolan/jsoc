@@ -16,15 +16,6 @@ let makeData = (item) => {
   }
 
   if(_default !== undefined){
-    if(type == 'number'){
-      _default = Number.parseFloat(_default);
-    }
-    if(type == 'object' ||type == 'array' ){
-      _default = JSON.parse(_default);
-    }
-    if(type == 'bool'){
-      _default = (_default=='true')?true:false;
-    }
     return _default;
   }
   //todo 优先级
