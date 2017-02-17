@@ -16,7 +16,6 @@
     "faker": "^3.1.0",
     "request": "^2.69.0",
     "request-agent": "^1.0.3",
-    "xiaolan": "^1.0.47",
     "yargs": "^4.7.1"
   }
 }
