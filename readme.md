@@ -5,11 +5,16 @@
 
 - ### Getting start
 	- first , [star](https://github.com/captainblue2013/jsoc) this  repositorie
-	
+	- clone it
+		
+			git clone https://github.com/captainblue2013/jsoc.git
 	- install dependencies
 			
-			npm install jsoc -g
-	
+			npm install
+	- link to executable path
+		
+			npm link
+		or `ln -s` to your executable path
 	- Is that OK?
 	
 			jsoc -v
