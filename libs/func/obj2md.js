@@ -13,10 +13,13 @@ let obj2md = {};
 obj2md.make = function (plan) {
   let obj = null;
 
-  plan = fs.realpathSync(plan);
   if(!fs.existsSync(plan)){
-    plan = __dirname+'/../../plans/'+plan+'.js';
+    plan = __dirname+'/../../plans/'+plan+'.json';
   }
+  if(!fs.existsSync(plan)){
+    return false;
+  }
+  plan = fs.realpathSync(plan);
 
   try{
     obj = require(plan);

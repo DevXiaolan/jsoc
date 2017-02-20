@@ -78,9 +78,6 @@ let argv = yargs
     alias: 'markdown',
     default: false
   })
-  .options('mock', {
-    default: false
-  })
   .options('v', {
     alias: 'version',
     default: false
@@ -90,141 +87,160 @@ let argv = yargs
   .help('h')
   .epilog('Power by Xiaolan 2016')
   .argv;
+
 if(argv.version){
   console.log(VERSION);
   process.exit(-1);
 }
-if(argv.mock !== false){
-  process.chdir(__dirname+'/web');
-  process.mock = argv.mock;
-  require(process.cwd()+'/server');
 
-}else {
-  if (argv.gen !== false) {
-    if(typeof argv.gen !== 'string'){
-      errorReport('path must be a string , usage:  '+colors.red('jsoc --gen {path}'));
-      process.exit(-1);
-    }
-    let files = [];
-    if (fs.statSync(argv.gen).isDirectory()) {
-      files = fs.readdirSync(argv.gen).map(file=>argv.gen + '/' + file);
-    } else {
-      files = [argv.gen];
+const command = argv._[0];
+
+switch (command){
+  case 'mock':
+    process.chdir(__dirname+'/web');
+    process.mock = argv._[1];
+    require(process.cwd()+'/server');
+    break;
+  case 'markdown':
+    let plan = argv._[1];
+    let md = obj2md.make(argv._[1]);
+
+    if(!md || md.length<1){
+      errorReport(colors.red('generating markdown error!'));
     }
 
-    let T = new trans();
-    for (let k in files) {
-      if (fs.statSync(files[k]).isDirectory()) continue;
-      T.loadContent(fs.readFileSync(files[k], {encoding: 'utf8'}).toString());
-    }
-    fs.writeFileSync((argv.output ? argv.output : 'out.js'), T.toFile());
-    process.exit(-1);
-  }
-
-  if (argv.markdown !== false) {
-    let md = obj2md.make(argv.markdown);
-
-    if(md.length<1){
-      errorReport('generating markdown error!');
-    }
-    let output = argv.output ? argv.output :  __dirname + '/plans/' + argv.markdown + '.md';
+    let output = argv.output ? argv.output :  __dirname + '/plans/' + plan + '.md';
     for(let k in md){
 
       fs.writeFileSync(output.replace('.md', '_'+k+'.md'), md[k]);
     }
-    process.exit(-1);
-  }
-
-  let planName = argv._[0];
-  if(planName === undefined){
-    errorReport('Usage : jsoc {PlanName} [options]');
-  }
-
-  if(!planName.endsWith('.js')){
-    planName += '.js';
-  }
-  planName = fs.realpathSync(planName);
-
-  if (fs.existsSync(planName)) {
-
-    let plan = require(planName);
-
-    if (argv.list) {
-      let apis = Object.keys(plan.apis);
-      let out = [];
-      if (argv.list !== true) {
-        for (let k in apis) {
-          if (apis[k].toLowerCase().indexOf(argv.list.toLowerCase()) !== -1)out.push(apis[k]);
-        }
-      } else {
-        out = apis;
-      }
-      console.log(out);
-      process.exit(-1);
-    }
-
-    if (argv.api != 'all') {
-      let apis = argv.api.split(',');
-      let Apis = {};
-      for (let k in apis) {
-        if (plan.apis[apis[k]]) {
-          Apis[apis[k]] = plan.apis[apis[k]];
-        } else {
-          errorReport('Api [ ' + colors.red(apis[k]) + ' ] not defined');
-        }
-      }
-      plan.apis = Apis;
-    }
-    if (argv.info) {
-      console.log(JSON.stringify(plan.apis, null, 4));
-      process.exit(-1);
-    }
-    try {
-      if (typeof argv.data === 'string') {
-        argv.data = JSON.parse(argv.data);
-      }
-    } catch (ex) {
-      errorReport('Parse data failed :  ' + colors.red(argv.d)
-        + ' is not a correct JSON string.'
-        + EOL + 'See  ' + colors.blue('jsoc -h') + ' for more help');
-    }
-
-    async.eachSeries(plan.apis, (item, callback) => {
-      console.log('测试接口：［' + colors.blue(item.name) + ']');
-
-      let dp = new dataProvider(item, argv.data);
-      item = dp.generator();
-
-      requestAgent
-        .url(plan.host + item.request.uri)
-        .headers(item.request.headers)
-        .method(item.request.method)
-        .query(item.request.query)
-        .body(item.request.body)
-        .send()
-        .then(requestAgent.toJson)
-        .then((obj) => {
-          if (argv.body) {
-            console.log('===== REQUEST =====');
-            console.log(item.request);
-            console.log('===== RESPONSE ====');
-            console.log(obj);
-            console.log('===== REPORT  =====');
-          }
-          dp.validation(obj);
-          console.log(argv.color ? colorsFy(dp.report) : dp.report);
-          callback(null, null);
-        })
-        .catch((err) => {
-          errorReport('Error: ' + colors.red(err.toString()));
-        });
-
-    }, (err, ret) => {
-      //console.log(err,ret);
-    });
-
-
-  } else {
-    errorReport('Plan [ ' + colors.red(planName) + ' ] not exists');
-  }
+    break;
 }
+//
+//if (argv.gen !== false) {
+//  if(typeof argv.gen !== 'string'){
+//    errorReport('path must be a string , usage:  '+colors.red('jsoc --gen {path}'));
+//    process.exit(-1);
+//  }
+//  let files = [];
+//  if (fs.statSync(argv.gen).isDirectory()) {
+//    files = fs.readdirSync(argv.gen).map(file=>argv.gen + '/' + file);
+//  } else {
+//    files = [argv.gen];
+//  }
+//
+//  let T = new trans();
+//  for (let k in files) {
+//    if (fs.statSync(files[k]).isDirectory()) continue;
+//    T.loadContent(fs.readFileSync(files[k], {encoding: 'utf8'}).toString());
+//  }
+//  fs.writeFileSync((argv.output ? argv.output : 'out.js'), T.toFile());
+//  process.exit(-1);
+//}
+//
+//if (argv.markdown !== false) {
+//  let md = obj2md.make(argv.markdown);
+//
+//  if(md.length<1){
+//    errorReport('generating markdown error!');
+//  }
+//  let output = argv.output ? argv.output :  __dirname + '/plans/' + argv.markdown + '.md';
+//  for(let k in md){
+//
+//    fs.writeFileSync(output.replace('.md', '_'+k+'.md'), md[k]);
+//  }
+//  process.exit(-1);
+//}
+//
+//let planName = argv._[0];
+//if(planName === undefined){
+//  errorReport('Usage : jsoc {PlanName} [options]');
+//}
+//
+//if(!planName.endsWith('.js')){
+//  planName += '.js';
+//}
+//planName = fs.realpathSync(planName);
+//
+//if (fs.existsSync(planName)) {
+//
+//  let plan = require(planName);
+//
+//  if (argv.list) {
+//    let apis = Object.keys(plan.apis);
+//    let out = [];
+//    if (argv.list !== true) {
+//      for (let k in apis) {
+//        if (apis[k].toLowerCase().indexOf(argv.list.toLowerCase()) !== -1)out.push(apis[k]);
+//      }
+//    } else {
+//      out = apis;
+//    }
+//    console.log(out);
+//    process.exit(-1);
+//  }
+//
+//  if (argv.api != 'all') {
+//    let apis = argv.api.split(',');
+//    let Apis = {};
+//    for (let k in apis) {
+//      if (plan.apis[apis[k]]) {
+//        Apis[apis[k]] = plan.apis[apis[k]];
+//      } else {
+//        errorReport('Api [ ' + colors.red(apis[k]) + ' ] not defined');
+//      }
+//    }
+//    plan.apis = Apis;
+//  }
+//  if (argv.info) {
+//    console.log(JSON.stringify(plan.apis, null, 4));
+//    process.exit(-1);
+//  }
+//  try {
+//    if (typeof argv.data === 'string') {
+//      argv.data = JSON.parse(argv.data);
+//    }
+//  } catch (ex) {
+//    errorReport('Parse data failed :  ' + colors.red(argv.d)
+//      + ' is not a correct JSON string.'
+//      + EOL + 'See  ' + colors.blue('jsoc -h') + ' for more help');
+//  }
+//
+//  async.eachSeries(plan.apis, (item, callback) => {
+//    console.log('测试接口：［' + colors.blue(item.name) + ']');
+//
+//    let dp = new dataProvider(item, argv.data);
+//    item = dp.generator();
+//
+//    requestAgent
+//      .url(plan.host + item.request.uri)
+//      .headers(item.request.headers)
+//      .method(item.request.method)
+//      .query(item.request.query)
+//      .body(item.request.body)
+//      .send()
+//      .then(requestAgent.toJson)
+//      .then((obj) => {
+//        if (argv.body) {
+//          console.log('===== REQUEST =====');
+//          console.log(item.request);
+//          console.log('===== RESPONSE ====');
+//          console.log(obj);
+//          console.log('===== REPORT  =====');
+//        }
+//        dp.validation(obj);
+//        console.log(argv.color ? colorsFy(dp.report) : dp.report);
+//        callback(null, null);
+//      })
+//      .catch((err) => {
+//        errorReport('Error: ' + colors.red(err.toString()));
+//      });
+//
+//  }, (err, ret) => {
+//    //console.log(err,ret);
+//  });
+//
+//
+//} else {
+//  errorReport('Plan [ ' + colors.red(planName) + ' ] not exists');
+//}

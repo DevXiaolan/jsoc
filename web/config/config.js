@@ -8,5 +8,5 @@ module.exports = {
     'cors': false,
     'static': ['js', 'css', 'jpg', 'png', 'ico','woff','woff2'],
     'modules': {},
-    'apis':'uu'
+    'apis':'de'
 };

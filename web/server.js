@@ -3,16 +3,21 @@
  */
 
 //引入配置文件
-var config = require('./config/config');
+const config = require('./config/config');
+const colors = require('colors');
+const fs = require('fs');
 
 if(process.mock){
+  if(!fs.existsSync(process.mock))
   config.apis = process.mock;
 }
 
-console.log('Mock in '+config.apis);
+console.log('Mock in '+colors.green(config.apis));
 
 //引入小蓝框架
 var xiaolan = require('./xiaolan')(config);
 
 //启动监听服务
 xiaolan.createServer();
+
+console.log('URL : '+colors.yellow('http://127.0.0.1:'+config.port));
