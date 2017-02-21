@@ -6,13 +6,27 @@
 const config = require('./config/config');
 const colors = require('colors');
 const fs = require('fs');
+const path = require('path');
+const EOL = require('os').EOL;
 
 if(process.mock){
-  if(!fs.existsSync(process.mock))
-  config.apis = process.mock;
+  if(!fs.existsSync(process.mock)){
+    config.apis = __dirname+'/../plans/'+process.mock;
+
+  }else{
+    config.apis = process.mock;
+  }
 }
 
-console.log('Mock in '+colors.green(config.apis));
+config.apis = path.resolve(config.apis);
+
+if(!fs.existsSync(config.apis)){
+  console.log(EOL.repeat(2) + colors.red('"'+config.apis+'" Not Found') + EOL.repeat(2));
+  process.exit(-1);
+}
+
+
+console.log('Mock with '+colors.green(config.apis));
 
 //引入小蓝框架
 var xiaolan = require('./xiaolan')(config);

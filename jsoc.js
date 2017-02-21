@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 "use strict";
 const _time = process.hrtime();
-const VERSION = require(__dirname+'/package.json').version;
 
 const async = require('async');
 const EOL = require('os').EOL;
@@ -9,7 +8,7 @@ const fs = require('fs');
 const colors = require('colors');
 const yargs = require('yargs');
 const requestAgent = require('request-agent').init();
-
+const path = require('path');
 const dataProvider = require('./libs/dataProvider');
 
 const trans = require('./libs/translate');
@@ -37,6 +36,14 @@ const colorsFy = (obj, tab) => {
   return result + EOL + '    '.repeat(tab - 1) + '}';
 };
 
+const solvePlan = (plan) => {
+  if(!fs.existsSync(plan)){
+    plan = path.resolve(__dirname+'/plans/'+plan);
+  }else{
+    plan = path.resolve(plan);
+  }
+  return plan;
+};
 
 let argv = yargs
   .options('a', {
@@ -66,18 +73,7 @@ let argv = yargs
     boolean: true,
     default: false
   })
-  .options('g', {
-    alias: 'gen',
-    default: false
-  })
-  .options('o', {
-    alias: 'output',
-    default: false
-  })
-  .options('m', {
-    alias: 'markdown',
-    default: false
-  })
+
   .options('v', {
     alias: 'version',
     default: false
@@ -89,6 +85,7 @@ let argv = yargs
   .argv;
 
 if(argv.version){
+  const VERSION = require(__dirname+'/package.json').version;
   console.log(VERSION);
   process.exit(-1);
 }
@@ -99,20 +96,27 @@ switch (command){
   case 'mock':
     process.chdir(__dirname+'/web');
     process.mock = argv._[1];
+    process.mock = solvePlan(process.mock);
     require(process.cwd()+'/server');
     break;
   case 'markdown':
     let plan = argv._[1];
     let md = obj2md.make(argv._[1]);
-
     if(!md || md.length<1){
       errorReport(colors.red('generating markdown error!'));
     }
-
     let output = argv.output ? argv.output :  __dirname + '/plans/' + plan + '.md';
     for(let k in md){
 
       fs.writeFileSync(output.replace('.md', '_'+k+'.md'), md[k]);
+    }
+    break;
+  case 'run':
+    let plan = argv._[1];
+    if(!fs.existsSync(plan)){
+
+    }else{
+
     }
     break;
 }
@@ -191,10 +195,6 @@ switch (command){
 //      }
 //    }
 //    plan.apis = Apis;
-//  }
-//  if (argv.info) {
-//    console.log(JSON.stringify(plan.apis, null, 4));
-//    process.exit(-1);
 //  }
 //  try {
 //    if (typeof argv.data === 'string') {
