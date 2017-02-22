@@ -7,7 +7,14 @@ let makeData = (item) => {
   let assert = item._assert;
   let _default = item._default;
   let _length = item._length;
+  let _schema = item._schema;
   let choices = item._choices ? item._choices.split(',') : [];
+
+  let globalSchema = process.currentPlan?process.currentPlan.schema:false;
+
+  if(globalSchema && _schema && globalSchema[_schema]){
+    return globalSchema[_schema];
+  }
 
   type = (type && typeof type == 'string') ? type.toLowerCase() : type;
 

@@ -37,6 +37,7 @@ const colorsFy = (obj, tab) => {
 };
 
 const solvePlan = (plan) => {
+
   if(!fs.existsSync(plan)){
     plan = path.resolve(__dirname+'/plans/'+plan);
   }else{
@@ -94,25 +95,30 @@ const command = argv._[0];
 
 switch (command){
   case 'mock':
-    process.chdir(__dirname+'/web');
     process.mock = argv._[1];
     process.mock = solvePlan(process.mock);
+    process.chdir(__dirname+'/web');
+
     require(process.cwd()+'/server');
     break;
   case 'markdown':
-    let plan = argv._[1];
+    var plan = argv._[1];
     let md = obj2md.make(argv._[1]);
     if(!md || md.length<1){
       errorReport(colors.red('generating markdown error!'));
     }
-    let output = argv.output ? argv.output :  __dirname + '/plans/' + plan + '.md';
-    for(let k in md){
 
-      fs.writeFileSync(output.replace('.md', '_'+k+'.md'), md[k]);
+    let output = argv.output ? argv.output :  process.cwd()+ '/' + plan.replace('.json','') + '.md';
+    if(md.length>1) {
+      for (let k in md) {
+        fs.writeFileSync(output.replace('.md', '_' + k + '.md'), md[k]);
+      }
+    }else{
+      fs.writeFileSync(output, md['']);
     }
     break;
   case 'run':
-    let plan = argv._[1];
+    var plan = argv._[1];
     if(!fs.existsSync(plan)){
 
     }else{

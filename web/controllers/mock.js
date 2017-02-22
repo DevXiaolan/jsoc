@@ -17,7 +17,7 @@ Controller.index = (req,res) => {
 Controller.mock = (req,res) => {
     if(config.apis){
         delete require.cache[require.resolve(config.apis)];
-
+      
         let apis = require(config.apis).apis;
         
         let route = false;

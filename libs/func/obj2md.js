@@ -7,27 +7,28 @@ const fs = require('fs');
 
 const EOL = require('os').EOL;
 const makeData = require('./makeData.js');
-
+const path = require('path');
 let obj2md = {};
 
 obj2md.make = function (plan) {
   let obj = null;
 
   if(!fs.existsSync(plan)){
-    plan = __dirname+'/../../plans/'+plan+'.json';
+    plan = __dirname+'/../../plans/'+plan;
   }
+
   if(!fs.existsSync(plan)){
     return false;
   }
-  plan = fs.realpathSync(plan);
 
   try{
-    obj = require(plan);
+    obj = require(path.resolve(plan));
   }catch(ex){
     
   }
 
   if(obj) {
+    process.currentPlan = obj;
     let groupApis = {};
     for(let k in obj.apis){
       groupApis[obj.apis[k].group] = groupApis[obj.apis[k].group] || {};
@@ -119,7 +120,7 @@ let entity2tr = (obj,prefix) => {
 let response = (retData) => {
   var result = {};
   if(retData){
-    if(typeof retData == 'object' && !(retData._type) && !(retData._assert!==undefined)){
+    if(typeof retData == 'object' && !(retData._schema) && !(retData._type) && !(retData._assert!==undefined)){
       for(let k in retData){
         result[k] = response(retData[k]);
       }
