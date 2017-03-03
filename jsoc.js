@@ -103,13 +103,17 @@ switch (command){
     break;
   case 'markdown':
     var plan = argv._[1];
-    let md = obj2md.make(argv._[1]);
-    if(!md || md.length<1){
+
+    let md = obj2md.make(plan);
+    let keys = Object.keys(md);
+
+    if(!md || keys.length<1){
       errorReport(colors.red('generating markdown error!'));
     }
 
     let output = argv.output ? argv.output :  process.cwd()+ '/' + plan.replace('.json','') + '.md';
-    if(md.length>1) {
+
+    if(keys.length>1) {
       for (let k in md) {
         fs.writeFileSync(output.replace('.md', '_' + k + '.md'), md[k]);
       }
