@@ -116,7 +116,7 @@ let checkType = (obj, value) => {
 let response = (retData) => {
   let result = {};
   if (retData) {
-    if (typeof retData == 'object' && !(retData._type) && !(retData._assert !== undefined)) {
+    if (typeof retData == 'object' && !(retData._type) && !(retData._assert !== undefined) && !(retData._schema)) {
       for (let k in retData) {
         result[k] = response(retData[k]);
       }

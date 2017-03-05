@@ -66,16 +66,24 @@ DataProvider.prototype.data = function(item) {
 };
 
 DataProvider.prototype.validation = function(body, config, report){
+
   report = report ? report : this.report;
   let returnConfig = config ? config : this.apiConfig.response.body;
 
   for (let k in returnConfig) {
+    if(returnConfig[k]._schema){
+      delete returnConfig[k]._schema;
+    }
 
     if ((typeof returnConfig[k] == 'object') && (!returnConfig[k]._type) && (returnConfig[k]._assert === undefined)) {
-      if(body[k] === null){
+      
+      if(body[k] === null && (Object.keys(returnConfig[k]).length>0)){
         report[k] = false;
+      }else if(Object.keys(returnConfig[k]).length === 0){
+        report[k] = true;
       }else {
         report[k] = {};
+
         this.validation(body[k], returnConfig[k], report[k]);
       }
     } else {
