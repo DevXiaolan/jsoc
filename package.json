@@ -1,10 +1,11 @@
 {
   "name": "jsoc",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "description": "",
   "main": "jsoc.js",
   "scripts": {
-    "test": ""
+    "test": "",
+    "postinstall":"./node_modules/.bin/xiaolan"
   },
   "bin": "jsoc.js",
   "author": "lanhao.name",

@@ -28,7 +28,12 @@ const colorsFy = (obj, tab) => {
     if (typeof obj[i] == 'object') {
       result += colorsFy(obj[i], tab + 1);
     } else {
-      result += (obj[i] == true) ? colors.green('true') : colors.red('false');
+      if(obj[i] == true){
+        result += colors.green('true');
+      }else{
+        result += colors.red('false');
+        console.error('');
+      }
     }
     if (i < len - 1)
       result += ' , ';
