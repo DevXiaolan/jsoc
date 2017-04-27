@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 "use strict";
-const _time = process.hrtime();
-
 const async = require('async');
 const EOL = require('os').EOL;
 const fs = require('fs');
