@@ -1,0 +1,75 @@
+{
+  "_args": [
+    [
+      "xiaolan@^1.0.47",
+      "/Users/lanhao/src/jsoc"
+    ]
+  ],
+  "_from": "xiaolan@>=1.0.47 <2.0.0",
+  "_id": "xiaolan@1.0.49",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/xiaolan",
+  "_nodeVersion": "5.2.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/xiaolan-1.0.49.tgz_1461319603895_0.612837607273832"
+  },
+  "_npmUser": {
+    "email": "admin@lanhao.name",
+    "name": "lanhao"
+  },
+  "_npmVersion": "3.3.12",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "xiaolan",
+    "raw": "xiaolan@^1.0.47",
+    "rawSpec": "^1.0.47",
+    "scope": null,
+    "spec": ">=1.0.47 <2.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_shasum": "579fca20663888cec1407f9a10a1341660a90f01",
+  "_shrinkwrap": null,
+  "_spec": "xiaolan@^1.0.47",
+  "_where": "/Users/lanhao/src/jsoc",
+  "author": {
+    "name": "lanhao"
+  },
+  "bin": {
+    "xiaolan_init": "./bin/xiaolan_init.js"
+  },
+  "dependencies": {
+    "crypto": "0.0.3",
+    "easymysql": "^0.2.7",
+    "redis": "^2.2.5",
+    "serve-static": "^1.9.3",
+    "swig": "^1.4.2"
+  },
+  "description": "xiaolan web framework",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "579fca20663888cec1407f9a10a1341660a90f01",
+    "tarball": "https://registry.npmjs.org/xiaolan/-/xiaolan-1.0.49.tgz"
+  },
+  "gitHead": "55c0b3f15346b18d0969c7ae31144a78b3c46566",
+  "license": "ISC",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "email": "admin@lanhao.name",
+      "name": "lanhao"
+    }
+  ],
+  "name": "xiaolan",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {
+    "start": "xiaolan_init"
+  },
+  "version": "1.0.49"
+}

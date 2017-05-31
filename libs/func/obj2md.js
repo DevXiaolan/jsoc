@@ -9,17 +9,10 @@ const EOL = require('os').EOL;
 const makeData = require('./makeData.js');
 const path = require('path');
 let obj2md = {};
+const tab = '    ';
 
 obj2md.make = function (plan) {
   let obj = null;
-
-  if(!fs.existsSync(plan)){
-    plan = __dirname+'/../../plans/'+plan;
-  }
-
-  if(!fs.existsSync(plan)){
-    return false;
-  }
 
   try{
     obj = require(path.resolve(plan));
@@ -31,6 +24,9 @@ obj2md.make = function (plan) {
     process.currentPlan = obj;
     let groupApis = {};
     for(let k in obj.apis){
+      if(obj.apis[k].group === undefined || obj.apis[k].group===''){
+        obj.apis[k].group = 'default';
+      }
       groupApis[obj.apis[k].group] = groupApis[obj.apis[k].group] || {};
       groupApis[obj.apis[k].group][obj.apis[k].name] = obj.apis[k];
     }
@@ -53,7 +49,7 @@ obj2md.make = function (plan) {
         content += object2md(_obj[k].request.query, 'QueryString');
         content += object2md(_obj[k].request.body, 'Body');
         content += '**返回示例**:' + EOL + EOL;
-        content += '    ' + prettyJson2(response(_obj[k].response.body), 1).replace(/},/g, '}') + EOL;
+        content += '    ' + prettyJson2(response(_obj[k].response.body), 0).replace(/},/g, '}') + EOL;
       }
       contentArr[k] = content;
     }
@@ -75,16 +71,16 @@ let prettyJson2 =  (obj, tabCount) => {
     var k ;
     while(k=keys.shift()){
       if(isArray){
-        r += '  '+'  '.repeat(tabCount) + prettyJson2(obj[k], tabCount);
+        r += tab.repeat(tabCount+1) + prettyJson2(obj[k], tabCount);
       }else{
-        r += '  '+'  '.repeat(tabCount) + k + ' : ' + prettyJson2(obj[k], tabCount);
+        r += tab.repeat(tabCount+1) + k + ' : ' + prettyJson2(obj[k], tabCount);
       }
       if(keys.length == 0){
         r = r.substr(0,r.length-2)+EOL;
       }
     }
 
-    return r += '  '+'  '.repeat(tabCount - 1) + ((isArray) ? '],' : '},') + EOL;
+    return r += tab.repeat(tabCount) + ((isArray) ? '],' : '},') + EOL;
   } else {
     return (Number.isNaN(obj*1)?'\''+ obj +'\'':obj) +','+EOL;
   }
@@ -134,4 +130,3 @@ let response = (retData) => {
 };
 
 module.exports = obj2md;
-
