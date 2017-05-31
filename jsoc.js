@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 "use strict";
+
 const async = require('async');
 const EOL = require('os').EOL;
 const fs = require('fs');
@@ -28,44 +29,37 @@ const solvePlan = (plan) => {
 };
 
 let argv = yargs
-  .options('a', {
-    alias: 'api',
-    default: 'all'
-  })
-  .options('b', {
-    alias: 'body',
-    boolean: true,
-    default: false
-  })
-  .options('c', {
-    alias: 'color',
-    boolean: true,
-    default: true
-  })
-  .options('d', {
-    alias: 'data',
-    default: {}
-  })
-  .options('l', {
-    alias: 'list',
-    default: false
-  })
-  .options('i', {
-    alias: 'info',
-    boolean: true,
-    default: false
-  })
+  .command('mock', 'run a mock server', (y) => {
 
-  .options('v', {
-    alias: 'version',
-    default: false
+    let argv = y.reset()
+      .help('h')
+      .usage(colors.yellow(`${EOL}jsoc mock {path/of/plan}`))
+      .epilog(colors.green('Power by Xiaolan 2017'))
+      .argv;
+
+    if(argv._[1] === undefined){
+      errorReport('jsoc mock -h')
+    }
+
+    let mockFile = solvePlan(argv._[1]);
+
+
+
+    process.chdir(__dirname+'/web');
+
+    require(process.cwd()+'/server');
+
   })
-  .usage('Usage : jsoc {PlanName} [options]')
-  .example('jsoc testApi -a user -d \'{"a":123}\'  // 测试testApi中的user接口 ')
+  .command('run', 'run a mock server', (y) => {
+    let argv = y.reset()
+      .help('h')
+      .argv;
+  })
   .help('h')
-  .epilog('Power by Xiaolan 2016')
+  .epilog(colors.green('Power by Xiaolan 2017'))
   .argv;
-
+/*
+process.exit(-1);
 if(argv.version){
   const VERSION = require(__dirname+'/package.json').version;
   console.log(VERSION);
@@ -73,7 +67,7 @@ if(argv.version){
 }
 
 const command = argv._[0];
-
+let plan = argv._[1];
 switch (command){
   case 'mock':
     process.mock = argv._[1];
@@ -83,8 +77,6 @@ switch (command){
     require(process.cwd()+'/server');
     break;
   case 'markdown':
-    let plan = argv._[1];
-
     let md = obj2md.make(plan);
     let keys = Object.keys(md);
 
@@ -103,7 +95,9 @@ switch (command){
     }
     break;
   default :
-    var plan = argv._[1];
+    if(plan === undefined){
+      errorReport('jsoc -h');
+    }
     plan = require(solvePlan(plan));
     var apis = plan.apis;
     if(argv.list){
@@ -154,10 +148,4 @@ switch (command){
     break;
 }
 
-
-
-//
-//
-//} else {
-//  errorReport('Plan [ ' + colors.red(planName) + ' ] not exists');
-//}
+*/
