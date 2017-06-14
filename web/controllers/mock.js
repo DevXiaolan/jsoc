@@ -5,8 +5,8 @@
 let fs = require('fs');
 
 let config = require('../config/config.js');
-let isType = require('../../libs/func/isType.js');
-let makeData = require('../../libs/func/makeData.js');
+let isType = require('../../func/isType.js');
+let makeData = require('../../func/makeData.js');
 let Controller = {};
 
 Controller.index = (req, res) => {

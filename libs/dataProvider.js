@@ -46,7 +46,7 @@ class DataProvider {
 
   data(item){
     let ret = {};
-    if (!item._type && !item._assert && !item._default && !item._to && !item._from) {
+    if (!item._type && !item._assert && !item._to && !item._from) {
       for (let k in item) {
         ret[k] = this.data(item[k]);
       }
@@ -55,7 +55,7 @@ class DataProvider {
       if (item._from && this.cache[item._from]) {
         ret = this.cache[item._from];
       } else {
-        ret = require('./func/makeData')(item);
+        ret = require('../func/makeData')(item);
       }
       if (item._to) {
         this.cache[item._to] = ret;
@@ -111,7 +111,7 @@ class DataProvider {
   }
 
   isType(){
-    let isType = require('./func/isType.js');
+    let isType = require('../func/isType.js');
     return isType(...arguments);
   }
 }

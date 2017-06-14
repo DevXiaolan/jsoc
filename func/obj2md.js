@@ -3,8 +3,6 @@
  */
 
 'use strict';
-const fs = require('fs');
-
 const EOL = require('os').EOL;
 const makeData = require('./makeData.js');
 const path = require('path');

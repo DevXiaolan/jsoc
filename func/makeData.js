@@ -3,12 +3,11 @@
 const faker = require('faker');
 
 let makeData = (item) => {
-  let type = item._type;
-  let assert = item._assert;
-  let _default = item._default;
+  let _type = item._type;
+  let _assert = item._assert;
   let _length = item._length;
   let _schema = item._schema;
-  let choices = item._choices ? item._choices.split(',') : [];
+  let _choices = item._choices ? item._choices.split(',') : [];
 
   let globalSchema = process.currentPlan?process.currentPlan.schema:false;
 
@@ -16,23 +15,19 @@ let makeData = (item) => {
     return globalSchema[_schema];
   }
 
-  type = (type && typeof type == 'string') ? type.toLowerCase() : type;
+  _type = (_type && typeof _type == 'string') ? _type.toLowerCase() : _type;
 
-  if (assert !== undefined) {
-    return assert;
+  if (_assert !== undefined) {
+    return _assert;
   }
 
-  if(_default !== undefined){
-    return _default;
-  }
-  //todo 优先级
 
-  if (choices.length > 0) {
-    return choices[Number.parseInt(Math.random() * choices.length)];
+  if (_choices.length > 0) {
+    return _choices[Number.parseInt(Math.random() * _choices.length)];
   }
 
   let ret = null;
-  switch (type) {
+  switch (_type) {
     case 'string':
       ret = faker.random.word();
       if (_length) {
@@ -78,3 +73,15 @@ let makeData = (item) => {
 
 module.exports = makeData;
 
+
+/**
+ _type    yes
+ _assert    yes
+ _length    no
+ _schema    yes
+ _choices   yes
+ _from      yes
+ _to        no
+ _required    no
+
+ */

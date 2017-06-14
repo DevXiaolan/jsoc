@@ -9,8 +9,8 @@ const yargs = require('yargs');
 const requestAgent = require('request-agent').init();
 const path = require('path');
 const dataProvider = require('./libs/dataProvider');
-const colorsFy = require('./libs/func/colorsFy');
-const obj2md = require('./libs/func/obj2md');
+const colorsFy = require('./func/colorsFy');
+const obj2md = require('./func/obj2md');
 
 const errorReport = (msg) => {
   console.log(EOL.repeat(2) + msg + EOL.repeat(2));
@@ -20,7 +20,7 @@ const errorReport = (msg) => {
 
 const solvePlan = (plan) => {
   if(!fs.existsSync(plan)){
-    plan = path.resolve(__dirname+'/plans/'+plan);
+    errorReport(colors.red(`${plan} Not Found.`))
   }else{
     plan = path.resolve(plan);
   }
@@ -80,6 +80,17 @@ let argv = yargs
     }
 
     process.exit(-1);
+  })
+  .command('check', '', (y) => {
+    let argv = y.reset()
+      .help('h')
+      .usage(colors.yellow(`${EOL}jsoc check {path/of/plan}`))
+      .epilog(colors.green('Power by Xiaolan 2017'))
+      .argv;
+    if(argv._[1] === undefined){
+      errorReport('jsoc check -h')
+    }
+    require('./libs/check')(solvePlan(argv._[1]));
   })
   .command('run', 'run a mock server', (y) => {
     let argv = y.reset()
