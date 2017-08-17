@@ -7,7 +7,8 @@ const EOL = require('os').EOL;
 const makeData = require('./makeData.js');
 const path = require('path');
 let obj2md = {};
-const tab = '    ';
+const TAB_WIDTH = 4;
+const tab = ' '.repeat(TAB_WIDTH);
 
 obj2md.make = function (plan) {
   let obj = null;

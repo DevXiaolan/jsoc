@@ -23,7 +23,7 @@ Xiaolan.init = function (config) {
 
     if(config.modules){
         Xiaolan.libs = {};
-        for(var k in config.modules){
+        for(let k in config.modules){
             if(config.modules[k].import){
                 Xiaolan.libs[k] = require('./lib/'+k)(config.modules[k].config);
                 console.log('Load ['+k+']  ok!');
@@ -34,14 +34,14 @@ Xiaolan.init = function (config) {
 };
 
 Xiaolan.createServer = function () {
-    var Request = require('./lib/request');
-    var Response = require('./lib/response');
+    let Request = require('./lib/request');
+    let Response = require('./lib/response');
 
-    var serveStatic = require('serve-static');
-    var serve = serveStatic(process.cwd()+'/views/');
-    var config = global.app.config;
-    var _port = config.port?config.port:3000;
-    var _ip = config.ip?config.ip:null;
+    let serveStatic = require('serve-static');
+    let serve = serveStatic(process.cwd()+'/views/');
+    let config = global.app.config;
+    let _port = config.port?config.port:3000;
+    let _ip = config.ip?config.ip:null;
     http.createServer(function (req, res) {
         console.log(req.url);
         if(global.app.libs['session']){

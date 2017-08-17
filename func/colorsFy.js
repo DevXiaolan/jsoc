@@ -16,9 +16,9 @@ let colorsFy = (obj, tab) => {
       result += colorsFy(obj[i], tab + 1);
     } else {
       if(obj[i] == true){
-        result += colors.green('true');
+        result += 'true'.green;
       }else{
-        result += colors.red('false');
+        result += 'false'.red;
         console.error('');
       }
     }
