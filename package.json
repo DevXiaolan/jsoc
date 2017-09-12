@@ -1,21 +1,19 @@
 {
   "name": "jsoc",
-  "version": "0.9.12",
+  "version": "0.9.13",
   "description": "",
   "main": "jsoc.js",
   "scripts": {
     "test": "",
-    "postinstall":"./node_modules/.bin/xiaolan"
+    "postinstall": "./node_modules/.bin/xiaolan"
   },
   "bin": "jsoc.js",
   "author": "lanhao.name",
   "license": "ISC",
   "dependencies": {
-    "EventEmitter": "^1.0.0",
     "async": "^1.5.2",
     "colors": "^1.1.2",
     "faker": "^3.1.0",
-    "request": "^2.69.0",
     "request-agent": "^1.0.3",
     "yargs": "^4.7.1"
   }

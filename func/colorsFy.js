@@ -6,7 +6,7 @@
 const colors = require('colors');
 const EOL = require('os').EOL;
 
-let colorsFy = (obj, tab) => {
+module.exports = (obj, tab) => {
   tab = tab || 1;
   let len = Object.keys(obj).length;
   let result = '{';
@@ -26,6 +26,5 @@ let colorsFy = (obj, tab) => {
       result += ' , ';
   }
   return result + EOL + '    '.repeat(tab - 1) + '}';
-};;
+};
 
-module.exports = colorsFy;
